@@ -7,7 +7,9 @@ import collections
 
 def analyze(filepath: str) -> dict:
     reads = collections.Counter()
+    full_reads = []
     tool_sequence = []
+    tool_counts = collections.Counter()
     verbose_responses = []
     total_chars = 0
     message_count = 0
@@ -23,10 +25,14 @@ def analyze(filepath: str) -> dict:
 
             if obj_type == "tool_call":
                 name = obj.get("tool_name", obj.get("name", ""))
+                params = obj.get("parameters", {})
+                tool_counts[name] += 1
                 if name in ("Read", "read_file", "file_read"):
-                    path = obj.get("parameters", {}).get("path", "")
+                    path = params.get("path", "")
                     if path:
                         reads[path] += 1
+                    if path and not params.get("offset") and not params.get("limit"):
+                        full_reads.append(path)
                 tool_sequence.append(name)
 
             elif obj_type in ("assistant", "assistant_message"):
@@ -76,10 +82,25 @@ def analyze(filepath: str) -> dict:
             f"- estimated tokens: ~{est_tokens:,} ({message_count} messages, {total_chars:,} chars)"
         )
 
+    full_read_findings = []
+    full_read_counter = collections.Counter(full_reads)
+    for path, count in full_read_counter.most_common(5):
+        if count >= 1:
+            full_read_findings.append(f"- full file read (no offset/limit): {path} ({count}x)")
+
+    tool_summary = []
+    total_calls = sum(tool_counts.values())
+    if total_calls > 0:
+        top3 = tool_counts.most_common(3)
+        parts = [f"{n}={c}" for n, c in top3]
+        tool_summary.append(f"- {total_calls} tool calls total (top: {', '.join(parts)})")
+
     return {
         "repeated_reads": read_findings,
+        "full_reads": full_read_findings[:5],
         "sequential_calls": batch_findings,
         "verbose_responses": verbose_responses[:5],
+        "tool_summary": tool_summary,
         "token_estimate": cost_summary,
     }
 
