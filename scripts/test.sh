@@ -91,6 +91,24 @@ check "benchmark prompts >= 8" test "$PROMPT_COUNT" -ge 8
 # analyze_transcript.py importable
 check "analyze_transcript importable" python3 -c "import sys; sys.path.insert(0,'$SCRIPT_DIR'); from analyze_transcript import analyze"
 
+# cost.sh runs
+check "cost.sh runs (opus)" bash "$SCRIPT_DIR/cost.sh" opus
+check "cost.sh runs (sonnet)" bash "$SCRIPT_DIR/cost.sh" sonnet
+
+# hooks
+check "session hook exists" test -f "$REPO_DIR/hooks/session-start.sh"
+check "session hook executable" test -x "$REPO_DIR/hooks/session-start.sh"
+check "hooks.json example exists" test -f "$REPO_DIR/hooks/hooks.json.example"
+check "session hook valid json output" bash -c "bash '$REPO_DIR/hooks/session-start.sh' | python3 -c 'import json,sys; json.load(sys.stdin)'"
+
+# adapters
+check "Windsurf adapter exists" test -f "$REPO_DIR/adapters/windsurfrules"
+
+# extra files
+check "CHANGELOG.md exists" test -f "$REPO_DIR/CHANGELOG.md"
+check "LICENSE exists" test -f "$REPO_DIR/LICENSE"
+check "examples dir exists" test -d "$REPO_DIR/examples"
+
 echo
 echo "Results: $pass passed, $fail failed, $((pass + fail)) total"
 [ "$fail" -eq 0 ] && echo "[OK] All tests passed." || { echo "[FAIL] $fail test(s) failed."; exit 1; }
