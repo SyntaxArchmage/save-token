@@ -22,7 +22,7 @@ Enforces a **three-layer optimization** every response:
 
 ## A/B Tested Results
 
-Verified across **100 independent subagent trials** (8 tasks, 3 intensity levels):
+Verified across **106 independent subagent trials** (8 tasks, 3 intensity levels):
 
 | Mode | Explanation | Tool Calls | Code Lines | Correctness |
 |------|-------------|------------|------------|-------------|
@@ -59,24 +59,35 @@ See [benchmarks/results/full-report.md](benchmarks/results/full-report.md) for p
 ```
 save-token/
 ├── SKILL.md                    # Entry point (Cursor reads this)
+├── CHEATSHEET.md               # Quick-reference card
+├── install.sh                  # One-command installer (+uninstall)
 ├── rules/
-│   ├── agent-rules.md          # Full behavior ruleset
+│   ├── agent-rules.md          # Full behavior ruleset (lite/full/ultra)
 │   └── save-token.mdc          # Compact Cursor rule (<200 words)
 ├── scripts/
-│   ├── setup.sh                # Headroom proxy install
+│   ├── setup.sh                # Headroom proxy install (OS-aware)
 │   ├── benchmark.sh            # A/B test prompt generator
-│   ├── compare.sh              # Results comparison table
-│   ├── stats.sh                # Status + metrics display
-│   ├── learn.sh                # Session waste pattern miner
+│   ├── compare.sh              # Results table (+ --json mode)
+│   ├── stats.sh                # Status + context budget + history
+│   ├── learn.sh                # Session waste + token estimation
+│   ├── review.sh               # Real-time session audit
 │   ├── mode.sh                 # Mode persistence + history
-│   ├── test.sh                 # 20-check test runner
+│   ├── test.sh                 # 31-check test runner
 │   └── analyze_transcript.py   # Multi-pattern transcript analyzer
+├── adapters/
+│   └── AGENTS.md               # Claude Code adapter
+├── hooks/
+│   ├── session-start.sh        # Auto-activate hook
+│   └── hooks.json.example      # Hook config template
 ├── templates/
-│   └── cursorignore            # Recommended .cursorignore template
-├── install.sh                  # One-command installer
+│   └── cursorignore            # Recommended .cursorignore
+├── examples/
+│   └── before-after.md         # Real A/B output comparisons
+├── skills/
+│   └── auto-dev-SKILL.md       # Companion auto-dev skill
 └── benchmarks/
     ├── prompts/                # 8 preset test prompts
-    └── results/                # A/B test output
+    └── results/                # A/B report (106 trials)
 ```
 
 ## Installation
@@ -124,4 +135,4 @@ Rules work without Headroom — it's an additive optimization.
 | Approach | Code ladder + tool + output | Decision ladder + code diet | Input/output compression |
 | Measurement | A/B subagent testing | Manual benchmarks | Automatic perf stats |
 | Integration | Cursor skill | Cursor rule | API proxy |
-| Unique | 100-trial A/B tested + session learning | Anti-bloat focus | Reversible compression |
+| Unique | 106-trial A/B tested + session learning | Anti-bloat focus | Reversible compression |
