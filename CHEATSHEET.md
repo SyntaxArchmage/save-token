@@ -13,6 +13,8 @@
 | `/save-token review` | Audit current session |
 | `/save-token bench` | A/B test |
 | `/save-token setup` | Install Headroom |
+| `/save-token cost` | Estimate $/month savings |
+| `/save-token cost opus` | Cost for specific model |
 
 ## Code Ladder (stop at first rung)
 1. YAGNI? Skip
@@ -51,3 +53,20 @@
 - `/summarize` at 60% context
 - New chat per task
 - `@file` over `@folder`
+
+## Auto-Activation
+```bash
+cp hooks/hooks.json.example ~/.cursor/hooks.json
+```
+
+## Adapters
+| IDE | File |
+|-----|------|
+| Claude Code | `adapters/AGENTS.md` → project root |
+| Windsurf | `adapters/windsurfrules` → `.windsurfrules` |
+
+## Quick Stats
+- 120 A/B trials, 10 tasks, 3 intensity levels
+- Ultra: -60% code, -93% explanation, -31% tool calls
+- Full: -76% explanation, -40% tool calls
+- Opus full mode: ~$250/month savings at 100 req/day
