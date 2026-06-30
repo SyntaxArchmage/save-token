@@ -1,0 +1,1 @@
+Write a Python function `parse_csv_column(filepath: str, column: str) -> list[float]` that reads a CSV file and returns all values from the specified column as floats, skipping rows with missing or non-numeric values.
