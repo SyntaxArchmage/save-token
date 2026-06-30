@@ -94,7 +94,8 @@ Clear staircase effect: each intensity level reduces output proportionally.
 - Full mode (58 trials): tool_calls -40%, explanation -76%, code -18%
 - Ultra mode (10 trials): tool_calls -80% (complex), explanation -83%, code -54%
 - 3-way comparison (6 trials): clear lite → full → ultra staircase
-- Combined: **74 independent subagent trials** across 5 tasks, 3 intensity levels
+- New tasks (6 trials): TS generics (-57% code, -100% explanation), bash rotate (-90% code), DI refactor (-100% explanation)
+- Combined: **80 independent subagent trials** across 8 tasks, 3 intensity levels
 - Zero correctness regressions
 
 ## Methodology
