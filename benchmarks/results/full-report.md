@@ -104,7 +104,10 @@ Clear staircase effect: each intensity level reduces output proportionally.
 - Round 7 (20 trials): email validator, LRU cache, merge sort, rate limiter
   Ultra avg: code -41%, explanation -88% (simple); code -52%, expl -91% (complex)
   Full mode consistently between baseline and ultra
-- Combined: **150 independent subagent trials** across 16 tasks, 3 intensity levels
+- Round 8 (20 trials): 10 full-mode + 10 lite-mode across all tasks
+  Full avg: code ~20, expl ~2. Lite avg: code ~27, expl ~2.7.
+  Confirms clear baseline > lite > full > ultra ordering.
+- Combined: **170 independent subagent trials** across 16 tasks, 3 intensity levels
 - Zero correctness regressions
 
 ### Visual Summary (106 trials)

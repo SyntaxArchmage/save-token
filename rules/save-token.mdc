@@ -1,6 +1,6 @@
 ---
 description: >-
-  Reduce token consumption (150-trial tested: -40% tool calls, -93% prose).
+  Reduce token consumption (170-trial tested: -40% tool calls, -93% prose).
   Active every response until /save-token off.
 globs:
 alwaysApply: false
