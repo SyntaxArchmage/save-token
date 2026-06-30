@@ -22,7 +22,7 @@ Enforces a **three-layer optimization** every response:
 
 ## A/B Tested Results
 
-Verified across **106 independent subagent trials** (8 tasks, 3 intensity levels):
+Verified across **120 independent subagent trials** (10 tasks, 3 intensity levels):
 
 | Mode | Explanation | Tool Calls | Code Lines | Correctness |
 |------|-------------|------------|------------|-------------|
@@ -135,4 +135,4 @@ Rules work without Headroom — it's an additive optimization.
 | Approach | Code ladder + tool + output | Decision ladder + code diet | Input/output compression |
 | Measurement | A/B subagent testing | Manual benchmarks | Automatic perf stats |
 | Integration | Cursor skill | Cursor rule | API proxy |
-| Unique | 106-trial A/B tested + session learning | Anti-bloat focus | Reversible compression |
+| Unique | 120-trial A/B tested + session learning | Anti-bloat focus | Reversible compression |
