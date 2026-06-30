@@ -6,8 +6,11 @@ set -euo pipefail
 # Or: pipe combined output and specify --baseline-label and --optimized-label.
 
 usage() {
-  echo "Usage: compare.sh <baseline_file> <optimized_file>"
+  echo "Usage: compare.sh [--json] <baseline_file> <optimized_file>"
   echo "   or: compare.sh --parse <single_file>  (extract metrics from one file)"
+  echo
+  echo "Options:"
+  echo "  --json    Output comparison as JSON (for scripting)"
   echo
   echo "Each file should contain one or more METRICS blocks like:"
   echo "  METRICS:"
@@ -56,6 +59,12 @@ if [ "${1:-}" = "--parse" ]; then
   exit 0
 fi
 
+JSON_OUTPUT=false
+if [ "${1:-}" = "--json" ]; then
+  JSON_OUTPUT=true
+  shift
+fi
+
 [ $# -lt 2 ] && usage
 
 BASELINE_FILE="$1"
@@ -66,6 +75,22 @@ OPTIMIZED_FILE="$2"
 
 B=$(extract_metrics "$BASELINE_FILE")
 O=$(extract_metrics "$OPTIMIZED_FILE")
+
+if [ "$JSON_OUTPUT" = true ]; then
+  python3 -c "
+import json
+b = json.loads('$B')
+o = json.loads('$O')
+result = {}
+for key in ['tool_calls', 'code_lines', 'explanation_lines', 'files_read']:
+    bv, ov = b.get(key, 0), o.get(key, 0)
+    delta = ((ov - bv) / bv * 100) if bv > 0 else 0
+    result[key] = {'baseline': bv, 'optimized': ov, 'delta_pct': round(delta, 1)}
+result['_trials'] = {'baseline': int(b.get('_trials', 1)), 'optimized': int(o.get('_trials', 1))}
+print(json.dumps(result, indent=2))
+"
+  exit 0
+fi
 
 python3 -c "
 import json
