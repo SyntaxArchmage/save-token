@@ -22,16 +22,14 @@ Enforces a **three-layer optimization** every response:
 
 ## A/B Tested Results
 
-Verified across **58 independent subagent trials** (5 tasks × 4+ trials per arm):
+Verified across **68 independent subagent trials** (5 tasks, 3 intensity levels):
 
-| Metric | Baseline (n=29) | Optimized (n=29) | Change |
-|--------|----------------|------------------|--------|
-| Explanation lines | 2.1 | 0.5 | **-76%** |
-| Tool calls | 6.5 | 3.9 | **-40%** |
-| Code lines | 16.7 | 13.7 | **-18%** |
-| Correctness | 100% | 100% | = |
+| Mode | Explanation | Tool Calls | Code Lines | Correctness |
+|------|-------------|------------|------------|-------------|
+| **full** (n=58) | **-76%** | **-40%** | -18% | 100% |
+| **ultra** (n=10) | **-83%** | **-80%** | **-54%** | 100% |
 
-Effect scales with task complexity — simple tasks: -18% tool calls, complex tasks: **-54%**.
+Effect scales with task complexity — simple tasks: -18%, complex tasks: **-80%**.
 
 See [benchmarks/results/full-report.md](benchmarks/results/full-report.md) for per-task breakdowns.
 
@@ -69,7 +67,13 @@ save-token/
 │   ├── benchmark.sh            # A/B test prompt generator
 │   ├── compare.sh              # Results comparison table
 │   ├── stats.sh                # Status + metrics display
-│   └── learn.sh                # Session waste pattern miner
+│   ├── learn.sh                # Session waste pattern miner
+│   ├── mode.sh                 # Mode persistence + history
+│   ├── test.sh                 # 20-check test runner
+│   └── analyze_transcript.py   # Multi-pattern transcript analyzer
+├── templates/
+│   └── cursorignore            # Recommended .cursorignore template
+├── install.sh                  # One-command installer
 └── benchmarks/
     ├── prompts/                # 5 preset test prompts
     └── results/                # A/B test output
@@ -77,11 +81,12 @@ save-token/
 
 ## Installation
 
-Copy or symlink to your Cursor skills directory:
-
 ```bash
-ln -s /path/to/save-token ~/.cursor/skills/save-token
+git clone https://github.com/YOUR_USER/save-token.git
+cd save-token && bash install.sh
 ```
+
+Or manually symlink: `ln -s /path/to/save-token ~/.cursor/skills/save-token`
 
 Then use `/save-token` in any agent chat.
 
@@ -103,4 +108,4 @@ Rules work without Headroom — it's an additive optimization.
 | Approach | Code ladder + tool + output | Decision ladder + code diet | Input/output compression |
 | Measurement | A/B subagent testing | Manual benchmarks | Automatic perf stats |
 | Integration | Cursor skill | Cursor rule | API proxy |
-| Unique | 58-trial A/B tested + session learning | Anti-bloat focus | Reversible compression |
+| Unique | 68-trial A/B tested + session learning | Anti-bloat focus | Reversible compression |
