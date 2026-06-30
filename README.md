@@ -22,7 +22,7 @@ Enforces a **three-layer optimization** every response:
 
 ## A/B Tested Results
 
-Verified across **120 independent subagent trials** (10 tasks, 3 intensity levels):
+Verified across **130 independent subagent trials** (12 tasks, 3 intensity levels):
 
 | Mode | Explanation | Tool Calls | Code Lines | Correctness |
 |------|-------------|------------|------------|-------------|
@@ -75,7 +75,9 @@ save-token/
 │   ├── test.sh                 # 31-check test runner
 │   └── analyze_transcript.py   # Multi-pattern transcript analyzer
 ├── adapters/
-│   └── AGENTS.md               # Claude Code adapter
+│   ├── AGENTS.md               # Claude Code adapter
+│   ├── windsurfrules           # Windsurf adapter
+│   └── copilot-instructions.md # GitHub Copilot adapter
 ├── hooks/
 │   ├── session-start.sh        # Auto-activate hook
 │   └── hooks.json.example      # Hook config template
@@ -86,8 +88,8 @@ save-token/
 ├── skills/
 │   └── auto-dev-SKILL.md       # Companion auto-dev skill
 └── benchmarks/
-    ├── prompts/                # 8 preset test prompts
-    └── results/                # A/B report (106 trials)
+    ├── prompts/                # 10 preset test prompts
+    └── results/                # A/B report (130 trials)
 ```
 
 ## Installation
@@ -133,6 +135,7 @@ Rules work without Headroom — it's an additive optimization.
 |----------|------|-----|
 | **Claude Code** | `adapters/AGENTS.md` | Copy to project root as `AGENTS.md` |
 | **Windsurf** | `adapters/windsurfrules` | Copy to project root as `.windsurfrules` |
+| **GitHub Copilot** | `adapters/copilot-instructions.md` | Copy to `.github/copilot-instructions.md` |
 
 ## Auto-Activation (Cursor Hook)
 
@@ -152,4 +155,4 @@ Or merge the `sessionStart` entry into your existing `hooks.json`.
 | Approach | Code ladder + tool + output | Decision ladder + code diet | Input/output compression |
 | Measurement | A/B subagent testing | Manual benchmarks | Automatic perf stats |
 | Integration | Cursor skill | Cursor rule | API proxy |
-| Unique | 120-trial A/B tested + session learning | Anti-bloat focus | Reversible compression |
+| Unique | 130-trial A/B tested + session learning | Anti-bloat focus | Reversible compression |
