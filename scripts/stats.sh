@@ -38,3 +38,13 @@ else
   echo "Waste patterns: none yet"
   echo "  Run '/save-token learn' to analyze past sessions"
 fi
+
+# Mode history
+HISTORY=$(bash "$SCRIPT_DIR/mode.sh" history 2>/dev/null)
+if [ "$HISTORY" != "(no history)" ] && [ -n "$HISTORY" ]; then
+  echo
+  echo "Recent mode changes:"
+  echo "$HISTORY" | tail -5 | while IFS= read -r line; do
+    echo "  $line"
+  done
+fi
