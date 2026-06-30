@@ -127,6 +127,23 @@ Rules work without Headroom — it's an additive optimization.
 | Claude Code | Partial (rules work, scripts need adaptation) |
 | Other AI IDEs | Rules portable, scripts Cursor-specific |
 
+## Adapters (Other AI IDEs)
+
+| Platform | File | How |
+|----------|------|-----|
+| **Claude Code** | `adapters/AGENTS.md` | Copy to project root as `AGENTS.md` |
+| **Windsurf** | `adapters/windsurfrules` | Copy to project root as `.windsurfrules` |
+
+## Auto-Activation (Cursor Hook)
+
+Optionally activate save-token automatically on every new chat:
+
+```bash
+cp hooks/hooks.json.example ~/.cursor/hooks.json
+```
+
+Or merge the `sessionStart` entry into your existing `hooks.json`.
+
 ## How It Compares
 
 | | save-token | Ponytail | Headroom |
