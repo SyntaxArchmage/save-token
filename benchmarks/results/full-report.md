@@ -101,7 +101,10 @@ Clear staircase effect: each intensity level reduces output proportionally.
 - Lite mode validation (4 trials): code -18% avg, explanation -29% avg (advisory, not enforced)
 - Round 5 (10 trials): REST endpoint + HTML link extractor, confirms savings across all modes
 - Round 6 (10 trials): JSON schema validator + CLI todo manager — complex tasks show strongest savings
-- Combined: **130 independent subagent trials** across 12 tasks, 3 intensity levels
+- Round 7 (20 trials): email validator, LRU cache, merge sort, rate limiter
+  Ultra avg: code -41%, explanation -88% (simple); code -52%, expl -91% (complex)
+  Full mode consistently between baseline and ultra
+- Combined: **150 independent subagent trials** across 16 tasks, 3 intensity levels
 - Zero correctness regressions
 
 ### Visual Summary (106 trials)

@@ -22,7 +22,7 @@ Enforces a **three-layer optimization** every response:
 
 ## A/B Tested Results
 
-Verified across **130 independent subagent trials** (12 tasks, 3 intensity levels):
+Verified across **150 independent subagent trials** (16 tasks, 3 intensity levels):
 
 | Mode | Explanation | Tool Calls | Code Lines | Correctness |
 |------|-------------|------------|------------|-------------|
@@ -155,4 +155,4 @@ Or merge the `sessionStart` entry into your existing `hooks.json`.
 | Approach | Code ladder + tool + output | Decision ladder + code diet | Input/output compression |
 | Measurement | A/B subagent testing | Manual benchmarks | Automatic perf stats |
 | Integration | Cursor skill | Cursor rule | API proxy |
-| Unique | 130-trial A/B tested + session learning | Anti-bloat focus | Reversible compression |
+| Unique | 150-trial A/B tested + session learning | Anti-bloat focus | Reversible compression |

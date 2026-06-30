@@ -12,7 +12,7 @@ argument-hint: "[setup|bench|stats|learn|review|lite|full|ultra|off]"
 # /save-token
 
 Reduce token waste across code generation, tool usage, and output verbosity.
-Verified: 130 A/B subagent trials show -60% code, -93% explanation, -31% tool calls (ultra mode).
+Verified: 150 A/B subagent trials show -60% code, -93% explanation, -31% tool calls (ultra mode).
 
 ## Activation
 
@@ -75,7 +75,7 @@ A/B test to measure rule effectiveness on a given task.
    ```
 
 3. For statistical robustness, run **4 trials per arm** (8 subagents total).
-   Our 130-trial benchmark uses this sample size across 12 distinct tasks.
+   Our 150-trial benchmark uses this sample size across 16 distinct tasks.
 
 4. Compare results and display a table:
    ```
