@@ -50,6 +50,20 @@ echo
 echo "Context cost: ~${TOTAL_TOKENS} tokens/request"
 echo "  agent-rules.md: ${RULES_WORDS}w  save-token.mdc: ${MDC_WORDS}w  SKILL.md: ${SKILL_WORDS}w"
 
+# Quick cost summary
+case "$MODE" in
+  ultra) EXPL_SAVE=93 ;;
+  full)  EXPL_SAVE=76 ;;
+  lite)  EXPL_SAVE=50 ;;
+  *)     EXPL_SAVE=0 ;;
+esac
+if [ "$EXPL_SAVE" -gt 0 ]; then
+  OPUS_MONTHLY=$(python3 -c "print(f'\${2000 * $EXPL_SAVE / 100 * 75 / 1000000 * 100 * 22:.0f}')" 2>/dev/null || echo "?")
+  echo
+  echo "Est. savings ($MODE, Opus, 100 req/day): ~${OPUS_MONTHLY}/month"
+  echo "  Run '/save-token cost [model]' for detailed breakdown"
+fi
+
 # Mode history
 HISTORY=$(bash "$SCRIPT_DIR/mode.sh" history 2>/dev/null)
 if [ "$HISTORY" != "(no history)" ] && [ -n "$HISTORY" ]; then
