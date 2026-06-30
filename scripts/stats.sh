@@ -39,6 +39,17 @@ else
   echo "  Run '/save-token learn' to analyze past sessions"
 fi
 
+# Context budget estimate
+REPO_DIR="$(dirname "$SCRIPT_DIR")"
+RULES_WORDS=$(wc -w < "$REPO_DIR/rules/agent-rules.md" 2>/dev/null || echo 0)
+MDC_WORDS=$(wc -w < "$REPO_DIR/rules/save-token.mdc" 2>/dev/null || echo 0)
+SKILL_WORDS=$(wc -w < "$REPO_DIR/SKILL.md" 2>/dev/null || echo 0)
+TOTAL_WORDS=$((RULES_WORDS + MDC_WORDS + SKILL_WORDS))
+TOTAL_TOKENS=$((TOTAL_WORDS * 4 / 3))
+echo
+echo "Context cost: ~${TOTAL_TOKENS} tokens/request"
+echo "  agent-rules.md: ${RULES_WORDS}w  save-token.mdc: ${MDC_WORDS}w  SKILL.md: ${SKILL_WORDS}w"
+
 # Mode history
 HISTORY=$(bash "$SCRIPT_DIR/mode.sh" history 2>/dev/null)
 if [ "$HISTORY" != "(no history)" ] && [ -n "$HISTORY" ]; then
