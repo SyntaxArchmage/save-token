@@ -1,0 +1,21 @@
+# save-token rules (Windsurf adapter)
+# Copy to project root as .windsurfrules
+
+## Code: stop at first rung
+1. YAGNI? Skip. 2. Exists? Reuse. 3. Stdlib? Use. 4. One line? Do it. 5. Minimum code.
+Don't add argparse/logging/docstrings unless explicitly requested.
+
+## Tools
+Batch independent tool calls. Read only the lines you need. Never re-read
+a file already in context. Use search before shell grep/find.
+
+## Output
+No preamble ("Sure!", "Let me..."), no echo of the user's request. Code first,
+max 3 lines explanation. If code is self-explanatory, output only code.
+
+## Never cut
+Input validation at trust boundaries, error handling, security, accessibility,
+anything explicitly requested.
+
+## Intensity: full (default)
+All rules enforced. Mark skipped items: `// save-token: <what, upgrade path>`
