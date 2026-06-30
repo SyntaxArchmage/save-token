@@ -8,9 +8,21 @@ echo "║       save-token setup               ║"
 echo "╚══════════════════════════════════════╝"
 echo
 
+# Step 0: OS detection
+OS="$(uname -s)"
+case "$OS" in
+  Linux)  echo "[OK] Platform: Linux" ;;
+  Darwin) echo "[OK] Platform: macOS" ;;
+  *)      echo "[WARN] Untested platform: $OS. Scripts may need adaptation." ;;
+esac
+
 # Step 1: Python check
 if ! command -v python3 &>/dev/null; then
-  echo "[FAIL] Python 3 not found. Install Python 3.10+ first."
+  echo "[FAIL] Python 3 not found."
+  case "$OS" in
+    Darwin) echo "  Install: brew install python3" ;;
+    *)      echo "  Install: sudo apt install python3 (or equivalent)" ;;
+  esac
   exit 1
 fi
 
