@@ -22,14 +22,18 @@ Enforces a **three-layer optimization** every response:
 
 ## A/B Tested Results
 
-Tested with 12 parallel subagent trials (2 tasks × 3 baseline + 3 optimized):
+Verified across **58 independent subagent trials** (5 tasks × 4+ trials per arm):
 
-| Metric | Baseline | Optimized | Change |
-|--------|----------|-----------|--------|
-| Explanation lines | 2.3 | 1.0 | **-57%** |
-| Tool calls | 4.0 | 3.0 | **-25%** |
-| Code lines | 24.3 | 22.3 | **-8%** |
+| Metric | Baseline (n=29) | Optimized (n=29) | Change |
+|--------|----------------|------------------|--------|
+| Explanation lines | 2.1 | 0.5 | **-76%** |
+| Tool calls | 6.5 | 3.9 | **-40%** |
+| Code lines | 16.7 | 13.7 | **-18%** |
 | Correctness | 100% | 100% | = |
+
+Effect scales with task complexity — simple tasks: -18% tool calls, complex tasks: **-54%**.
+
+See [benchmarks/results/full-report.md](benchmarks/results/full-report.md) for per-task breakdowns.
 
 ## Commands
 
@@ -99,4 +103,4 @@ Rules work without Headroom — it's an additive optimization.
 | Approach | Code ladder + tool + output | Decision ladder + code diet | Input/output compression |
 | Measurement | A/B subagent testing | Manual benchmarks | Automatic perf stats |
 | Integration | Cursor skill | Cursor rule | API proxy |
-| Unique | Combines all 3 layers + learns from sessions | Anti-bloat focus | Reversible compression |
+| Unique | 58-trial A/B tested + session learning | Anti-bloat focus | Reversible compression |

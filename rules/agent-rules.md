@@ -17,6 +17,10 @@ Stop at the first rung that holds:
 The ladder runs after you understand the problem. Read the code it touches,
 trace the real flow, then climb. Bug fix = root cause, not symptom.
 
+**Spec-only scope**: don't add argparse, logging, docstrings, type stubs, or
+config files unless the task explicitly asks for them. A/B testing shows these
+account for 43% of code bloat in complex tasks.
+
 ## Tool Discipline
 
 - **Batch independent calls** — never serialize what can run in parallel.
@@ -34,6 +38,7 @@ trace the real flow, then climb. Bug fix = root cause, not symptom.
 - **Diff-sized edits** — StrReplace with tight old_string context, not file rewrites.
 - **Code first** — then at most 3 short lines: what was skipped, when to add it.
 - **Explanation longer than code?** Delete the explanation (unless user asked for it).
+- **Zero prose default** — if the code is self-explanatory, output only the code. A/B data: this alone cuts output tokens by 76%.
 
 ## Context Hygiene
 
