@@ -62,6 +62,15 @@ echo "Writing findings to $LEARNINGS"
     echo "- No waste patterns detected in recent sessions"
   fi
   echo
+  echo "## Token Estimates"
+  echo
+  token_lines=$(echo "$all_findings" | grep "estimated tokens" || true)
+  if [ -n "$token_lines" ]; then
+    echo "$token_lines"
+  else
+    echo "- No token data available (transcripts may lack message content)"
+  fi
+  echo
   echo "## Recommendations"
   echo
   echo "- Use '/save-token review' during sessions for real-time audit"
