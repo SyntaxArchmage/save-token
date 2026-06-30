@@ -2,11 +2,17 @@
 
 A Cursor skill that minimizes token consumption when using expensive AI models (Opus, o3, etc.) — without sacrificing output quality.
 
-## Quick Start
+## 60-Second Start
 
-```
+```bash
+# 1. Install (one-time)
+git clone https://github.com/YOUR_USER/save-token.git
+cd save-token && bash install.sh
+
+# 2. Use (in any Cursor chat)
 /save-token          # activate (default: full mode)
 /save-token ultra    # maximum savings
+/save-token stats    # see mode + cost estimate
 /save-token off      # deactivate
 ```
 
