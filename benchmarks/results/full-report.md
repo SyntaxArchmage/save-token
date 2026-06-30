@@ -79,11 +79,22 @@ Ultra mode applies stricter rules: single-expression preference, no prose, delet
 
 **Ultra aggregate**: code -54%, explanation -83% vs baseline.
 
+## 3-Way Intensity Comparison (file-watcher task, 6 trials)
+
+| Metric | Lite (n=2) | Full (n=2) | Ultra (n=2) |
+|--------|-----------|-----------|-------------|
+| tool_calls | 8.0 | 3.5 | **2.0** |
+| code_lines | 39.5 | 15.5 | **11.0** |
+| explanation | 5.0 | 0.5 | **0.5** |
+
+Clear staircase effect: each intensity level reduces output proportionally.
+
 ## Grand Total
 
 - Full mode (58 trials): tool_calls -40%, explanation -76%, code -18%
 - Ultra mode (10 trials): tool_calls -80% (complex), explanation -83%, code -54%
-- Combined: **68 independent subagent trials** across 5 tasks, 3 intensity levels
+- 3-way comparison (6 trials): clear lite → full → ultra staircase
+- Combined: **74 independent subagent trials** across 5 tasks, 3 intensity levels
 - Zero correctness regressions
 
 ## Methodology
