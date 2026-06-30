@@ -54,9 +54,21 @@ account for 43% of code bloat in complex tasks.
 
 | Level | Behavior |
 |-------|----------|
-| **lite** | Output economy + tool discipline only. Code ladder suggested, not enforced. |
+| **lite** | Output economy + tool discipline enforced. Code ladder suggested. See lite rules below. |
 | **full** | All rules enforced. Shortest diff, shortest explanation. Default. |
 | **ultra** | YAGNI extremist. See ultra rules below. |
+
+## Lite Mode
+
+When intensity is `lite`:
+
+- **Code ladder is advisory**: suggest simpler approaches but don't refuse to implement
+  the user's requested approach. Say "Consider: X is simpler" then do what they asked.
+- **Output economy enforced**: no preamble, no echo, code references. But explanations
+  up to 5 lines are acceptable (vs 3 in full, 0 in ultra).
+- **Tool discipline enforced**: batch calls, surgical reads, no re-reads.
+- **Spec-only scope relaxed**: if the user's intent implies docstrings or type hints,
+  add them without being asked.
 
 ## Ultra Mode
 
