@@ -113,13 +113,14 @@ Outputs findings to `~/.save-token/learnings.md`.
 
 ## Command: review
 
-Analyze the current session directly (no subagent). Look for:
-- Files read multiple times in this conversation
-- Tool calls that could have been batched
-- Responses that restated context unnecessarily
-- Code blocks that should have been code references
+Analyze the current session for token waste (no subagent):
 
-Report as a short checklist of improvements.
+```bash
+bash ~/.cursor/skills/save-token/scripts/review.sh
+```
+
+Detects: repeated file reads, unbatched sequential tool calls, verbose responses.
+Outputs a checklist of improvements.
 
 ## Command: lite / full / ultra
 
