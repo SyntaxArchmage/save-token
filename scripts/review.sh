@@ -38,15 +38,26 @@ echo "Reviewing: $project"
 echo "Transcript: $(basename "$LATEST")"
 echo
 
-# Run analyzer
-findings=$(python3 "$SCRIPT_DIR/analyze_transcript.py" "$LATEST" 2>/dev/null || true)
+# Run analyzer with detailed output
+findings=$(python3 -c "
+import json, sys
+sys.path.insert(0, '$SCRIPT_DIR')
+from analyze_transcript import analyze
+r = analyze('$LATEST')
+waste = []
+for k in ('repeated_reads', 'sequential_calls', 'verbose_responses'):
+    waste.extend(r.get(k, []))
+if waste:
+    print('Waste patterns found:')
+    for w in waste:
+        print(w)
+else:
+    print('No waste patterns detected in this session.')
+for t in r.get('token_estimate', []):
+    print(t)
+" 2>/dev/null || true)
 
-if [ -n "$findings" ]; then
-  echo "Waste patterns found:"
-  echo "$findings"
-else
-  echo "No waste patterns detected in this session."
-fi
+echo "$findings"
 
 echo
 echo "Checklist:"

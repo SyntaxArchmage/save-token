@@ -9,6 +9,8 @@ def analyze(filepath: str) -> dict:
     reads = collections.Counter()
     tool_sequence = []
     verbose_responses = []
+    total_chars = 0
+    message_count = 0
 
     with open(filepath) as f:
         for line in f:
@@ -29,11 +31,20 @@ def analyze(filepath: str) -> dict:
 
             elif obj_type in ("assistant", "assistant_message"):
                 content = obj.get("content", obj.get("text", ""))
-                if isinstance(content, str) and len(content) > 2000:
-                    preview = content[:80].replace("\n", " ")
-                    verbose_responses.append(
-                        f"- verbose response ({len(content)} chars): {preview}..."
-                    )
+                if isinstance(content, str):
+                    total_chars += len(content)
+                    message_count += 1
+                    if len(content) > 2000:
+                        preview = content[:80].replace("\n", " ")
+                        verbose_responses.append(
+                            f"- verbose response ({len(content)} chars): {preview}..."
+                        )
+
+            elif obj_type in ("user", "human", "user_message"):
+                content = obj.get("content", obj.get("text", ""))
+                if isinstance(content, str):
+                    total_chars += len(content)
+                    message_count += 1
 
     # Repeated reads
     repeated = {k: v for k, v in reads.items() if v > 2}
@@ -57,10 +68,19 @@ def analyze(filepath: str) -> dict:
             )
         i += 1
 
+    # Estimated token usage (~4 chars per token for English)
+    est_tokens = total_chars * 4 // 3 if total_chars else 0
+    cost_summary = []
+    if est_tokens > 0:
+        cost_summary.append(
+            f"- estimated tokens: ~{est_tokens:,} ({message_count} messages, {total_chars:,} chars)"
+        )
+
     return {
         "repeated_reads": read_findings,
         "sequential_calls": batch_findings,
         "verbose_responses": verbose_responses[:5],
+        "token_estimate": cost_summary,
     }
 
 
