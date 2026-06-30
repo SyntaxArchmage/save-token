@@ -78,7 +78,7 @@ save-token/
 │   ├── learn.sh                # Session waste + token estimation
 │   ├── review.sh               # Real-time session audit
 │   ├── mode.sh                 # Mode persistence + history
-│   ├── test.sh                 # 31-check test runner
+│   ├── test.sh                 # 42-check test runner
 │   └── analyze_transcript.py   # Multi-pattern transcript analyzer
 ├── adapters/
 │   ├── AGENTS.md               # Claude Code adapter
@@ -95,7 +95,7 @@ save-token/
 │   └── auto-dev-SKILL.md       # Companion auto-dev skill
 └── benchmarks/
     ├── prompts/                # 10 preset test prompts
-    └── results/                # A/B report (130 trials)
+    └── results/                # A/B report (170 trials)
 ```
 
 ## Installation

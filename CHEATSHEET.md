@@ -66,7 +66,7 @@ cp hooks/hooks.json.example ~/.cursor/hooks.json
 | Windsurf | `adapters/windsurfrules` → `.windsurfrules` |
 
 ## Quick Stats
-- 120 A/B trials, 10 tasks, 3 intensity levels
+- 170 A/B trials, 16 tasks, 3 intensity levels
 - Ultra: -60% code, -93% explanation, -31% tool calls
 - Full: -76% explanation, -40% tool calls
 - Opus full mode: ~$250/month savings at 100 req/day
