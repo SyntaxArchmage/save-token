@@ -27,7 +27,7 @@ Verified across **100 independent subagent trials** (8 tasks, 3 intensity levels
 | Mode | Explanation | Tool Calls | Code Lines | Correctness |
 |------|-------------|------------|------------|-------------|
 | **full** (n=58) | **-76%** | **-40%** | -18% | 100% |
-| **ultra** (n=10) | **-83%** | **-80%** | **-54%** | 100% |
+| **ultra** (n=42) | **-93%** | **-31%** | **-60%** | 100% |
 
 Effect scales with task complexity — simple tasks: -18%, complex tasks: **-80%**.
 
@@ -75,7 +75,7 @@ save-token/
 │   └── cursorignore            # Recommended .cursorignore template
 ├── install.sh                  # One-command installer
 └── benchmarks/
-    ├── prompts/                # 5 preset test prompts
+    ├── prompts/                # 8 preset test prompts
     └── results/                # A/B test output
 ```
 
