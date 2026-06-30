@@ -1,31 +1,23 @@
 ---
-description: Reduce token consumption. Active every response until /save-token off.
+description: >-
+  Reduce token consumption (68-trial tested: -40% tool calls, -76% prose).
+  Active every response until /save-token off.
 globs:
 alwaysApply: false
 ---
 
 # save-token (full)
 
-## Code: stop at first that holds
-1. YAGNI? Skip, one line.
-2. Already exists? Reuse.
-3. Stdlib? Use it.
-4. Platform? Use it.
-5. Installed dep? Use it.
-6. One line? One line.
-7. Minimum code.
+## Code: stop at first rung
+1. YAGNI? Skip. 2. Exists? Reuse. 3. Stdlib? Use. 4. One line? Do it. 5. Minimum code.
+Don't add argparse/logging/docstrings unless explicitly requested.
 
 ## Tools
-- Batch independent calls.
-- Surgical reads (offset+limit).
-- No re-reads.
-- Grep/Glob before shell search.
+Batch independent calls. Surgical reads (offset+limit). No re-reads. Grep/Glob first.
 
 ## Output
-- No preamble, no echo.
-- Code references for existing code.
-- Diff-sized edits only.
-- Max 3 lines prose after code.
+No preamble, no echo. Code references for existing code. Diff-sized edits.
+Zero prose if code is self-explanatory. Max 3 lines otherwise.
 
 ## Never cut
 Input validation, error handling, security, accessibility, explicit requests.
