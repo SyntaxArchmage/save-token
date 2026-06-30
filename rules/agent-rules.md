@@ -45,8 +45,10 @@ account for 43% of code bloat in complex tasks.
 - **Targeted @mentions** — @file/@folder/@symbol, not repo-wide.
 - **.cursorignore** — exclude node_modules/, dist/, build/, .env*, *.lock.
 - **Rules under 200 words** — alwaysApply rules are a per-request tax.
-- **/summarize at 60%** — don't wait for auto-compaction.
+- **/summarize at 60%** — when the agent warns about context usage, summarize proactively.
+  Don't wait for auto-compaction which loses precision. Manual summarize preserves intent.
 - **New chat per task** — don't carry stale context across unrelated work.
+  Exception: multi-step tasks that share state (e.g., A/B tests across same codebase).
 
 ## Intensity Levels
 
