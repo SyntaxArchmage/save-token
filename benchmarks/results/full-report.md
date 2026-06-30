@@ -62,6 +62,30 @@ Tasks: 5 distinct prompts × 4-7 trials per arm
 
 5. **The code ladder drives the biggest wins on complex tasks**: when baseline agents add argument parsing, logging, and other features beyond the spec, the YAGNI rung catches it.
 
+## Ultra Mode Results (10 additional trials)
+
+Ultra mode applies stricter rules: single-expression preference, no prose, deletion over addition.
+
+| Task | Metric | Baseline | Ultra | Delta |
+|------|--------|----------|-------|-------|
+| CSV Parser | code_lines | 16.5 | 11.0 | **-33%** |
+| CSV Parser | explanation | 3.0 | 0.5 | **-83%** |
+| Email Validator | code_lines | 11 | 4 | **-64%** |
+| Email Validator | explanation | 3 | 0 | **-100%** |
+| REST Endpoint | code_lines | 13 | 4 | **-69%** |
+| REST Endpoint | explanation | 2 | 1 | **-50%** |
+| File Watcher | code_lines | 20 | 10 | **-50%** |
+| File Watcher | tool_calls | 15 | 3 | **-80%** |
+
+**Ultra aggregate**: code -54%, explanation -83% vs baseline.
+
+## Grand Total
+
+- Full mode (58 trials): tool_calls -40%, explanation -76%, code -18%
+- Ultra mode (10 trials): tool_calls -80% (complex), explanation -83%, code -54%
+- Combined: **68 independent subagent trials** across 5 tasks, 3 intensity levels
+- Zero correctness regressions
+
 ## Methodology
 
 - Each trial is an independent `best-of-n-runner` subagent with isolated git worktree
