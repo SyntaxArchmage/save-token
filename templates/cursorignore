@@ -1,0 +1,43 @@
+# save-token recommended .cursorignore
+# Copy to your project root as .cursorignore
+# Reduces context window usage by excluding non-essential files
+
+# Dependencies
+node_modules/
+vendor/
+.venv/
+venv/
+__pycache__/
+
+# Build output
+dist/
+build/
+out/
+.next/
+target/
+
+# Lock files (large, not useful for AI)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+Pipfile.lock
+poetry.lock
+Cargo.lock
+go.sum
+
+# Environment and secrets
+.env*
+*.pem
+*.key
+
+# IDE and OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Logs and data
+*.log
+*.sqlite
+*.db

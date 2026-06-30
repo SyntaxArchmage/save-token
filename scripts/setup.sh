@@ -53,4 +53,11 @@ echo "│                                             │"
 echo "│ Keep your existing API key unchanged.       │"
 echo "└─────────────────────────────────────────────┘"
 echo
+REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+if [ ! -f .cursorignore ] && [ -f "$REPO_DIR/templates/cursorignore" ]; then
+  echo "[TIP] Copy .cursorignore to reduce context usage:"
+  echo "  cp $REPO_DIR/templates/cursorignore .cursorignore"
+fi
+
+echo
 echo "[OK] Setup complete. Rules active at 'full' intensity."
