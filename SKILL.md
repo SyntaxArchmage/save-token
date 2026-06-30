@@ -12,7 +12,7 @@ argument-hint: "[setup|bench|stats|learn|review|lite|full|ultra|off]"
 # /save-token
 
 Reduce token waste across code generation, tool usage, and output verbosity.
-Verified: 100 A/B subagent trials show -60% code, -93% explanation, -31% tool calls (ultra mode).
+Verified: 120 A/B subagent trials show -60% code, -93% explanation, -31% tool calls (ultra mode).
 
 ## Activation
 
@@ -33,6 +33,7 @@ That file contains the complete behavior ruleset. Apply it immediately.
 | `/save-token stats` | Show savings statistics |
 | `/save-token learn` | Mine past sessions for waste patterns |
 | `/save-token review` | Audit current session for token waste |
+| `/save-token cost [model]` | Estimate $/month savings |
 
 ## Command: setup
 
@@ -74,7 +75,7 @@ A/B test to measure rule effectiveness on a given task.
    ```
 
 3. For statistical robustness, run **4 trials per arm** (8 subagents total).
-   Our 100-trial benchmark uses this sample size across 8 distinct tasks.
+   Our 120-trial benchmark uses this sample size across 10 distinct tasks.
 
 4. Compare results and display a table:
    ```
@@ -121,6 +122,15 @@ bash ~/.cursor/skills/save-token/scripts/review.sh
 
 Detects: repeated file reads, unbatched sequential tool calls, verbose responses.
 Outputs a checklist of improvements.
+
+## Command: cost
+
+```bash
+bash ~/.cursor/skills/save-token/scripts/cost.sh [opus|sonnet|haiku|gpt4o|o3]
+```
+
+Estimates monthly dollar savings based on model pricing, current mode, and
+120-trial benchmark data. Default model: opus.
 
 ## Command: lite / full / ultra
 
