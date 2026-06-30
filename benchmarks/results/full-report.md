@@ -98,7 +98,8 @@ Clear staircase effect: each intensity level reduces output proportionally.
 - Refactor-extract (4 trials): code -53%, explanation -88%
 - Round 4 (16 trials): all 8 tasks, confirms aggregate trends
 - Full mode revalidation (6 trials): bash -76% code, TS -57% code, DI -73% code, explanation -96% avg
-- Combined: **106 independent subagent trials** across 8 tasks, 3 intensity levels
+- Lite mode validation (4 trials): code -18% avg, explanation -29% avg (advisory, not enforced)
+- Combined: **110 independent subagent trials** across 8 tasks, 3 intensity levels
 - Zero correctness regressions
 
 ### Visual Summary (106 trials)
