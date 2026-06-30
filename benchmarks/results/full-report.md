@@ -1,7 +1,7 @@
 # save-token A/B Test Report
 
 Generated: 2026-06-30
-Total trials: 58 (29 baseline + 29 optimized)
+Total trials: 106 across all rounds
 Tasks: 5 distinct prompts × 4-7 trials per arm
 
 ## Per-Task Results
@@ -100,6 +100,21 @@ Clear staircase effect: each intensity level reduces output proportionally.
 - Full mode revalidation (6 trials): bash -76% code, TS -57% code, DI -73% code, explanation -96% avg
 - Combined: **106 independent subagent trials** across 8 tasks, 3 intensity levels
 - Zero correctness regressions
+
+### Visual Summary (106 trials)
+
+```
+                    Baseline    Full      Ultra
+                    ────────    ────      ─────
+Code lines       ████████████████  ██████████   ██████
+                       16.2        ~13.7         6.4
+
+Explanation      ████████████████  ████           █
+                        4.1        ~1.0          0.3
+
+Tool calls       ████████████████  ██████████   ████████
+                        6.1        ~3.9          4.2
+```
 
 ### Aggregate across all 100 trials
 | Metric | Baseline avg | Ultra avg | Delta |
