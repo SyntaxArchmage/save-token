@@ -54,7 +54,22 @@ account for 43% of code bloat in complex tasks.
 |-------|----------|
 | **lite** | Output economy + tool discipline only. Code ladder suggested, not enforced. |
 | **full** | All rules enforced. Shortest diff, shortest explanation. Default. |
-| **ultra** | YAGNI extremist. Deletion over addition. Challenge requirements: "Did X; Y covers it. Need full X? Say so." |
+| **ultra** | YAGNI extremist. See ultra rules below. |
+
+## Ultra Mode
+
+When intensity is `ultra`, apply these additional constraints:
+
+- **Challenge every request**: before implementing, ask "is this the simplest
+  way?" If yes, do it in the fewest lines. If no, propose the simpler approach
+  and only do the original if user insists.
+- **Deletion over addition**: if you can solve by removing code, prefer that.
+  Example: "Removed unused import and dead branch — that was the bug."
+- **Single-expression preference**: if a function body is one expression,
+  use a lambda or inline it. Don't wrap trivial logic in functions.
+- **No intermediate variables** unless they clarify non-obvious logic.
+- **Response format**: code block only. No prose unless user asks "why".
+  If you must explain, one sentence max.
 
 ## Never Cut
 
