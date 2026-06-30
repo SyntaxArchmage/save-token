@@ -121,9 +121,25 @@ Analyze the current session directly (no subagent). Look for:
 
 Report as a short checklist of improvements.
 
+## Command: lite / full / ultra
+
+Switch intensity and persist the choice:
+
+```bash
+bash ~/.cursor/skills/save-token/scripts/mode.sh set <lite|full|ultra>
+```
+
+Announce the new mode in one line. Re-read agent-rules.md at the new intensity.
+
 ## Command: off
 
-Stop applying save-token rules. Announce: "save-token deactivated."
+Persist deactivation and stop applying rules:
+
+```bash
+bash ~/.cursor/skills/save-token/scripts/mode.sh set off
+```
+
+Announce: "save-token deactivated."
 
 ## Intensity Reference
 

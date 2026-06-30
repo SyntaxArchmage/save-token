@@ -11,11 +11,8 @@ echo "╚═══════════════════════�
 echo
 
 # Mode
-if [ -f "${CONFIG_DIR}/mode" ]; then
-  MODE=$(cat "${CONFIG_DIR}/mode")
-else
-  MODE="full"
-fi
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+MODE=$(bash "$SCRIPT_DIR/mode.sh" get)
 echo "Mode: $MODE"
 
 # Headroom status
