@@ -3,24 +3,28 @@
 ## [Unreleased]
 
 ### Added
+- **130 total A/B trials** across 12 tasks, 3 intensity levels
+- GitHub Copilot adapter (`adapters/copilot-instructions.md`)
 - Windsurf adapter (`adapters/windsurfrules`)
-- Lite mode A/B results (110 total trials)
+- Claude Code AGENTS.md adapter
 - Token cost calculator (`scripts/cost.sh`) — estimates $/month savings per model
-- MIT license
-- ASCII visual summary in full-report.md
+- Cost estimate in `stats.sh` output
 - Session auto-activation hook (`hooks/session-start.sh` + `hooks.json.example`)
+- Session scoring in `review.sh` (A+ to F grade)
+- Full-read detection and tool stats in transcript analyzer
 - `compare.sh --json` output mode for scripting
 - OS detection in setup.sh (macOS/Linux hints)
 - Before/after examples from real A/B trials (`examples/before-after.md`)
-- Token estimate section in learn.sh output
-- Full mode revalidation (106 total trials)
+- Token estimate sections in learn.sh and stats.sh
 - Explicit lite mode rules in agent-rules.md
-- Claude Code AGENTS.md adapter
-- Expanded test suite (31 checks)
+- Expanded test suite (42 checks)
+- 2 new benchmark prompts (JSON schema validator, CLI todo manager)
+- MIT license, ASCII report chart
 - `.gitignore` for test artifacts
 
 ### Fixed
-- README: correct prompt count (8 not 5), correct ultra trial count
+- README: correct prompt count, correct ultra trial count
+- test.sh pipe bug in hook JSON validation
 
 ## [0.1.0] — 2026-06-30
 
