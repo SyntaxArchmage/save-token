@@ -62,8 +62,34 @@ check "benchmark prompts exist (>= 5)" test "$PROMPT_COUNT" -ge 5
 # README exists
 check "README.md exists" test -f "$REPO_DIR/README.md"
 
+# CHEATSHEET exists
+check "CHEATSHEET.md exists" test -f "$REPO_DIR/CHEATSHEET.md"
+
 # .gitignore exists
 check ".gitignore exists" test -f "$REPO_DIR/.gitignore"
+
+# install.sh roundtrip
+check "install.sh runs" bash "$REPO_DIR/install.sh"
+check "install.sh uninstall" bash "$REPO_DIR/install.sh" uninstall
+check "install.sh reinstall" bash "$REPO_DIR/install.sh"
+
+# review.sh runs
+check "review.sh runs" bash "$SCRIPT_DIR/review.sh"
+
+# learn.sh runs
+check "learn.sh runs" bash "$SCRIPT_DIR/learn.sh"
+
+# adapters exist
+check "AGENTS.md adapter exists" test -f "$REPO_DIR/adapters/AGENTS.md"
+
+# templates exist
+check "cursorignore template exists" test -f "$REPO_DIR/templates/cursorignore"
+
+# benchmark prompts >= 8
+check "benchmark prompts >= 8" test "$PROMPT_COUNT" -ge 8
+
+# analyze_transcript.py importable
+check "analyze_transcript importable" python3 -c "import sys; sys.path.insert(0,'$SCRIPT_DIR'); from analyze_transcript import analyze"
 
 echo
 echo "Results: $pass passed, $fail failed, $((pass + fail)) total"
