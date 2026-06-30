@@ -27,28 +27,11 @@ for base_dir in "${TRANSCRIPT_DIRS[@]}"; do
     project_name=$(basename "$(dirname "$transcript_dir")")
     echo "Scanning: $project_name"
 
+    SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
     while IFS= read -r jsonl_file; do
       [ ! -s "$jsonl_file" ] && continue
 
-      findings=$(python3 -c "
-import json, collections
-reads = collections.Counter()
-with open('$jsonl_file') as f:
-    for line in f:
-        try:
-            obj = json.loads(line)
-            if obj.get('type') == 'tool_call':
-                name = obj.get('tool_name', obj.get('name', ''))
-                if name in ('Read', 'read_file', 'file_read'):
-                    path = obj.get('parameters', {}).get('path', '')
-                    if path:
-                        reads[path] += 1
-        except (json.JSONDecodeError, KeyError):
-            pass
-dupes = {k: v for k, v in reads.items() if v > 2}
-for path, count in sorted(dupes.items(), key=lambda x: -x[1]):
-    print(f'- re-read {count}x: {path}')
-" 2>/dev/null || true)
+      findings=$(python3 "$SCRIPT_DIR/analyze_transcript.py" "$jsonl_file" 2>/dev/null || true)
 
       if [ -n "$findings" ]; then
         echo "$findings"
@@ -71,18 +54,18 @@ echo "Writing findings to $LEARNINGS"
   echo "# save-token Learnings"
   echo "Generated: $(date -Iseconds)"
   echo
-  echo "## Repeated File Reads"
+  echo "## Waste Patterns"
   echo
   if [ -n "$all_findings" ]; then
     echo "$all_findings"
   else
-    echo "- No repeated reads detected in recent sessions"
+    echo "- No waste patterns detected in recent sessions"
   fi
   echo
   echo "## Recommendations"
   echo
   echo "- Use '/save-token review' during sessions for real-time audit"
-  echo "- Enable 'full' mode to enforce no-reread discipline"
+  echo "- Enable 'full' mode to enforce no-reread and batching discipline"
 } > "$LEARNINGS"
 
 echo "[OK] Done. Run '/save-token stats' to see summary."
