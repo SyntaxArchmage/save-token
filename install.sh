@@ -4,6 +4,19 @@ set -euo pipefail
 SKILL_DIR="${HOME}/.cursor/skills/save-token"
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+if [ "${1:-}" = "uninstall" ] || [ "${1:-}" = "remove" ]; then
+  if [ -L "$SKILL_DIR" ]; then
+    rm "$SKILL_DIR"
+    echo "[OK] Uninstalled: removed symlink $SKILL_DIR"
+  elif [ -d "$SKILL_DIR" ]; then
+    echo "[WARN] $SKILL_DIR is a directory, not a symlink. Remove manually."
+    exit 1
+  else
+    echo "[OK] Not installed (nothing to remove)."
+  fi
+  exit 0
+fi
+
 echo "Installing save-token skill..."
 
 if [ -L "$SKILL_DIR" ]; then
