@@ -38,3 +38,7 @@ ln -s "$REPO_DIR" "$SKILL_DIR"
 echo "[OK] Installed: $SKILL_DIR -> $REPO_DIR"
 echo
 echo "Usage: type '/save-token' in any Cursor agent chat."
+echo
+echo "[TIP] For auto-activation, add the session hook:"
+echo "  Copy hooks/hooks.json.example to ~/.cursor/hooks.json"
+echo "  Or merge the sessionStart entry into your existing hooks.json"

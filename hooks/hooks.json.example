@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": "~/.cursor/skills/save-token/hooks/session-start.sh",
+        "timeout": 5
+      }
+    ]
+  }
+}
