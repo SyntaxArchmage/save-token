@@ -22,7 +22,7 @@ Enforces a **three-layer optimization** every response:
 
 ## A/B Tested Results
 
-Verified across **68 independent subagent trials** (5 tasks, 3 intensity levels):
+Verified across **80 independent subagent trials** (8 tasks, 3 intensity levels):
 
 | Mode | Explanation | Tool Calls | Code Lines | Correctness |
 |------|-------------|------------|------------|-------------|
@@ -100,6 +100,22 @@ For system-level compression (60-95% input token reduction):
 
 Rules work without Headroom — it's an additive optimization.
 
+## Requirements
+
+- **Cursor** with Agent mode (CLI or Desktop)
+- **bash** + **python3** (for learn/review/stats scripts)
+- **git** (optional, for install.sh)
+- **Headroom** (optional, for system-level compression)
+
+## Compatibility
+
+| Platform | Status |
+|----------|--------|
+| Cursor CLI (Linux/macOS) | Tested |
+| Cursor Desktop | Tested |
+| Claude Code | Partial (rules work, scripts need adaptation) |
+| Other AI IDEs | Rules portable, scripts Cursor-specific |
+
 ## How It Compares
 
 | | save-token | Ponytail | Headroom |
@@ -108,4 +124,4 @@ Rules work without Headroom — it's an additive optimization.
 | Approach | Code ladder + tool + output | Decision ladder + code diet | Input/output compression |
 | Measurement | A/B subagent testing | Manual benchmarks | Automatic perf stats |
 | Integration | Cursor skill | Cursor rule | API proxy |
-| Unique | 68-trial A/B tested + session learning | Anti-bloat focus | Reversible compression |
+| Unique | 80-trial A/B tested + session learning | Anti-bloat focus | Reversible compression |
