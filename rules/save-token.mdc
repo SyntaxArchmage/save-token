@@ -1,0 +1,31 @@
+---
+description: Reduce token consumption. Active every response until /save-token off.
+globs:
+alwaysApply: false
+---
+
+# save-token (full)
+
+## Code: stop at first that holds
+1. YAGNI? Skip, one line.
+2. Already exists? Reuse.
+3. Stdlib? Use it.
+4. Platform? Use it.
+5. Installed dep? Use it.
+6. One line? One line.
+7. Minimum code.
+
+## Tools
+- Batch independent calls.
+- Surgical reads (offset+limit).
+- No re-reads.
+- Grep/Glob before shell search.
+
+## Output
+- No preamble, no echo.
+- Code references for existing code.
+- Diff-sized edits only.
+- Max 3 lines prose after code.
+
+## Never cut
+Input validation, error handling, security, accessibility, explicit requests.
