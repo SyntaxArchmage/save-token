@@ -38,31 +38,59 @@ echo "Reviewing: $project"
 echo "Transcript: $(basename "$LATEST")"
 echo
 
-# Run analyzer with detailed output
-findings=$(python3 -c "
+scored=$(python3 -c "
 import json, sys
 sys.path.insert(0, '$SCRIPT_DIR')
 from analyze_transcript import analyze
 r = analyze('$LATEST')
-waste = []
-for k in ('repeated_reads', 'sequential_calls', 'verbose_responses'):
-    waste.extend(r.get(k, []))
-if waste:
-    print('Waste patterns found:')
-    for w in waste:
-        print(w)
+
+score = 100
+issues = 0
+
+reads = r.get('repeated_reads', [])
+seqs = r.get('sequential_calls', [])
+verbose = r.get('verbose_responses', [])
+tokens = r.get('token_estimate', [])
+
+for item in reads:
+    print('  [!] ' + item)
+    score -= 5
+    issues += 1
+
+for item in seqs:
+    print('  [!] ' + item)
+    score -= 3
+    issues += 1
+
+for item in verbose:
+    print('  [!] ' + item)
+    score -= 2
+    issues += 1
+
+for t in tokens:
+    print('  ' + t)
+
+score = max(0, score)
+
+print()
+if issues == 0:
+    grade = 'A+'
+elif score >= 90:
+    grade = 'A'
+elif score >= 75:
+    grade = 'B'
+elif score >= 60:
+    grade = 'C'
+elif score >= 40:
+    grade = 'D'
 else:
-    print('No waste patterns detected in this session.')
-for t in r.get('token_estimate', []):
-    print(t)
+    grade = 'F'
+
+print(f'Score: {score}/100 (grade {grade}, {issues} issue(s))')
+if issues == 0:
+    print('No waste detected. Session is clean.')
+else:
+    print('Fix: batch tool calls, use code references, reduce prose.')
 " 2>/dev/null || true)
 
-echo "$findings"
-
-echo
-echo "Checklist:"
-echo "  [ ] Files read multiple times? Check above"
-  echo "  [ ] Sequential tool calls that could batch? Check above"
-echo "  [ ] Responses over 2000 chars? Check above"
-echo "  [ ] Code blocks that should be code references?"
-echo "  [ ] Context restated unnecessarily?"
+echo "$scored"
