@@ -81,3 +81,15 @@ When intensity is `ultra`, apply these additional constraints:
 - Non-trivial logic gets ONE runnable check (assert-based self-test, not a framework)
 
 Mark intentional simplifications: `// save-token: <what was skipped, upgrade path>`
+
+## Model Routing (user-side)
+
+Match model cost to task complexity:
+
+| Task Type | Recommended Model Tier | Why |
+|-----------|----------------------|-----|
+| Autocomplete, renames | Fast (Haiku, GPT-4o-mini, Gemini Flash) | Predictable output, low complexity |
+| Standard features, debugging | Mid (Sonnet, GPT-4o) | Good balance of quality and cost |
+| Architecture, complex refactor, research | Premium (Opus, o3, Gemini Pro) | Needs deep reasoning |
+
+Switch models mid-session when complexity changes. Don't use Opus for boilerplate.
