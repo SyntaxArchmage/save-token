@@ -1,0 +1,33 @@
+{
+  "id": "data-pipeline",
+  "prompt": "Write Python: `pipeline(*funcs)` that takes any number of single-argument functions and returns a new function that applies them left to right.\n\n```python\nadd1 = lambda x: x + 1\ndouble = lambda x: x * 2\nto_str = lambda x: str(x)\n\nf = pipeline(add1, double, to_str)\nf(3)  # -> '8'  (3+1=4, 4*2=8, str(8)='8')\n```\n\nShould work with 0 functions (identity), 1 function, or many. Use functools.reduce.",
+  "language": "python",
+  "function": "pipeline",
+  "tests": [
+    {
+      "type": "exec",
+      "code": "f = pipeline(lambda x: x + 1, lambda x: x * 2, str)\nassert f(3) == '8'",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "f = pipeline()\nassert f(42) == 42",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "f = pipeline(lambda x: x.upper())\nassert f('hello') == 'HELLO'",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "f = pipeline(lambda x: x + 1, lambda x: x + 1, lambda x: x + 1)\nassert f(0) == 3",
+      "expected": true
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 8,
+    "banned_patterns": ["for ", "while "],
+    "required_patterns": ["def pipeline", "reduce"]
+  }
+}

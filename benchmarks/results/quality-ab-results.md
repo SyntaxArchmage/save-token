@@ -1,8 +1,8 @@
 # Quality A/B Results — save-token Dual Objective Benchmark
 
 Date: 2026-07-01
-Trials: 34 subagents (17 baseline, 17 save-token)
-Benchmarks: all 17
+Trials: 40 subagents (20 baseline, 20 save-token)
+Benchmarks: all 20
 
 ## Summary
 
@@ -71,35 +71,48 @@ Benchmarks: all 17
 
 **Notable**: save-token event-emitter used `setdefault` instead of `defaultdict` + type annotations — 4 fewer lines, cleaner approach.
 
-## Aggregate Metrics (All 17 Benchmarks)
+### Functional Programming & Patterns (Round 6)
+
+| Benchmark | Arm | Correctness | Quality | Lines | Grade | Tool Calls | Explanation Lines |
+|-----------|-----|-------------|---------|-------|-------|------------|-------------------|
+| data-pipeline | baseline | 100% (4/4) | 100% (5/5) | 5 | A | 1 | 0 |
+| data-pipeline | save-token | 100% (4/4) | 100% (5/5) | **3** | A | 2 | 0 |
+| singleton-meta | baseline | 100% (3/3) | 100% (5/5) | 6 | A | 1 | 0 |
+| singleton-meta | save-token | 100% (3/3) | 100% (5/5) | 6 | A | 2 | 0 |
+| memoize-ttl | baseline | 100% (4/4) | 83.3% (5/6) | 19 | **B** | 1 | 0 |
+| memoize-ttl | save-token | 100% (4/4) | **100%** (6/6) | **16** | **A** | 3 | 0 |
+
+**Notable**: baseline memoize-ttl exceeded 18-line limit (19 lines, Grade B) due to extra blank lines. save-token stayed at 16 lines (Grade A).
+
+## Aggregate Metrics (All 20 Benchmarks)
 
 | Metric | Baseline (avg) | save-token (avg) | Delta |
 |--------|----------------|------------------|-------|
 | Correctness | 100% | 100% | 0% |
-| Quality | 97.1% | **100%** | **+3.0%** |
-| Code lines | 18.06 | 15.53 | **-14.0%** |
-| Tool calls | 1.94 | 1.71 | **-12.1%** |
-| Explanation lines | 0.76 | 0 | **-100%** |
-| Grade | 14A / **3B** | **17A / 0B** | **save-token wins** |
+| Quality | 96.7% | **100%** | **+3.4%** |
+| Code lines | 16.85 | 14.45 | **-14.2%** |
+| Tool calls | 1.80 | 1.80 | 0% |
+| Explanation lines | 0.65 | 0 | **-100%** |
+| Grade | 16A / **4B** | **20A / 0B** | **save-token wins** |
 
 ## Analysis
 
-1. **Correctness parity**: Both arms achieve 100% on all functional tests across 17 benchmarks. save-token does not degrade code correctness.
+1. **Correctness parity**: Both arms achieve 100% on all functional tests across 20 benchmarks. save-token does not degrade code correctness.
 
-2. **Quality superiority**: save-token achieves 100% quality across all 17 benchmarks while baseline drops to Grade B on 3 out of 17 (retry-decorator: missing `functools.wraps`, stack-calculator: code bloat exceeding 25-line limit, generate-tests: exceeding 30-line limit). **save-token's code ladder actively prevents quality issues.**
+2. **Quality superiority**: save-token achieves 100% quality across all 20 benchmarks while baseline drops to Grade B on 4 out of 20 (retry-decorator: missing `functools.wraps`, stack-calculator: code bloat, generate-tests: code bloat, memoize-ttl: code bloat). **save-token's code ladder actively prevents quality issues.**
 
-3. **Code conciseness**: save-token produces 14.0% fewer code lines on average. Largest gap: stack-calculator (-37%, 27→17 lines), event-emitter (-22%, 18→14), merge-sort (-25%). The "minimum code that works" rung is measurably effective.
+3. **Code conciseness**: save-token produces 14.2% fewer code lines on average. Largest gaps: stack-calculator (-37%, 27→17), event-emitter (-22%, 18→14), pipeline (-40%, 5→3), merge-sort (-25%). The "minimum code that works" rung is measurably effective.
 
-4. **Tool call reduction**: save-token uses 12.1% fewer tool calls on average. Baseline subagents sometimes explore unnecessarily (api-crud: 4 vs 2, stack-calculator: 4 vs 3).
+4. **Tool call parity**: At 20 benchmarks, tool call averages have converged to 1.80 for both arms. Baseline's extra tool calls in early rounds balanced by save-token's occasional extra file reads.
 
-5. **Explanation elimination**: Baseline produces 0.76 explanation lines per trial on average (despite not being asked). save-token enforces zero-prose default — 0 explanation lines across all 17 benchmarks.
+5. **Explanation elimination**: Baseline produces 0.65 explanation lines per trial on average (despite not being asked). save-token enforces zero-prose default — 0 explanation lines across all 20 benchmarks.
 
 ## Conclusion
 
-Across 34 trials (17 baseline, 17 save-token) covering algorithms, data structures, decorators, refactoring, debugging, thread-safe API design, performance optimization, security fixes, test generation, race condition debugging, order validation refactoring, and event-driven design:
+Across 40 trials (20 baseline, 20 save-token) covering algorithms, data structures, decorators, design patterns, refactoring, debugging, race conditions, event-driven design, performance optimization, security fixes, test generation, functional programming, and caching:
 
-- **Quality**: save-token **outperforms** baseline (**17A/0B** vs 14A/3B)
-- **Correctness**: 100% parity across all 17 benchmarks — no degradation
-- **Efficiency**: -14.0% code lines, -12.1% tool calls, -100% unwanted explanation
-- **Baseline failures**: retry-decorator (missing functools.wraps), stack-calculator (code bloat), generate-tests (code bloat)
+- **Quality**: save-token **outperforms** baseline (**20A/0B** vs 16A/4B)
+- **Correctness**: 100% parity across all 20 benchmarks — no degradation
+- **Efficiency**: -14.2% code lines, -100% unwanted explanation
+- **Baseline failures**: retry-decorator (missing functools.wraps), stack-calculator (code bloat), generate-tests (code bloat), memoize-ttl (code bloat)
 - **Key insight**: save-token doesn't just save tokens — it produces *better* code by enforcing discipline that prevents bloat and missing best practices

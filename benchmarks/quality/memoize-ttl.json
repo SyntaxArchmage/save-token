@@ -1,0 +1,33 @@
+{
+  "id": "memoize-ttl",
+  "prompt": "Write Python: a `memoize(ttl_seconds: float)` decorator that caches function results for the given TTL. After TTL expires, the next call recomputes. Use `time.monotonic()` for timing.\n\n```python\n@memoize(ttl_seconds=1.0)\ndef expensive(x):\n    return x * 2\n\nexpensive(5)  # computes\nexpensive(5)  # cached\ntime.sleep(1.1)\nexpensive(5)  # recomputes\n```\n\nCache key should be based on all positional and keyword arguments.",
+  "language": "python",
+  "function": "memoize",
+  "tests": [
+    {
+      "type": "exec",
+      "code": "call_count = 0\n@memoize(ttl_seconds=10.0)\ndef f(x):\n    global call_count; call_count += 1; return x * 2\nassert f(3) == 6\nassert f(3) == 6\nassert call_count == 1",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "call_count = 0\n@memoize(ttl_seconds=10.0)\ndef g(x):\n    global call_count; call_count += 1; return x\nassert g(1) == 1\nassert g(2) == 2\nassert call_count == 2",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "import time\ncall_count = 0\n@memoize(ttl_seconds=0.1)\ndef h(x):\n    global call_count; call_count += 1; return x\nh(1)\ntime.sleep(0.15)\nh(1)\nassert call_count == 2",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "@memoize(ttl_seconds=10.0)\ndef k(a, b=1):\n    return a + b\nassert k(1, b=2) == 3\nassert k(1, b=3) == 4",
+      "expected": true
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 18,
+    "banned_patterns": ["import datetime", "functools.lru_cache"],
+    "required_patterns": ["def memoize", "monotonic", "ttl"]
+  }
+}

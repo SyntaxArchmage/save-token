@@ -1,0 +1,28 @@
+{
+  "id": "singleton-meta",
+  "prompt": "Write Python: a `Singleton` metaclass that ensures any class using it as metaclass can only have one instance. Calling the class again returns the same instance.\n\n```python\nclass DB(metaclass=Singleton):\n    def __init__(self, url):\n        self.url = url\n\na = DB('postgres://localhost')\nb = DB('postgres://localhost')\nassert a is b\n```",
+  "language": "python",
+  "function": "Singleton",
+  "tests": [
+    {
+      "type": "exec",
+      "code": "class A(metaclass=Singleton):\n    pass\nassert A() is A()",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "class B(metaclass=Singleton):\n    def __init__(self, v):\n        self.v = v\nb1 = B(1)\nb2 = B(2)\nassert b1 is b2\nassert b1.v == 1",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "class C(metaclass=Singleton):\n    pass\nclass D(metaclass=Singleton):\n    pass\nassert C() is not D()",
+      "expected": true
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 10,
+    "banned_patterns": ["import"],
+    "required_patterns": ["class Singleton", "__call__", "_instances"]
+  }
+}
