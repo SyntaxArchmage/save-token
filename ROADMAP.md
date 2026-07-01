@@ -100,7 +100,9 @@ Core rules (`rules/agent-rules.md`) are platform-agnostic. All scripts work on a
 
 ---
 
-### P1: Content-Type-Aware Compression Pipeline
+### P1: Content-Type-Aware Compression Pipeline ✅ DONE
+
+**Status:** Implemented. `compress.sh` + 7 engines (none, truncate, pointer, treesitter, llmlingua, claw, headroom). Configurable via env vars + `~/.save-token/compress.conf`. A/B tested: pointer 84-99% on large tool output, truncate 74-95% on docs.
 
 **Problem:** Context is not homogeneous. Code, natural language, tool outputs, and binary references have fundamentally different structures. A single compressor cannot optimize all types. Headroom understands this (separate CCR for code, output shaper for responses), but we need to go further.
 
@@ -194,7 +196,9 @@ scripts/compress.sh --type=<type> --engine=<engine> < input > output
 
 ---
 
-### P2: Effort Routing via Subagent
+### P2: Effort Routing via Subagent ✅ DONE
+
+**Status:** Implemented. TRIVIAL/MECHANICAL/COMPLEX classification + subagent delegation protocol in `agent-rules.md`. Template in `SKILL.md`.
 
 **Problem:** Premium models (Opus, o3) handle trivial tasks (rename variable, add comment, format file) that don't need deep reasoning. Switching models mid-session breaks prompt cache.
 
@@ -271,7 +275,9 @@ Metrics: `correctness` (pass/fail), `cost` ($), `latency` (s), `context_tokens_s
 
 ---
 
-### P3: Verbosity Self-Adaptation
+### P3: Verbosity Self-Adaptation ✅ DONE
+
+**Status:** Implemented. `learn.sh --verbosity-profile` scans 30 days of transcripts. Configurable thresholds. Outputs JSON profile with confidence-rated mode recommendation.
 
 **Problem:** Fixed explanation limits (0/3/5 lines per mode) don't match all users. Some want more explanation, some want zero.
 
@@ -333,7 +339,9 @@ save-token --auto-suggest  # suggest but don't auto-apply (safer default)
 
 ---
 
-### P4: Rules Density Optimization
+### P4: Rules Density Optimization ✅ DONE
+
+**Status:** Implemented. Three variants: kernel (177w/~299 tokens), mid (368w/~578 tokens), full (1123w/~1796 tokens). `install.sh --density=kernel|mid|full`. Cost analysis: kernel saves $4.49/1k requests vs full.
 
 **Problem:** `agent-rules.md` is ~1100 words ≈ ~1500 tokens. This is paid on EVERY request as context tax.
 
@@ -387,7 +395,9 @@ Shorter rules = smaller cached prefix = faster cache hit. But rules must be STAB
 
 ---
 
-### P5: Context Eviction & Pointer Pattern
+### P5: Context Eviction & Pointer Pattern ✅ DONE
+
+**Status:** Implemented. 4-tier triage in `agent-rules.md`: tool output (≤20/21-100/>100 lines), file reads (surgical/no-reread), conversation length (10+/20+ turn warnings), binary content (pointer by path).
 
 **Problem:** Agent context fills up with stale tool outputs, old conversation turns, and large file reads. No eviction strategy exists — context grows monotonically until `/summarize`.
 
