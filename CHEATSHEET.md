@@ -17,6 +17,8 @@
 | `/save-token setup` | Install Headroom |
 | `/save-token cost` | Estimate $/month savings |
 | `/save-token tokens` | Track real token usage |
+| `/save-token config` | Team config (show/apply) |
+| `/save-token progress` | Progressive activation |
 
 ## Code Ladder (stop at first rung)
 1. YAGNI? Skip

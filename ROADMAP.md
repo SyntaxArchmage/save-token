@@ -517,7 +517,9 @@ Output:
 
 ---
 
-### 7. Team Config Mode
+### 7. Team Config Mode ✅ DONE
+
+**Status:** Implemented. `load-config.sh` with show/get/sources/init/apply commands. Three-level precedence: defaults → `.save-token.json` (team) → `~/.save-token/config.json` (user). Deep merge for nested objects.
 
 **Problem:** Individual settings aren't shareable. Teams want consistent save-token behavior across all members.
 
@@ -565,7 +567,9 @@ Defaults (built into save-token)
 
 ---
 
-### 8. Progressive Activation
+### 8. Progressive Activation ✅ DONE
+
+**Status:** Implemented. `progress.sh` with show/record/apply/reset commands. Tracks review scores, promotes through lite→full→ultra after configurable qualifying sessions (default: 3 at B+).
 
 **Problem:** New users don't know which mode to start with. Ultra scares beginners; lite doesn't show value.
 
@@ -611,7 +615,9 @@ Output:
 
 ---
 
-### 9. CI Benchmark Regression
+### 9. CI Benchmark Regression ✅ DONE
+
+**Status:** Implemented. `.github/workflows/benchmark.yml` runs tests + regression check on rule PRs. `compare.sh --fail-if-regression=N%` exits non-zero on regressions. `--format=markdown` for GitHub Step Summary.
 
 **Problem:** Rule changes might degrade save-token effectiveness. No automated guard.
 
@@ -665,7 +671,9 @@ git add benchmarks/results/baseline.json && git commit -m "Update benchmark base
 
 ## Low Priority
 
-### 10. promptfoo Integration
+### 10. promptfoo Integration ✅ DONE
+
+**Status:** Implemented. `export-promptfoo.sh` generates `promptfooconfig.yaml` with baseline vs save-token-full prompts, 20 test cases from benchmark prompts, YAGNI rubric assertions.
 
 **Problem:** Power users already have promptfoo for prompt evaluation. Our benchmark data isn't compatible.
 
@@ -703,7 +711,9 @@ tests:
 
 ---
 
-### 11. Multi-model A/B Testing
+### 11. Multi-model A/B Testing ✅ DONE
+
+**Status:** Implemented. `benchmark.sh --model=MODEL --trials=N --output=json`. Supports any model slug. JSON output for CI/scripting integration.
 
 **Problem:** Our 200-trial data is from whatever model Cursor's Task tool used. We don't know if save-token rules work equally well on Opus vs Sonnet vs GPT vs Codex.
 

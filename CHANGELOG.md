@@ -10,11 +10,16 @@
 - **P4: Rules density optimization** — kernel (177 words), mid (368 words), full (1123 words) variants with `--density=` install option
 - **P5: Context eviction** — tool output triage rules (≤20/21-100/>100 lines), no-re-read, conversation length warnings, binary content pointers
 - **P6: Real token tracking** — `tokens.sh` with 8 commands (detect, collect, log, summary, export, reset, parse-claude); supports Cursor, Claude CLI, Helicone, LiteLLM, manual entry; integrates with `cost.sh` (real data + estimation fallback)
+- **P7: Team config mode** — `load-config.sh` with 3-level precedence (defaults → `.save-token.json` team → `~/.save-token/config.json` user), deep merge, init template
+- **P8: Progressive activation** — `progress.sh` tracks review scores, promotes lite→full→ultra after qualifying sessions
+- **P9: CI benchmark regression** — GitHub Action workflow + `compare.sh --fail-if-regression=N%` + `--format=markdown`
+- **P10: promptfoo integration** — `export-promptfoo.sh` generates promptfoo eval config from rules + 20 benchmark prompts
+- **P11: Multi-model A/B** — `benchmark.sh --model=MODEL --trials=N --output=json` for cross-model comparison
 - Multi-platform `install.sh` with `--platform=cursor|claude-code|codebuddy|generic` and `--density=kernel|mid|full`
 - P1 compression baseline benchmark results
 - P4 density cost/benefit analysis document
 - P6 functional A/B test results
-- Test suite expanded to 101 checks
+- Test suite expanded to 127 checks
 
 ### Changed
 - All adapters: code ladder upgraded from 5 to 7 rungs (added platform native + installed dep)

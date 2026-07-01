@@ -9,6 +9,7 @@ set -euo pipefail
 CONFIG_DIR="${SAVE_TOKEN_DIR:-${HOME}/.save-token}"
 USER_CONFIG="${CONFIG_DIR}/config.json"
 TEAM_CONFIG=""
+mkdir -p "$CONFIG_DIR"
 
 find_team_config() {
   local dir="$PWD"

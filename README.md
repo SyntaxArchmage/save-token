@@ -1,6 +1,6 @@
 # save-token
 
-![Tests](https://img.shields.io/badge/tests-101%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-127%20passing-brightgreen)
 ![Trials](https://img.shields.io/badge/A%2FB%20trials-216-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -66,6 +66,8 @@ See [benchmarks/results/full-report.md](benchmarks/results/full-report.md) for p
 | `/save-token cost [model]` | Estimate $/month savings |
 | `/save-token tokens` | Track real token usage |
 | `/save-token compress [file]` | Content-type-aware compression |
+| `/save-token config` | Team config (show/apply/init) |
+| `/save-token progress` | Progressive activation status |
 
 ## Intensity Levels
 
@@ -91,14 +93,17 @@ save-token/
 │   ├── engines/                # Compression engines (7: none, truncate, pointer, treesitter, llmlingua, claw, headroom)
 │   ├── setup.sh                # Headroom proxy install (OS-aware)
 │   ├── benchmark.sh            # A/B test prompt generator
-│   ├── compare.sh              # Results table (+ --json mode)
+│   ├── compare.sh              # Results table (+ --json, --markdown, --fail-if-regression)
 │   ├── stats.sh                # Status + context budget + history
 │   ├── learn.sh                # Session waste + verbosity profiling
 │   ├── review.sh               # Real-time session audit
 │   ├── mode.sh                 # Mode persistence + history
 │   ├── cost.sh                 # Cost savings estimator (real data + 216-trial fallback)
 │   ├── tokens.sh               # Real token tracking (multi-platform)
-│   ├── test.sh                 # 101-check test runner
+│   ├── load-config.sh          # Team config loader (3-level precedence)
+│   ├── progress.sh             # Progressive activation tracker
+│   ├── export-promptfoo.sh     # promptfoo config generator
+│   ├── test.sh                 # 127-check test runner
 │   └── analyze_transcript.py   # Transcript analyzer (+ --html report)
 ├── adapters/
 │   ├── standalone.mdc          # Cursor standalone rule (zero-install)
