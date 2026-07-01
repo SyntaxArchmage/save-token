@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.5.0] — 2026-07-01
+## [0.6.0] — 2026-07-01
 
 ### Added
 - **P0: Multi-platform architecture** — 8 adapters: Cursor, Claude Code, CodeBuddy (global + project), Windsurf, GitHub Copilot, generic system prompt, CLI pre-prompt

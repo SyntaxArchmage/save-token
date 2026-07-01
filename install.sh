@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="0.5.0"
+VERSION="0.6.0"
 CONFIG_DIR="${SAVE_TOKEN_DIR:-${HOME}/.save-token}"
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 
