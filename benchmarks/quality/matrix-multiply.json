@@ -1,0 +1,33 @@
+{
+  "id": "matrix-multiply",
+  "prompt": "Write Python: `matrix_multiply(a: list[list[float]], b: list[list[float]]) -> list[list[float]]` that multiplies two matrices. Raise ValueError if dimensions are incompatible. No numpy.\n\nA is m×n, B is n×p, result is m×p.",
+  "language": "python",
+  "function": "matrix_multiply",
+  "tests": [
+    {
+      "type": "exec",
+      "code": "assert matrix_multiply([[1,2],[3,4]], [[5,6],[7,8]]) == [[19,22],[43,50]]",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "assert matrix_multiply([[1,2,3]], [[4],[5],[6]]) == [[32]]",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "try:\n    matrix_multiply([[1,2]], [[1,2]])\n    assert False, 'Should raise'\nexcept ValueError:\n    pass",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "assert matrix_multiply([[1]], [[1]]) == [[1]]",
+      "expected": true
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 12,
+    "banned_patterns": ["import numpy", "import np"],
+    "required_patterns": ["def matrix_multiply", "ValueError", "len"]
+  }
+}

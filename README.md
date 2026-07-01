@@ -1,7 +1,7 @@
 # save-token
 
-![Tests](https://img.shields.io/badge/tests-143%20passing-brightgreen)
-![Trials](https://img.shields.io/badge/A%2FB%20trials-216%20%2B%2034%20quality-blue)
+![Tests](https://img.shields.io/badge/tests-145%20passing-brightgreen)
+![Trials](https://img.shields.io/badge/A%2FB%20trials-216%20%2B%2050%20quality-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 A Cursor skill that minimizes token consumption when using expensive AI models (Opus, o3, etc.) — without sacrificing output quality.
@@ -105,7 +105,7 @@ save-token/
 │   ├── progress.sh             # Progressive activation tracker
 │   ├── export-promptfoo.sh     # promptfoo config generator
 │   ├── quality-bench.sh        # Dev quality benchmark runner (correctness + quality)
-│   ├── test.sh                 # 143-check test runner
+│   ├── test.sh                 # 145-check test runner
 │   └── analyze_transcript.py   # Transcript analyzer (+ --html report)
 ├── adapters/
 │   ├── standalone.mdc          # Cursor standalone rule (zero-install)

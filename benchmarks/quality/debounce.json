@@ -1,0 +1,28 @@
+{
+  "id": "debounce",
+  "prompt": "Write Python: `debounce(wait: float)` decorator that delays calling the decorated function until `wait` seconds have passed since the last invocation. If called again before the wait period, the timer resets.\n\nUse `threading.Timer`. The decorated function should have a `.cancel()` method to cancel any pending call.\n\n```python\n@debounce(0.5)\ndef save(data):\n    print(f'Saving {data}')\n\nsave('a')  # starts 0.5s timer\nsave('b')  # resets timer\n# after 0.5s, save('b') executes\n```",
+  "language": "python",
+  "function": "debounce",
+  "tests": [
+    {
+      "type": "exec",
+      "code": "import time\nresults = []\n@debounce(0.1)\ndef f(x):\n    results.append(x)\nf('a')\nf('b')\ntime.sleep(0.2)\nassert results == ['b'], f'Expected [\"b\"], got {results}'",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "import time\nresults = []\n@debounce(0.1)\ndef g(x):\n    results.append(x)\ng('only')\ntime.sleep(0.2)\nassert results == ['only']",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "import time\nresults = []\n@debounce(0.1)\ndef h(x):\n    results.append(x)\nh('cancelled')\nh.cancel()\ntime.sleep(0.2)\nassert results == []",
+      "expected": true
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 18,
+    "banned_patterns": ["import asyncio"],
+    "required_patterns": ["def debounce", "Timer", "cancel"]
+  }
+}

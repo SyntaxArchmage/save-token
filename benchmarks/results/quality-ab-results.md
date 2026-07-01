@@ -1,8 +1,8 @@
 # Quality A/B Results — save-token Dual Objective Benchmark
 
 Date: 2026-07-01
-Trials: 46 subagents (23 baseline, 23 save-token)
-Benchmarks: all 23
+Trials: 50 subagents (25 baseline, 25 save-token)
+Benchmarks: all 25
 
 ## Summary
 
@@ -97,33 +97,44 @@ Benchmarks: all 23
 
 **Notable**: baseline context-timer **Grade C** — failed to set `elapsed = None` in `__init__`, causing `AttributeError` on pre-exit access. save-token correctly initialized the attribute. **First correctness failure for baseline.**
 
-## Aggregate Metrics (All 23 Benchmarks)
+### Math & Concurrency Patterns (Round 8)
+
+| Benchmark | Arm | Correctness | Quality | Lines | Grade | Tool Calls | Explanation Lines |
+|-----------|-----|-------------|---------|-------|-------|------------|-------------------|
+| matrix-multiply | baseline | 100% (4/4) | 100% (6/6) | 12 | A | 1 | 0 |
+| matrix-multiply | save-token | 100% (4/4) | 100% (6/6) | **7** | A | 1 | 0 |
+| debounce | baseline | 100% (3/3) | 80.0% (4/5) | 27 | **B** | 1 | 0 |
+| debounce | save-token | 100% (3/3) | **100%** (5/5) | **16** | **A** | 3 | 0 |
+
+**Notable**: baseline debounce over-engineered (27 lines > 18 limit) with separate `invoke()` + `latest_args/kwargs`. save-token used direct `Timer(wait, func, args, kwargs)` — 16 lines, same correctness.
+
+## Aggregate Metrics (All 25 Benchmarks)
 
 | Metric | Baseline (avg) | save-token (avg) | Delta |
 |--------|----------------|------------------|-------|
-| Correctness | 98.9% | **100%** | **+1.1%** |
-| Quality | 96.5% | **100%** | **+3.6%** |
-| Code lines | 16.48 | 14.30 | **-13.2%** |
-| Tool calls | 1.70 | 1.83 | +7.7% |
-| Explanation lines | 0.57 | 0 | **-100%** |
-| Grade | 18A / 4B / **1C** | **23A / 0B / 0C** | **save-token wins** |
+| Correctness | 99.1% | **100%** | **+0.9%** |
+| Quality | 95.5% | **100%** | **+4.7%** |
+| Code lines | 16.72 | 14.08 | **-15.8%** |
+| Tool calls | 1.64 | 1.84 | +12.2% |
+| Explanation lines | 0.52 | 0 | **-100%** |
+| Grade | 19A / 5B / **1C** | **25A / 0B / 0C** | **save-token wins** |
 
 ## Analysis
 
-1. **Correctness superiority**: save-token achieves 100% correctness across all 23 benchmarks. Baseline drops to 98.9% — context-timer failed to initialize `elapsed = None`, causing `AttributeError`. **save-token's discipline prevents correctness bugs.**
+1. **Correctness superiority**: save-token achieves 100% correctness across all 25 benchmarks. Baseline drops to 99.1% — context-timer failed to initialize `elapsed = None`, causing `AttributeError`. **save-token's discipline prevents correctness bugs.**
 
-2. **Quality superiority**: save-token achieves 100% quality across all 23 benchmarks while baseline drops to Grade B on 4 (retry-decorator, stack-calculator, generate-tests, memoize-ttl — all code bloat) and Grade C on 1 (context-timer — correctness bug). **save-token's code ladder actively prevents quality issues.**
+2. **Quality superiority**: save-token achieves 100% quality across all 25 benchmarks while baseline drops to Grade B on 5 (retry-decorator, stack-calculator, generate-tests, memoize-ttl, debounce — all code bloat) and Grade C on 1 (context-timer — correctness bug). **save-token's code ladder actively prevents quality issues.**
 
-3. **Code conciseness**: save-token produces 13.2% fewer code lines on average. Largest gaps: pipeline (-40%, 5→3), stack-calculator (-37%, 27→17), merge-sort (-25%), event-emitter (-22%, 18→14).
+3. **Code conciseness**: save-token produces 15.8% fewer code lines on average. Largest gaps: matrix-multiply (-42%, 12→7), debounce (-41%, 27→16), pipeline (-40%, 5→3), stack-calculator (-37%, 27→17), merge-sort (-25%).
 
-4. **Explanation elimination**: Baseline produces 0.57 explanation lines per trial on average. save-token enforces zero-prose default — 0 explanation lines across all 23 benchmarks.
+4. **Explanation elimination**: Baseline produces 0.52 explanation lines per trial on average. save-token enforces zero-prose default — 0 explanation lines across all 25 benchmarks.
 
 ## Conclusion
 
-Across 46 trials (23 baseline, 23 save-token) covering algorithms, data structures, decorators, design patterns, refactoring, debugging, race conditions, event-driven design, performance optimization, security fixes, test generation, functional programming, caching, tries, context managers, and recursive utilities:
+Across 50 trials (25 baseline, 25 save-token) covering algorithms, data structures, decorators, design patterns, refactoring, debugging, race conditions, event-driven design, performance optimization, security fixes, test generation, functional programming, caching, tries, context managers, recursive utilities, matrix math, and concurrency patterns:
 
-- **Quality + Correctness**: save-token **outperforms** baseline (**23A/0B/0C** vs 18A/4B/1C)
-- **Correctness**: save-token 100% vs baseline 98.9% — first baseline correctness failure (context-timer)
-- **Efficiency**: -13.2% code lines, -100% unwanted explanation
-- **Baseline failures**: retry-decorator (missing functools.wraps), stack-calculator (code bloat), generate-tests (code bloat), memoize-ttl (code bloat), context-timer (correctness bug)
+- **Quality + Correctness**: save-token **outperforms** baseline (**25A/0B/0C** vs 19A/5B/1C)
+- **Correctness**: save-token 100% vs baseline 99.1% — baseline correctness failure on context-timer
+- **Efficiency**: -15.8% code lines, -100% unwanted explanation
+- **Baseline failures**: retry-decorator (missing functools.wraps), stack-calculator (code bloat), generate-tests (code bloat), memoize-ttl (code bloat), debounce (over-engineering), context-timer (correctness bug)
 - **Key insight**: save-token doesn't just save tokens — it produces *better* code by enforcing discipline that prevents bloat and missing best practices

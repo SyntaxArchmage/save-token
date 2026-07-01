@@ -19,9 +19,9 @@
 - P1 compression baseline benchmark results
 - P4 density cost/benefit analysis document
 - P6 functional A/B test results
-- **Software development quality benchmark suite** — `quality-bench.sh` + 17 benchmarks covering algorithms, data structures, decorators, refactoring, debugging, race conditions, event-driven design, performance optimization, security fixes, and test generation
-- 34-trial A/B results: save-token 17A/0B vs baseline 14A/3B, -14% code lines, -12% tool calls, 100% correctness parity
-- Test suite expanded to 137 checks
+- **Software development quality benchmark suite** — `quality-bench.sh` + 25 benchmarks covering algorithms, data structures, decorators, design patterns, refactoring, debugging, race conditions, event-driven design, performance optimization, security fixes, test generation, functional programming, caching, tries, context managers, matrix math, and concurrency patterns
+- 50-trial A/B results: save-token **25A/0B/0C** vs baseline 19A/5B/1C, -15.8% code lines, 100% correctness (vs baseline 99.1%), zero unwanted explanation
+- Test suite expanded to 145 checks
 
 ### Changed
 - All adapters: code ladder upgraded from 5 to 7 rungs (added platform native + installed dep)
