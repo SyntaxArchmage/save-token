@@ -60,10 +60,16 @@ if [ "${1:-}" = "--parse" ]; then
 fi
 
 JSON_OUTPUT=false
-if [ "${1:-}" = "--json" ]; then
-  JSON_OUTPUT=true
-  shift
-fi
+MARKDOWN=false
+FAIL_THRESHOLD=""
+
+while [ "${1:-}" = "--json" ] || [ "${1:-}" = "--format=markdown" ] || [[ "${1:-}" == --fail-if-regression=* ]]; do
+  case "$1" in
+    --json) JSON_OUTPUT=true; shift ;;
+    --format=markdown) MARKDOWN=true; shift ;;
+    --fail-if-regression=*) FAIL_THRESHOLD="${1#--fail-if-regression=}"; shift ;;
+  esac
+done
 
 [ $# -lt 2 ] && usage
 
@@ -90,6 +96,48 @@ result['_trials'] = {'baseline': int(b.get('_trials', 1)), 'optimized': int(o.ge
 print(json.dumps(result, indent=2))
 "
   exit 0
+fi
+
+if [ "$MARKDOWN" = true ]; then
+  python3 -c "
+import json
+b = json.loads('$B')
+o = json.loads('$O')
+print('## save-token Benchmark Results')
+print()
+print('| Metric | Baseline | Optimized | Change |')
+print('|--------|----------|-----------|--------|')
+for key in ['tool_calls', 'code_lines', 'explanation_lines', 'files_read']:
+    bv, ov = b.get(key, 0), o.get(key, 0)
+    delta = ((ov - bv) / bv * 100) if bv > 0 else 0
+    sign = '+' if delta > 0 else ''
+    print(f'| {key} | {bv:.1f} | {ov:.1f} | {sign}{delta:.0f}% |')
+"
+  exit 0
+fi
+
+if [ -n "$FAIL_THRESHOLD" ]; then
+  python3 -c "
+import json, sys
+b = json.loads('$B')
+o = json.loads('$O')
+threshold = float('$FAIL_THRESHOLD'.rstrip('%'))
+regressions = []
+for key in ['tool_calls', 'code_lines', 'explanation_lines']:
+    bv, ov = b.get(key, 0), o.get(key, 0)
+    if bv > 0:
+        delta = ((ov - bv) / bv) * 100
+        if delta > threshold:
+            regressions.append(f'{key}: +{delta:.0f}% (threshold: +{threshold:.0f}%)')
+if regressions:
+    print('[FAIL] Benchmark regression detected:')
+    for r in regressions:
+        print(f'  - {r}')
+    sys.exit(1)
+else:
+    print(f'[OK] No regressions above {threshold:.0f}% threshold.')
+" 2>/dev/null
+  exit $?
 fi
 
 python3 -c "

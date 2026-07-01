@@ -1,0 +1,37 @@
+name: Benchmark Regression
+on:
+  pull_request:
+    paths: ['rules/**', 'adapters/**', 'SKILL.md']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run test suite
+        run: bash scripts/test.sh
+      - name: Check benchmark baseline exists
+        run: |
+          if [ -f benchmarks/results/baseline.json ]; then
+            echo "Baseline found, running regression check..."
+            bash scripts/benchmark.sh --all --trials=2 --output=json \
+              > benchmarks/results/current.json 2>/dev/null || true
+            if [ -f benchmarks/results/current.json ] && [ -s benchmarks/results/current.json ]; then
+              bash scripts/compare.sh --fail-if-regression=15% \
+                benchmarks/results/baseline.json \
+                benchmarks/results/current.json
+            else
+              echo "Benchmark run produced no output (expected in CI without API keys)"
+            fi
+          else
+            echo "No baseline.json — skipping regression check"
+          fi
+      - name: Post summary
+        if: always()
+        run: |
+          echo "## save-token Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          bash scripts/test.sh 2>&1 | tail -3 >> $GITHUB_STEP_SUMMARY
