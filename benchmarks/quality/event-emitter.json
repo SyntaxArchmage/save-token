@@ -1,0 +1,38 @@
+{
+  "id": "event-emitter",
+  "prompt": "Write Python: a minimal `EventEmitter` class with:\n- `on(event: str, callback: Callable)` — register a listener\n- `off(event: str, callback: Callable)` — remove a listener (no-op if not found)\n- `emit(event: str, *args, **kwargs)` — call all listeners for the event with given args\n\nListeners should be called in registration order. Emitting an event with no listeners should be a no-op.",
+  "language": "python",
+  "function": "EventEmitter",
+  "tests": [
+    {
+      "type": "exec",
+      "code": "ee = EventEmitter()\nresults = []\nee.on('click', lambda x: results.append(x))\nee.emit('click', 42)\nassert results == [42]",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "ee = EventEmitter()\nresults = []\nfn = lambda: results.append('a')\nee.on('x', fn)\nee.on('x', lambda: results.append('b'))\nee.emit('x')\nassert results == ['a', 'b']",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "ee = EventEmitter()\nresults = []\nfn = lambda: results.append(1)\nee.on('x', fn)\nee.off('x', fn)\nee.emit('x')\nassert results == []",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "ee = EventEmitter()\nee.emit('nonexistent')",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "ee = EventEmitter()\nee.off('x', lambda: None)",
+      "expected": true
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 20,
+    "banned_patterns": ["import asyncio"],
+    "required_patterns": ["class EventEmitter", "def on", "def off", "def emit"]
+  }
+}

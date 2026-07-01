@@ -1,0 +1,28 @@
+{
+  "id": "debug-race-condition",
+  "prompt": "The following counter has a race condition. Fix it to be thread-safe. Return the corrected class.\n\n```python\nimport threading\n\nclass Counter:\n    def __init__(self):\n        self.count = 0\n    \n    def increment(self):\n        current = self.count\n        self.count = current + 1\n    \n    def get(self) -> int:\n        return self.count\n```\n\nThe bug: concurrent increments can lose updates because read-modify-write is not atomic. Fix it.",
+  "language": "python",
+  "function": "Counter",
+  "tests": [
+    {
+      "type": "exec",
+      "code": "c = Counter()\nc.increment()\nc.increment()\nassert c.get() == 2",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "import threading\nc = Counter()\nthreads = [threading.Thread(target=c.increment) for _ in range(1000)]\nfor t in threads: t.start()\nfor t in threads: t.join()\nassert c.get() == 1000, f'Expected 1000, got {c.get()}'",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "c = Counter()\nassert c.get() == 0",
+      "expected": true
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 15,
+    "banned_patterns": [],
+    "required_patterns": ["class Counter", "Lock", "def increment", "def get"]
+  }
+}

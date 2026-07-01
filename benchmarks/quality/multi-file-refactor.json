@@ -1,0 +1,43 @@
+{
+  "id": "multi-file-refactor",
+  "prompt": "Refactor this monolithic function into two clean functions: `validate_order(order: dict) -> list[str]` returns a list of error messages (empty if valid), and `process_order(order: dict) -> dict` processes a valid order. process_order should call validate_order first and raise ValueError with joined errors if invalid.\n\n```python\ndef handle_order(order):\n    errors = []\n    if 'items' not in order or not order['items']:\n        errors.append('no items')\n    if 'customer' not in order:\n        errors.append('no customer')\n    if order.get('total', 0) < 0:\n        errors.append('negative total')\n    if errors:\n        raise ValueError('; '.join(errors))\n    result = {\n        'customer': order['customer'],\n        'item_count': len(order['items']),\n        'total': order.get('total', sum(i.get('price', 0) for i in order['items'])),\n        'status': 'processed'\n    }\n    return result\n```\n\nOutput both functions. Keep the same validation logic and result structure.",
+  "language": "python",
+  "function": "validate_order",
+  "tests": [
+    {
+      "type": "exec",
+      "code": "errs = validate_order({'items': [{'price': 10}], 'customer': 'Alice', 'total': 10})\nassert errs == [], f'Expected no errors, got {errs}'",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "errs = validate_order({})\nassert 'no items' in errs and 'no customer' in errs",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "errs = validate_order({'items': [], 'customer': 'Bob', 'total': -5})\nassert 'no items' in errs and 'negative total' in errs",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "r = process_order({'items': [{'price': 10}], 'customer': 'Alice', 'total': 10})\nassert r == {'customer': 'Alice', 'item_count': 1, 'total': 10, 'status': 'processed'}",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "try:\n    process_order({})\n    assert False, 'Should have raised'\nexcept ValueError as e:\n    assert 'no items' in str(e) and 'no customer' in str(e)",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "r = process_order({'items': [{'price': 5}, {'price': 3}], 'customer': 'Carol'})\nassert r['total'] == 8 and r['item_count'] == 2",
+      "expected": true
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 25,
+    "banned_patterns": ["handle_order"],
+    "required_patterns": ["def validate_order", "def process_order", "ValueError"]
+  }
+}

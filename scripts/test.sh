@@ -205,7 +205,10 @@ echo "def binary_search(arr, target):
     return -1" > /tmp/st-qb-test2.py
 bash "'"$SCRIPT_DIR"'/quality-bench.sh" score /tmp/st-qb-test2.py --benchmark=binary-search 2>&1 | grep -q "Grade:.*A"
 rm /tmp/st-qb-test2.py'
-check "quality benchmarks exist (8)" bash -c 'test $(find "'"$REPO_DIR"'/benchmarks/quality" -name "*.json" | wc -l) -ge 8'
+check "quality benchmarks exist (17)" bash -c 'test $(find "'"$REPO_DIR"'/benchmarks/quality" -name "*.json" | wc -l) -ge 17'
+check "debug-race-condition benchmark" test -f "$REPO_DIR/benchmarks/quality/debug-race-condition.json"
+check "multi-file-refactor benchmark" test -f "$REPO_DIR/benchmarks/quality/multi-file-refactor.json"
+check "event-emitter benchmark" test -f "$REPO_DIR/benchmarks/quality/event-emitter.json"
 
 # --- Documentation ---
 
