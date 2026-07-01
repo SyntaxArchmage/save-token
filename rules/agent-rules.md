@@ -129,3 +129,23 @@ Before starting a task, classify its complexity:
 4. Resume: continue main work with warm context
 
 **Never delegate:** anything needing conversation context, debugging, or security review.
+
+## Context Eviction
+
+Prevent context from filling with stale data. Apply these triage rules automatically:
+
+**Tool output:**
+- ≤20 lines → include verbatim
+- 21–100 lines → first 5 + last 5 + `"... (N lines omitted, see shell #X)"`
+- >100 lines → summarize to ≤10 lines + pointer: `"Full output in terminal N, lines X-Y"`
+
+**File reads:**
+- Need a specific section? Use offset+limit. Never read an entire large file "just to see".
+- Already read this file this session? Reference the prior read, don't re-read.
+
+**Conversation length:**
+- After 10+ turns without compaction → suggest `/summarize`
+- After 20+ turns → strongly recommend `/summarize` or `/clear`
+
+**Binary content:**
+- Never embed base64 or raw binary. Reference by path: `"Image at path/file.png (800×600, PNG)"`
