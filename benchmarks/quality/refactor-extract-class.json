@@ -1,0 +1,38 @@
+{
+  "id": "refactor-extract-class",
+  "prompt": "Refactor the following monolithic function into a `ShoppingCart` class with methods `add_item(name, price, qty)`, `remove_item(name)`, `total() -> float`, and `summary() -> str`.\n\nOriginal code:\n```python\ndef process_cart(items):\n    cart = []\n    for item in items:\n        name, price, qty = item\n        if qty <= 0:\n            continue\n        found = False\n        for c in cart:\n            if c['name'] == name:\n                c['qty'] += qty\n                found = True\n                break\n        if not found:\n            cart.append({'name': name, 'price': price, 'qty': qty})\n    total = 0\n    lines = []\n    for c in cart:\n        subtotal = c['price'] * c['qty']\n        total += subtotal\n        lines.append(f\"{c['name']} x{c['qty']} = ${subtotal:.2f}\")\n    lines.append(f\"Total: ${total:.2f}\")\n    return '\\n'.join(lines)\n```\n\nPreserve all existing behavior. Output ONLY the refactored class.",
+  "language": "python",
+  "function": "ShoppingCart",
+  "tests": [
+    {
+      "type": "exec",
+      "code": "cart = ShoppingCart()\ncart.add_item('Apple', 1.50, 3)\ncart.add_item('Banana', 0.75, 2)\nassert cart.total() == 6.0",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "cart = ShoppingCart()\ncart.add_item('Apple', 1.50, 3)\ncart.add_item('Apple', 1.50, 2)\nassert cart.total() == 7.50",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "cart = ShoppingCart()\ncart.add_item('X', 10.0, 1)\ncart.remove_item('X')\nassert cart.total() == 0.0",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "cart = ShoppingCart()\ncart.add_item('A', 5.0, 2)\nassert 'A x2 = $10.00' in cart.summary()\nassert 'Total: $10.00' in cart.summary()",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "cart = ShoppingCart()\ncart.add_item('Skip', 1.0, 0)\nassert cart.total() == 0.0",
+      "expected": true
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 40,
+    "banned_patterns": ["def process_cart"],
+    "required_patterns": ["class ShoppingCart", "def add_item", "def remove_item", "def total", "def summary"]
+  }
+}

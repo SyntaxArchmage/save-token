@@ -1,0 +1,43 @@
+{
+  "id": "api-crud",
+  "prompt": "Write a Python class `InMemoryStore` implementing a simple key-value store with these methods:\n- `create(key: str, value: any) -> bool` — returns True if created, False if key exists\n- `read(key: str) -> any` — returns value or raises KeyError\n- `update(key: str, value: any) -> bool` — returns True if updated, False if key doesn't exist\n- `delete(key: str) -> bool` — returns True if deleted, False if key doesn't exist\n- `list_keys() -> list[str]` — returns all keys sorted\n- `count() -> int` — returns number of entries\n\nThread-safe. Use stdlib only.",
+  "language": "python",
+  "function": "InMemoryStore",
+  "tests": [
+    {
+      "type": "exec",
+      "code": "store = InMemoryStore()\nassert store.create('a', 1) == True\nassert store.create('a', 2) == False\nassert store.read('a') == 1",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "store = InMemoryStore()\nstore.create('x', 'hello')\nassert store.update('x', 'world') == True\nassert store.read('x') == 'world'\nassert store.update('missing', 42) == False",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "store = InMemoryStore()\nstore.create('a', 1)\nstore.create('b', 2)\nassert store.delete('a') == True\nassert store.delete('a') == False\nassert store.count() == 1",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "store = InMemoryStore()\nstore.create('c', 3)\nstore.create('a', 1)\nstore.create('b', 2)\nassert store.list_keys() == ['a', 'b', 'c']",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "store = InMemoryStore()\ntry:\n    store.read('missing')\n    assert False, 'should raise'\nexcept KeyError:\n    pass",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "import threading\nstore = InMemoryStore()\ndef writer(i):\n    store.create(f'key{i}', i)\nthreads = [threading.Thread(target=writer, args=(i,)) for i in range(100)]\nfor t in threads: t.start()\nfor t in threads: t.join()\nassert store.count() == 100",
+      "expected": true
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 40,
+    "banned_patterns": [],
+    "required_patterns": ["class InMemoryStore", "def create", "def read", "def update", "def delete", "threading", "Lock"]
+  }
+}
