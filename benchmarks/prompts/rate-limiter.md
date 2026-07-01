@@ -1,0 +1,1 @@
+Write Python: `RateLimiter(max_calls: int, period: float)` — token bucket rate limiter. Methods: `allow() -> bool` (check if request is allowed), `wait()` (block until allowed). Use only stdlib (time module).

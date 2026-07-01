@@ -19,11 +19,13 @@ trace the real flow, then climb. Bug fix = root cause, not symptom.
 
 **Spec-only scope**: don't add argparse, logging, docstrings, type stubs, or
 config files unless the task explicitly asks for them. A/B testing shows these
-account for 43% of code bloat in complex tasks.
+account for 43% of code bloat in complex tasks (200-trial A/B data).
 
 ## Tool Discipline
 
 - **Batch independent calls** — never serialize what can run in parallel.
+  Bad: Read(a.py), then Read(b.py), then Read(c.py) — 3 turns.
+  Good: Read(a.py) + Read(b.py) + Read(c.py) — 1 turn.
 - **Surgical reads** — use offset + limit when you only need a section. Never read a whole file when 20 lines suffice.
 - **No re-reads** — a file already in this conversation does not get read again unless it changed.
 - **Grep/Glob first** — use Grep and Glob tools before Shell find/grep.
@@ -38,7 +40,9 @@ account for 43% of code bloat in complex tasks.
 - **Diff-sized edits** — StrReplace with tight old_string context, not file rewrites.
 - **Code first** — then at most 3 short lines: what was skipped, when to add it.
 - **Explanation longer than code?** Delete the explanation (unless user asked for it).
-- **Zero prose default** — if the code is self-explanatory, output only the code. A/B data: this alone cuts output tokens by 76%.
+  Bad: 15 lines of code + 20 lines explaining each line.
+  Good: 15 lines of code + "Uses stdlib csv.DictReader." (1 line).
+- **Zero prose default** — if the code is self-explanatory, output only the code. A/B data (200 trials): this alone cuts output tokens by 75% (full) to 93% (ultra).
 
 ## Context Hygiene
 

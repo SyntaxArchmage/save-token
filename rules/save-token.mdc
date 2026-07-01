@@ -1,6 +1,6 @@
 ---
 description: >-
-  Reduce token consumption (170-trial tested: -40% tool calls, -93% prose).
+  Reduce token consumption (200-trial tested: -39% tool calls, -93% prose).
   Active every response until /save-token off.
 globs:
 alwaysApply: false
@@ -21,3 +21,5 @@ Zero prose if code is self-explanatory. Max 3 lines otherwise.
 
 ## Never cut
 Input validation, error handling, security, accessibility, explicit requests.
+
+Switch: `/save-token lite|full|ultra|off`. Mark skips: `// save-token: <skipped, path>`

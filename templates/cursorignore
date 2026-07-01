@@ -41,3 +41,27 @@ Thumbs.db
 *.log
 *.sqlite
 *.db
+
+# Media and binaries
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.ico
+*.woff
+*.woff2
+*.ttf
+*.eot
+*.mp4
+*.zip
+*.tar.gz
+*.pdf
+
+# Test coverage
+coverage/
+.nyc_output/
+htmlcov/
+
+# Generated docs
+docs/_build/
+site/

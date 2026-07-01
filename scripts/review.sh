@@ -34,6 +34,14 @@ if [ -z "$LATEST" ]; then
 fi
 
 project=$(basename "$(dirname "$(dirname "$LATEST")")")
+
+if [ "${1:-}" = "--html" ]; then
+  OUTFILE="${2:-/tmp/save-token-review.html}"
+  python3 "$SCRIPT_DIR/analyze_transcript.py" "$LATEST" --html -o "$OUTFILE"
+  echo "[OK] HTML report: $OUTFILE"
+  exit 0
+fi
+
 echo "Reviewing: $project"
 echo "Transcript: $(basename "$LATEST")"
 echo
@@ -52,20 +60,36 @@ seqs = r.get('sequential_calls', [])
 verbose = r.get('verbose_responses', [])
 tokens = r.get('token_estimate', [])
 
+fixes = []
+
 for item in reads:
     print('  [!] ' + item)
     score -= 5
     issues += 1
+    fixes.append('Use offset/limit on large files; cache content in conversation context')
 
 for item in seqs:
     print('  [!] ' + item)
     score -= 3
     issues += 1
+    fixes.append('Batch independent tool calls in a single turn')
 
 for item in verbose:
     print('  [!] ' + item)
     score -= 2
     issues += 1
+    fixes.append('Shorten responses: code-only answers, skip narration')
+
+full_reads = r.get('full_reads', [])
+for item in full_reads:
+    print('  [!] ' + item)
+    score -= 2
+    issues += 1
+    fixes.append('Read with offset/limit instead of full file')
+
+tool_summary = r.get('tool_summary', [])
+for t in tool_summary:
+    print('  ' + t)
 
 for t in tokens:
     print('  ' + t)
@@ -90,7 +114,12 @@ print(f'Score: {score}/100 (grade {grade}, {issues} issue(s))')
 if issues == 0:
     print('No waste detected. Session is clean.')
 else:
-    print('Fix: batch tool calls, use code references, reduce prose.')
+    seen = set()
+    unique_fixes = [f for f in fixes if f not in seen and not seen.add(f)]
+    print()
+    print('Suggested fixes:')
+    for i, fix in enumerate(unique_fixes[:5], 1):
+        print(f'  {i}. {fix}')
 " 2>/dev/null || true)
 
 echo "$scored"

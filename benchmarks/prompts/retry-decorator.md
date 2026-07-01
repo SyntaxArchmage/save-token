@@ -1,0 +1,1 @@
+Write Python: `@retry(max_attempts=3, delay=1.0, backoff=2.0)` — decorator that retries a function on exception. Exponential backoff between retries. Log each retry to stderr. Stdlib only (time, functools).

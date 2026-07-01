@@ -6,13 +6,13 @@ description: >
   compression, and A/B subagent testing. Use when the user says "save-token",
   "save tokens", "reduce token", "cut cost", "be efficient", "token budget",
   or invokes /save-token.
-argument-hint: "[setup|bench|stats|learn|review|lite|full|ultra|off]"
+argument-hint: "[setup|bench|stats|learn|review|cost|lite|full|ultra|off]"
 ---
 
 # /save-token
 
 Reduce token waste across code generation, tool usage, and output verbosity.
-Verified: 170 A/B subagent trials show -60% code, -93% explanation, -31% tool calls (ultra mode).
+Verified: 200 A/B subagent trials show -51% code, -93% explanation, -39% tool calls (ultra mode).
 
 ## Activation
 
@@ -37,13 +37,29 @@ That file contains the complete behavior ruleset. Apply it immediately.
 
 ## Command: setup
 
-Run the setup script to install and configure Headroom:
+**Agent installation commands** (run these when user asks to install save-token):
 
+```bash
+# Light mode (rules only, zero scripts):
+bash ~/.cursor/skills/save-token/install.sh light --mode=full
+
+# Heavy mode (full ecosystem — default):
+bash ~/.cursor/skills/save-token/install.sh heavy --mode=full --hook
+
+# With ultra intensity:
+bash ~/.cursor/skills/save-token/install.sh heavy --mode=ultra --hook
+```
+
+If save-token repo is not yet cloned:
+```bash
+git clone https://github.com/YOUR_USER/save-token.git /tmp/save-token && bash /tmp/save-token/install.sh heavy --hook
+```
+
+After installation, optionally configure Headroom proxy for input compression:
 ```bash
 bash ~/.cursor/skills/save-token/scripts/setup.sh
 ```
 
-This installs `headroom-ai`, starts the proxy, and prints Cursor config instructions.
 Headroom is optional — rules work without it.
 
 ## Command: bench
@@ -75,7 +91,7 @@ A/B test to measure rule effectiveness on a given task.
    ```
 
 3. For statistical robustness, run **4 trials per arm** (8 subagents total).
-   Our 170-trial benchmark uses this sample size across 16 distinct tasks.
+   Our 200-trial benchmark uses this sample size across 16 distinct tasks.
 
 4. Compare results and display a table:
    ```
@@ -130,7 +146,7 @@ bash ~/.cursor/skills/save-token/scripts/cost.sh [opus|sonnet|haiku|gpt4o|o3]
 ```
 
 Estimates monthly dollar savings based on model pricing, current mode, and
-120-trial benchmark data. Default model: opus.
+200-trial benchmark data. Default model: opus.
 
 ## Command: lite / full / ultra
 
@@ -161,3 +177,15 @@ Announce: "save-token deactivated."
 | ultra | Extremist   | Enforced        | Extremist      |
 
 See [rules/agent-rules.md](rules/agent-rules.md) for full details.
+
+## Troubleshooting
+
+| Issue | Fix |
+|-------|-----|
+| Rules not applying | Check mode: `bash scripts/mode.sh get` — ensure not `off` |
+| `install.sh` fails | Verify `~/.cursor/skills/` directory exists |
+| `review.sh` finds no transcripts | Run during an active session (looks at last 60 min) |
+| Hook not firing | Check `~/.cursor/hooks.json` matches `hooks/hooks.json.example` |
+| `cost.sh` wrong model | Use: `opus`, `sonnet`, `haiku`, `gpt4o`, `o3` |
+
+Quick check: `bash scripts/setup.sh --check` verifies all prerequisites.

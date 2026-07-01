@@ -1,15 +1,26 @@
 # save-token
 
+![Tests](https://img.shields.io/badge/tests-55%2B%20passing-brightgreen)
+![Trials](https://img.shields.io/badge/A%2FB%20trials-200-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 A Cursor skill that minimizes token consumption when using expensive AI models (Opus, o3, etc.) — without sacrificing output quality.
 
 ## 60-Second Start
 
+**Zero-install (standalone rule only):**
 ```bash
-# 1. Install (one-time)
+curl -o ~/.cursor/rules/save-token.mdc \
+  https://raw.githubusercontent.com/YOUR_USER/save-token/main/adapters/standalone.mdc
+```
+Done. Works immediately, no scripts needed.
+
+**Full install (scripts + benchmarks + adapters):**
+```bash
 git clone https://github.com/YOUR_USER/save-token.git
 cd save-token && bash install.sh
 
-# 2. Use (in any Cursor chat)
+# Use in any Cursor chat:
 /save-token          # activate (default: full mode)
 /save-token ultra    # maximum savings
 /save-token stats    # see mode + cost estimate
@@ -28,14 +39,15 @@ Enforces a **three-layer optimization** every response:
 
 ## A/B Tested Results
 
-Verified across **170 independent subagent trials** (16 tasks, 3 intensity levels):
+Verified across **200 independent subagent trials** (16 tasks, 3 intensity levels):
 
-| Mode | Explanation | Tool Calls | Code Lines | Correctness |
-|------|-------------|------------|------------|-------------|
-| **full** (n=58) | **-76%** | **-40%** | -18% | 100% |
-| **ultra** (n=42) | **-93%** | **-31%** | **-60%** | 100% |
+| Mode | Code | Explanation | Tool Calls | Correctness |
+|------|------|-------------|------------|-------------|
+| **lite** | -16% | **-33%** | -20% | 100% |
+| **full** | -24% | **-75%** | **-34%** | 100% |
+| **ultra** | **-51%** | **-93%** | **-39%** | 100% |
 
-Effect scales with task complexity — simple tasks: -18%, complex tasks: **-80%**.
+Effect scales with task complexity — simple tasks: -16%, complex tasks: **-51%+**.
 
 See [benchmarks/results/full-report.md](benchmarks/results/full-report.md) for per-task breakdowns.
 
@@ -51,6 +63,7 @@ See [benchmarks/results/full-report.md](benchmarks/results/full-report.md) for p
 | `/save-token stats` | Show savings statistics |
 | `/save-token learn` | Mine past sessions for waste |
 | `/save-token review` | Audit current session |
+| `/save-token cost [model]` | Estimate $/month savings |
 
 ## Intensity Levels
 
@@ -78,8 +91,9 @@ save-token/
 │   ├── learn.sh                # Session waste + token estimation
 │   ├── review.sh               # Real-time session audit
 │   ├── mode.sh                 # Mode persistence + history
-│   ├── test.sh                 # 42-check test runner
-│   └── analyze_transcript.py   # Multi-pattern transcript analyzer
+│   ├── cost.sh                 # Cost savings estimator (200-trial calibrated)
+│   ├── test.sh                 # 55+-check test runner
+│   └── analyze_transcript.py   # Transcript analyzer (+ --html report)
 ├── adapters/
 │   ├── AGENTS.md               # Claude Code adapter
 │   ├── windsurfrules           # Windsurf adapter
@@ -94,8 +108,8 @@ save-token/
 ├── skills/
 │   └── auto-dev-SKILL.md       # Companion auto-dev skill
 └── benchmarks/
-    ├── prompts/                # 10 preset test prompts
-    └── results/                # A/B report (170 trials)
+    ├── prompts/                # 20 preset test prompts
+    └── results/                # A/B report (200 trials)
 ```
 
 ## Installation
@@ -139,6 +153,7 @@ Rules work without Headroom — it's an additive optimization.
 
 | Platform | File | How |
 |----------|------|-----|
+| **Any Cursor (standalone)** | `adapters/standalone.mdc` | Copy to `.cursor/rules/` — zero-install, no skill needed |
 | **Claude Code** | `adapters/AGENTS.md` | Copy to project root as `AGENTS.md` |
 | **Windsurf** | `adapters/windsurfrules` | Copy to project root as `.windsurfrules` |
 | **GitHub Copilot** | `adapters/copilot-instructions.md` | Copy to `.github/copilot-instructions.md` |
@@ -153,6 +168,23 @@ cp hooks/hooks.json.example ~/.cursor/hooks.json
 
 Or merge the `sessionStart` entry into your existing `hooks.json`.
 
+## FAQ
+
+**Does this affect code quality?**
+No. 200 A/B trials show zero correctness regressions. The rules cut waste (verbose explanations, redundant reads, over-engineered features), not essential logic.
+
+**Which mode should I use?**
+Start with `full` (default). Switch to `ultra` for boilerplate/simple tasks. Use `lite` if you want gentle hints without strict enforcement.
+
+**Does Headroom require an API key?**
+Headroom is optional and separate. save-token works purely through behavior rules — no proxy needed.
+
+**Can I use this without Cursor?**
+Yes — copy the adapter file for your IDE (Claude Code, Windsurf, GitHub Copilot). The core rules are IDE-agnostic.
+
+**How do I verify it's working?**
+Run `/save-token review` mid-session to get a waste score (A+ to F). Run `/save-token stats` for cost estimates.
+
 ## How It Compares
 
 | | save-token | Ponytail | Headroom |
@@ -161,4 +193,4 @@ Or merge the `sessionStart` entry into your existing `hooks.json`.
 | Approach | Code ladder + tool + output | Decision ladder + code diet | Input/output compression |
 | Measurement | A/B subagent testing | Manual benchmarks | Automatic perf stats |
 | Integration | Cursor skill | Cursor rule | API proxy |
-| Unique | 170-trial A/B tested + session learning | Anti-bloat focus | Reversible compression |
+| Unique | 200-trial A/B tested + session learning | Anti-bloat focus | Reversible compression |

@@ -54,6 +54,13 @@
 - New chat per task
 - `@file` over `@folder`
 
+## Troubleshooting
+| Issue | Quick fix |
+|-------|-----------|
+| Not working | `bash scripts/mode.sh get` — is it `off`? |
+| No transcripts | Run during active session (60 min window) |
+| Install fail | `mkdir -p ~/.cursor/skills && bash install.sh` |
+
 ## Auto-Activation
 ```bash
 cp hooks/hooks.json.example ~/.cursor/hooks.json
@@ -64,9 +71,14 @@ cp hooks/hooks.json.example ~/.cursor/hooks.json
 |-----|------|
 | Claude Code | `adapters/AGENTS.md` → project root |
 | Windsurf | `adapters/windsurfrules` → `.windsurfrules` |
+| GitHub Copilot | `adapters/copilot-instructions.md` → `.github/` |
 
-## Quick Stats
-- 170 A/B trials, 16 tasks, 3 intensity levels
-- Ultra: -60% code, -93% explanation, -31% tool calls
-- Full: -76% explanation, -40% tool calls
-- Opus full mode: ~$250/month savings at 100 req/day
+## Quick Stats (200-trial A/B data)
+| Mode | Code | Explanation | Tool Calls |
+|------|------|-------------|------------|
+| Lite | -16% | -33% | -20% |
+| Full | -24% | -75% | -34% |
+| Ultra | -51% | -93% | -39% |
+
+Zero correctness regressions across all 200 trials.
+Opus full mode: ~$250/month savings at 100 req/day.

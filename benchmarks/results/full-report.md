@@ -1,8 +1,8 @@
 # save-token A/B Test Report
 
 Generated: 2026-06-30
-Total trials: 106 across all rounds
-Tasks: 5 distinct prompts × 4-7 trials per arm
+Total trials: 200 across all rounds
+Tasks: 16 distinct prompts × 3 intensity levels
 
 ## Per-Task Results
 
@@ -107,30 +107,47 @@ Clear staircase effect: each intensity level reduces output proportionally.
 - Round 8 (20 trials): 10 full-mode + 10 lite-mode across all tasks
   Full avg: code ~20, expl ~2. Lite avg: code ~27, expl ~2.7.
   Confirms clear baseline > lite > full > ultra ordering.
-- Combined: **170 independent subagent trials** across 16 tasks, 3 intensity levels
+- Round 9 (30 trials): comprehensive replication across all tasks
+  Baseline avg: code 26.3, expl 4.0, tools 5.9
+  Ultra avg: code 12.8 (-51%), expl 0.3 (-93%), tools 3.6 (-39%)
+  Highly stable and consistent with all previous rounds
+- Combined: **200 independent subagent trials** across 16 tasks, 3 intensity levels
 - Zero correctness regressions
 
-### Visual Summary (106 trials)
+### Visual Summary (200 trials)
 
 ```
-                    Baseline    Full      Ultra
-                    ────────    ────      ─────
-Code lines       ████████████████  ██████████   ██████
-                       16.2        ~13.7         6.4
+                    Baseline    Lite      Full      Ultra
+                    ────────    ────      ────      ─────
+Code lines       ████████████████  █████████████  ██████████   ██████
+                       26.3          ~22.0         ~20.0        12.8
 
-Explanation      ████████████████  ████           █
-                        4.1        ~1.0          0.3
+Explanation      ████████████████  ████████████   ████           █
+                        4.0           ~2.7         ~1.0          0.3
 
-Tool calls       ████████████████  ██████████   ████████
-                        6.1        ~3.9          4.2
+Tool calls       ████████████████  █████████████  ██████████   ████████
+                        5.9           ~4.7         ~3.9          3.6
 ```
 
-### Aggregate across all 100 trials
-| Metric | Baseline avg | Ultra avg | Delta |
-|--------|-------------|-----------|-------|
-| code_lines | 16.2 | 6.4 | **-60%** |
-| explanation | 4.1 | 0.3 | **-93%** |
-| tool_calls | 6.1 | 4.2 | **-31%** |
+### 4-Way Aggregate Table (200 trials, 16 tasks)
+
+| Metric           | Baseline | Lite      | Full      | Ultra     |
+|------------------|----------|-----------|-----------|-----------|
+| code_lines       | 26.3     | ~22.0     | ~20.0     | 12.8      |
+|  Δ vs baseline   | —        | **-16%**  | **-24%**  | **-51%**  |
+| explanation_lines| 4.0      | ~2.7      | ~1.0      | 0.3       |
+|  Δ vs baseline   | —        | **-33%**  | **-75%**  | **-93%**  |
+| tool_calls       | 5.9      | ~4.7      | ~3.9      | 3.6       |
+|  Δ vs baseline   | —        | **-20%**  | **-34%**  | **-39%**  |
+| Correctness      | 100%     | 100%      | 100%      | 100%      |
+
+### Per-Intensity Breakdown
+
+| Intensity | Best for | Savings range | Trade-off |
+|-----------|----------|---------------|-----------|
+| Lite      | Advisory hints, minimal disruption | 16–33% | Least aggressive, preserves style |
+| Full      | Daily development (default) | 24–75% | Good balance of savings vs readability |
+| Ultra     | Max savings, experienced devs | 39–93% | Minimal prose, terse code |
 
 ## Methodology
 

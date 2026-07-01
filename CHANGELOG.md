@@ -1,30 +1,49 @@
 # Changelog
 
-## [Unreleased]
+## [0.2.0] — 2026-06-30
 
 ### Added
-- **130 total A/B trials** across 12 tasks, 3 intensity levels
+- **200 total A/B trials** across 16 tasks, 3 intensity levels
+- 4-way aggregate table (baseline/lite/full/ultra) in full report
 - GitHub Copilot adapter (`adapters/copilot-instructions.md`)
 - Windsurf adapter (`adapters/windsurfrules`)
 - Claude Code AGENTS.md adapter
-- Token cost calculator (`scripts/cost.sh`) — estimates $/month savings per model
+- Token cost calculator (`scripts/cost.sh`) — 200-trial calibrated
 - Cost estimate in `stats.sh` output
 - Session auto-activation hook (`hooks/session-start.sh` + `hooks.json.example`)
-- Session scoring in `review.sh` (A+ to F grade)
+- Session scoring in `review.sh` (A+ to F grade + per-pattern fix suggestions)
+- HTML report output in `analyze_transcript.py --html`
+- `argparse` CLI for transcript analyzer
 - Full-read detection and tool stats in transcript analyzer
 - `compare.sh --json` output mode for scripting
 - OS detection in setup.sh (macOS/Linux hints)
-- Before/after examples from real A/B trials (`examples/before-after.md`)
+- Before/after examples with all 3 modes (`examples/before-after.md`)
 - Token estimate sections in learn.sh and stats.sh
 - Explicit lite mode rules in agent-rules.md
-- Expanded test suite (42 checks)
-- 2 new benchmark prompts (JSON schema validator, CLI todo manager)
-- MIT license, ASCII report chart
+- `install.sh` version, status, help commands
+- `mode.sh describe` command + improved help text
+- 20 benchmark prompts (LRU cache, merge sort, rate limiter, HTML link extractor, binary search, stack calculator, retry decorator, config parser, event emitter, markdown-to-HTML)
+- Expanded test suite (55+ checks including adapter content validation, CLI flags)
+- MIT license, ASCII report chart, CONTRIBUTING.md
 - `.gitignore` for test artifacts
+
+### Changed
+- `install.sh` now supports `--version`, `--help`, `status` commands
+- `mode.sh` now includes `describe` command with savings percentages
+- `benchmark.sh` now supports `--list` and `--all` flags
+- `review.sh` now supports `--html` output
+- `setup.sh` now supports `--check` prerequisite verification
+- `analyze_transcript.py` uses argparse, supports `--html` and `-o`
+- `compare.sh` shows overall change summary in output
+- `session-start.sh` hook includes mode description
+- `stats.sh` shows install status, mode description, version
+- `auto-dev-SKILL.md` updated with save-token v0.2.0 integration
 
 ### Fixed
 - README: correct prompt count, correct ultra trial count
 - test.sh pipe bug in hook JSON validation
+- cost.sh savings percentages updated from 106-trial to 200-trial data
+- SKILL.md argument-hint was missing `cost` command
 
 ## [0.1.0] — 2026-06-30
 

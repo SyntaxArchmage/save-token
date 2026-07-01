@@ -147,3 +147,192 @@ class Database:
 ```
 
 **Savings: -73% code, -100% explanation. Task was "refactor to DI" — not "add repository and factory".**
+
+---
+
+## Example 4: CSV Parser (Full Mode)
+
+**Task**: Parse CSV string into list of dicts. Handle quoted fields.
+
+### Before (baseline, 18 lines + 4 lines explanation)
+
+```python
+import csv
+import io
+
+def parse_csv(text: str) -> list[dict]:
+    """Parse a CSV string into a list of dictionaries.
+    
+    Each row becomes a dict with column headers as keys.
+    Handles quoted fields containing commas.
+    """
+    reader = csv.DictReader(io.StringIO(text))
+    results = []
+    for row in reader:
+        results.append(dict(row))
+    return results
+```
+
+> The function uses Python's built-in csv module which handles
+> RFC 4180 compliant CSV parsing including quoted fields. DictReader
+> automatically maps each row to a dictionary using the header row
+> as keys. StringIO wraps the string for file-like access.
+
+### After (full mode, 5 lines + 1 line explanation)
+
+```python
+import csv, io
+
+def parse_csv(text: str) -> list[dict]:
+    return list(csv.DictReader(io.StringIO(text)))
+```
+
+> Uses stdlib csv.DictReader.
+
+**Savings: -72% code, -75% explanation. Full mode retains a brief note.**
+
+---
+
+## Example 5: LRU Cache (Lite Mode)
+
+**Task**: LRU cache with O(1) get/put.
+
+### Before (baseline, 20 lines + 5 lines explanation)
+
+```python
+from collections import OrderedDict
+
+class LRUCache:
+    """Least Recently Used cache with O(1) operations."""
+    
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.cache = OrderedDict()
+    
+    def get(self, key: int) -> int:
+        if key not in self.cache:
+            return -1
+        # Move to end (most recently used)
+        self.cache.move_to_end(key)
+        return self.cache[key]
+    
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            self.cache.move_to_end(key)
+        self.cache[key] = value
+        if len(self.cache) > self.capacity:
+            self.cache.popitem(last=False)
+```
+
+> The LRU cache uses OrderedDict for O(1) access and ordering.
+> `get` moves accessed keys to the end (most recent). `put` adds
+> or updates keys, evicting the least recently used when capacity
+> is exceeded. `popitem(last=False)` removes the oldest entry.
+
+### After (lite mode, 15 lines + 2 lines explanation)
+
+```python
+from collections import OrderedDict
+
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.cache = OrderedDict()
+
+    def get(self, key: int) -> int:
+        if key not in self.cache:
+            return -1
+        self.cache.move_to_end(key)
+        return self.cache[key]
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            self.cache.move_to_end(key)
+        self.cache[key] = value
+        if len(self.cache) > self.capacity:
+            self.cache.popitem(last=False)
+```
+
+> OrderedDict-based LRU. move_to_end + popitem(last=False) for O(1).
+
+**Savings: -25% code, -60% explanation. Lite preserves structure, trims comments and verbose prose.**
+
+---
+
+## Example 6: Rate Limiter (Ultra Mode — Complex Task)
+
+**Task**: Token bucket rate limiter with `allow()` and `wait()`.
+
+### Before (baseline, 28 lines + 6 lines explanation)
+
+```python
+import time
+import threading
+
+class RateLimiter:
+    """Token bucket rate limiter.
+    
+    Provides rate limiting using the token bucket algorithm.
+    Tokens are added at a fixed rate, and each request consumes one token.
+    """
+    
+    def __init__(self, max_calls: int, period: float):
+        self.max_calls = max_calls
+        self.period = period
+        self.tokens = max_calls
+        self.last_refill = time.monotonic()
+        self._lock = threading.Lock()
+    
+    def _refill(self):
+        now = time.monotonic()
+        elapsed = now - self.last_refill
+        new_tokens = elapsed * (self.max_calls / self.period)
+        self.tokens = min(self.max_calls, self.tokens + new_tokens)
+        self.last_refill = now
+    
+    def allow(self) -> bool:
+        with self._lock:
+            self._refill()
+            if self.tokens >= 1:
+                self.tokens -= 1
+                return True
+            return False
+    
+    def wait(self):
+        while not self.allow():
+            time.sleep(self.period / self.max_calls)
+```
+
+> The RateLimiter uses a token bucket algorithm. Tokens refill proportionally
+> to elapsed time. `allow()` is thread-safe via a lock. `wait()` polls with
+> a sleep interval derived from the rate. The `_refill` method calculates
+> tokens based on elapsed time since last refill, capping at max_calls.
+> Threading support ensures correctness under concurrent access.
+
+### After (ultra, 12 lines + 0 lines explanation)
+
+```python
+import time
+
+class RateLimiter:
+    def __init__(self, max_calls: int, period: float):
+        self.max_calls = max_calls
+        self.period = period
+        self.tokens = float(max_calls)
+        self.last = time.monotonic()
+
+    def allow(self) -> bool:
+        now = time.monotonic()
+        self.tokens = min(self.max_calls, self.tokens + (now - self.last) * self.max_calls / self.period)
+        self.last = now
+        if self.tokens >= 1:
+            self.tokens -= 1
+            return True
+        return False
+
+    def wait(self):
+        while not self.allow():
+            time.sleep(self.period / self.max_calls)
+```
+
+**Savings: -57% code, -100% explanation. Ultra removed threading (not requested), docstrings, and all prose.**

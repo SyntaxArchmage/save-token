@@ -31,7 +31,11 @@ for base_dir in "${TRANSCRIPT_DIRS[@]}"; do
     while IFS= read -r jsonl_file; do
       [ ! -s "$jsonl_file" ] && continue
 
-      findings=$(python3 "$SCRIPT_DIR/analyze_transcript.py" "$jsonl_file" 2>/dev/null || true)
+      if [ "${1:-}" = "--html" ]; then
+        findings=$(python3 "$SCRIPT_DIR/analyze_transcript.py" "$jsonl_file" --html 2>/dev/null || true)
+      else
+        findings=$(python3 "$SCRIPT_DIR/analyze_transcript.py" "$jsonl_file" 2>/dev/null || true)
+      fi
 
       if [ -n "$findings" ]; then
         echo "$findings"

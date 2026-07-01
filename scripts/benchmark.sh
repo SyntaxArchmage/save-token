@@ -12,17 +12,54 @@ OUTFILE="${RESULTS_DIR}/bench-${TIMESTAMP}.json"
 
 mkdir -p "$RESULTS_DIR"
 
+PROMPT_COUNT=$(find "$PROMPTS_DIR" -name "*.md" 2>/dev/null | wc -l)
+
 usage() {
   echo "Usage: benchmark.sh [prompt_file|prompt_string]"
   echo
   echo "Runs A/B comparison: baseline vs optimized (with agent-rules)."
   echo "Default: ${TRIALS} trials per arm (set SAVE_TOKEN_TRIALS to change)."
+  echo "Available presets: ${PROMPT_COUNT} prompts in benchmarks/prompts/"
+  echo
+  echo "Presets:"
+  for f in "$PROMPTS_DIR"/*.md; do
+    [ -f "$f" ] || continue
+    name=$(basename "$f" .md)
+    echo "  $name"
+  done
   echo
   echo "Examples:"
   echo "  benchmark.sh 'Write a function to validate emails'"
   echo "  benchmark.sh benchmarks/prompts/csv-parser.md"
+  echo "  benchmark.sh --list    # list preset prompts"
   exit 0
 }
+
+if [ "${1:-}" = "--list" ]; then
+  echo "Available benchmark prompts (${PROMPT_COUNT}):"
+  for f in "$PROMPTS_DIR"/*.md; do
+    [ -f "$f" ] || continue
+    name=$(basename "$f" .md)
+    first_line=$(head -1 "$f" 2>/dev/null)
+    echo "  ${name}: ${first_line:0:70}"
+  done
+  exit 0
+fi
+
+if [ "${1:-}" = "--all" ]; then
+  echo "Preparing all ${PROMPT_COUNT} benchmark prompts..."
+  echo
+  for f in "$PROMPTS_DIR"/*.md; do
+    [ -f "$f" ] || continue
+    name=$(basename "$f" .md)
+    echo "  Generating: $name"
+    bash "$0" "$f" >/dev/null 2>&1
+  done
+  echo
+  echo "[OK] All ${PROMPT_COUNT} prompt pairs generated in ${RESULTS_DIR}/"
+  echo "Launch from Cursor to execute subagents."
+  exit 0
+fi
 
 [ "${1:-}" = "-h" ] || [ "${1:-}" = "--help" ] && usage
 

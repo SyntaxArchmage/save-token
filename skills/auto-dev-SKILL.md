@@ -119,6 +119,15 @@ remaining=$((BUDGET_SECONDS - elapsed))
 | `4h` | 14400 |
 | bare number | minutes |
 
+## Integration with save-token
+
+When used alongside save-token, auto-dev follows the active intensity level:
+- **lite/full**: normal dev cycle, test.sh validation
+- **ultra**: enforce minimal changes per cycle, terse commits
+
+Use `bash scripts/test.sh` as the validation gate after each cycle.
+Use `bash scripts/benchmark.sh --list` to see available A/B presets.
+
 ## Example
 
 ```

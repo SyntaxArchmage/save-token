@@ -8,6 +8,20 @@ echo "║       save-token setup               ║"
 echo "╚══════════════════════════════════════╝"
 echo
 
+if [ "${1:-}" = "--check" ] || [ "${1:-}" = "check" ]; then
+  echo "Checking save-token prerequisites..."
+  ok=true
+  command -v python3 &>/dev/null && echo "[OK] python3" || { echo "[MISSING] python3"; ok=false; }
+  command -v bash &>/dev/null && echo "[OK] bash" || { echo "[MISSING] bash"; ok=false; }
+  command -v git &>/dev/null && echo "[OK] git" || echo "[OPTIONAL] git (not required)"
+  python3 -c "import headroom" 2>/dev/null && echo "[OK] headroom-ai" || echo "[OPTIONAL] headroom-ai (run setup to install)"
+  SKILL_DIR="${HOME}/.cursor/skills/save-token"
+  [ -L "$SKILL_DIR" ] && echo "[OK] skill installed" || echo "[MISSING] skill not installed (run install.sh)"
+  [ -f "${HOME}/.save-token/mode" ] && echo "[OK] mode: $(cat "${HOME}/.save-token/mode")" || echo "[OK] mode: full (default)"
+  "$ok" && echo "[OK] All prerequisites met." || echo "[WARN] Some prerequisites missing."
+  exit 0
+fi
+
 # Step 0: OS detection
 OS="$(uname -s)"
 case "$OS" in

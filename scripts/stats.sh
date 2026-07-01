@@ -10,10 +10,20 @@ echo "║         save-token stats             ║"
 echo "╚══════════════════════════════════════╝"
 echo
 
-# Mode
+# Install status
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_DIR="$(dirname "$SCRIPT_DIR")"
+SKILL_DIR="${HOME}/.cursor/skills/save-token"
+VERSION=$(grep -m1 '^VERSION=' "$REPO_DIR/install.sh" 2>/dev/null | cut -d'"' -f2 || echo "?")
+if [ -L "$SKILL_DIR" ]; then
+  echo "Installed: v${VERSION} ($SKILL_DIR)"
+else
+  echo "Not installed (run: bash install.sh)"
+fi
+
+# Mode
 MODE=$(bash "$SCRIPT_DIR/mode.sh" get)
-echo "Mode: $MODE"
+echo "Mode: $MODE — $(bash "$SCRIPT_DIR/mode.sh" describe 2>/dev/null | cut -d: -f2 || echo "")"
 
 # Headroom status
 if lsof -i ":$PROXY_PORT" &>/dev/null; then
@@ -40,7 +50,6 @@ else
 fi
 
 # Context budget estimate
-REPO_DIR="$(dirname "$SCRIPT_DIR")"
 RULES_WORDS=$(wc -w < "$REPO_DIR/rules/agent-rules.md" 2>/dev/null || echo 0)
 MDC_WORDS=$(wc -w < "$REPO_DIR/rules/save-token.mdc" 2>/dev/null || echo 0)
 SKILL_WORDS=$(wc -w < "$REPO_DIR/SKILL.md" 2>/dev/null || echo 0)
@@ -53,8 +62,8 @@ echo "  agent-rules.md: ${RULES_WORDS}w  save-token.mdc: ${MDC_WORDS}w  SKILL.md
 # Quick cost summary
 case "$MODE" in
   ultra) EXPL_SAVE=93 ;;
-  full)  EXPL_SAVE=76 ;;
-  lite)  EXPL_SAVE=50 ;;
+  full)  EXPL_SAVE=75 ;;
+  lite)  EXPL_SAVE=33 ;;
   *)     EXPL_SAVE=0 ;;
 esac
 if [ "$EXPL_SAVE" -gt 0 ]; then

@@ -21,11 +21,11 @@ esac
 
 MODE=$(bash "$SCRIPT_DIR/mode.sh" get)
 
-# Savings percentages from 106-trial benchmark
+# Savings percentages from 200-trial benchmark
 case "$MODE" in
-  ultra) CODE_PCT=60; EXPL_PCT=93; TOOL_PCT=31 ;;
-  full)  CODE_PCT=18; EXPL_PCT=76; TOOL_PCT=40 ;;
-  lite)  CODE_PCT=10; EXPL_PCT=50; TOOL_PCT=20 ;;
+  ultra) CODE_PCT=51; EXPL_PCT=93; TOOL_PCT=39 ;;
+  full)  CODE_PCT=24; EXPL_PCT=75; TOOL_PCT=34 ;;
+  lite)  CODE_PCT=16; EXPL_PCT=33; TOOL_PCT=20 ;;
   off)   CODE_PCT=0;  EXPL_PCT=0;  TOOL_PCT=0 ;;
 esac
 
@@ -36,7 +36,7 @@ echo
 echo "Model: $NAME"
 echo "Mode:  $MODE"
 echo
-echo "Expected savings per request (from 106-trial benchmark):"
+echo "Expected savings per request (from 200-trial benchmark):"
 echo "  Code output:       -${CODE_PCT}%"
 echo "  Explanation output: -${EXPL_PCT}%"
 echo "  Tool calls:        -${TOOL_PCT}%"

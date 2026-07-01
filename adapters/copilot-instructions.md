@@ -3,6 +3,8 @@
 Place this file at `.github/copilot-instructions.md` in your project root
 to apply save-token rules to GitHub Copilot Chat.
 
+Validated: 200 A/B trials → -51% code, -93% explanation, -39% tool calls (ultra).
+
 ---
 
 ## Code: stop at first rung
@@ -24,4 +26,11 @@ Don't add argparse, logging, docstrings, or config files unless explicitly asked
 Input validation at trust boundaries, error handling, security, accessibility,
 anything explicitly requested.
 
-Mark intentional simplifications: `// save-token: <what was skipped, upgrade path>`
+## Intensity
+
+Default: **full** (all rules enforced). To switch:
+- `lite` — output economy only, code ladder suggested
+- `ultra` — code only, no prose, deletion over addition, challenge every request
+- `off` — stop applying rules
+
+Mark skips: `// save-token: <what was skipped, upgrade path>`

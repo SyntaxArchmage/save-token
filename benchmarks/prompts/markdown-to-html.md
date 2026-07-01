@@ -1,0 +1,1 @@
+Write Python: `md_to_html(text: str) -> str` — convert basic Markdown to HTML. Support: headers (#-######), bold (**), italic (*), code (`), links ([text](url)), unordered lists (-). Stdlib only (re module).

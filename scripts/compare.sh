@@ -118,6 +118,17 @@ for key in ['tool_calls', 'code_lines', 'explanation_lines', 'files_read']:
         delta_str = 'n/a'
     print(f'║ {key:<18}│ {bv:>8.1f} │ {ov:>9.1f} │ {delta_str:>9} ║')
 
+print('╠═══════════════════════════════════════════════════════╣')
+
+# Summary line
+total_bv = sum(b.get(k, 0) for k in ['tool_calls', 'code_lines', 'explanation_lines'])
+total_ov = sum(o.get(k, 0) for k in ['tool_calls', 'code_lines', 'explanation_lines'])
+if total_bv > 0:
+    overall = ((total_ov - total_bv) / total_bv) * 100
+    sign = '+' if overall > 0 else ''
+    print(f'║ OVERALL CHANGE     │          │           │ {sign}{overall:.0f}%{\" \" * (5 - len(f\"{sign}{overall:.0f}\"))}║')
+else:
+    print(f'║ OVERALL CHANGE     │          │           │       n/a ║')
 print('╚═══════════════════════════════════════════════════════╝')
 print()
 "
