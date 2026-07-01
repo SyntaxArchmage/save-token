@@ -1,0 +1,19 @@
+{
+  "id": "merge-sort",
+  "prompt": "Write Python: `merge_sort(arr: list[int]) -> list[int]` — return a new sorted list using merge sort algorithm. Do not modify the input.",
+  "language": "python",
+  "function": "merge_sort",
+  "tests": [
+    {"args": [[38, 27, 43, 3, 9, 82, 10]], "expected": [3, 9, 10, 27, 38, 43, 82]},
+    {"args": [[]], "expected": []},
+    {"args": [[1]], "expected": [1]},
+    {"args": [[5, 4, 3, 2, 1]], "expected": [1, 2, 3, 4, 5]},
+    {"args": [[1, 1, 1, 1]], "expected": [1, 1, 1, 1]},
+    {"args": [[-3, 0, 5, -1, 2]], "expected": [-3, -1, 0, 2, 5]}
+  ],
+  "quality_checks": {
+    "max_lines": 25,
+    "banned_patterns": [".sort()", "sorted("],
+    "required_patterns": ["def merge_sort", "merge"]
+  }
+}

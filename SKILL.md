@@ -39,6 +39,7 @@ That file contains the complete behavior ruleset. Apply it immediately.
 | `/save-token verbosity` | Analyze verbosity signals + recommend mode |
 | `/save-token config` | Show/apply team config (.save-token.json) |
 | `/save-token progress` | Show progressive activation status |
+| `/save-token quality` | Dev quality benchmarks (correctness + quality) |
 
 ## Command: setup
 
@@ -200,6 +201,24 @@ Track real token usage. Commands:
 - `reset` — clear token log
 
 Supports: Cursor usage.json, Claude Code JSON output, Helicone API, LiteLLM proxy, manual entry.
+
+## Command: quality
+
+```bash
+bash ~/.cursor/skills/save-token/scripts/quality-bench.sh [list|show|validate|score]
+```
+
+Software development quality benchmark suite — dual objective: token cost + code quality.
+
+Subcommands:
+- `list` — show all 8 quality benchmarks
+- `show <id>` — show benchmark details (prompt + tests + quality checks)
+- `validate <file.py> --benchmark=<id>` — run correctness tests + quality checks, output JSON
+- `score <file.py> --benchmark=<id>` — full quality score with grade (A/B/C/F)
+- `validate-all <dir>` — validate all .py files against matching benchmarks
+
+Each benchmark defines: prompt, test cases (functional), quality checks (max lines, banned/required patterns).
+Grade: A (100%), B (80%+), C (60%+), F (<60%).
 
 ## Command: config
 

@@ -1,6 +1,6 @@
 # save-token
 
-![Tests](https://img.shields.io/badge/tests-127%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-134%20passing-brightgreen)
 ![Trials](https://img.shields.io/badge/A%2FB%20trials-216-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -68,6 +68,7 @@ See [benchmarks/results/full-report.md](benchmarks/results/full-report.md) for p
 | `/save-token compress [file]` | Content-type-aware compression |
 | `/save-token config` | Team config (show/apply/init) |
 | `/save-token progress` | Progressive activation status |
+| `/save-token quality` | Dev quality benchmarks (correctness + quality) |
 
 ## Intensity Levels
 
@@ -103,7 +104,8 @@ save-token/
 │   ├── load-config.sh          # Team config loader (3-level precedence)
 │   ├── progress.sh             # Progressive activation tracker
 │   ├── export-promptfoo.sh     # promptfoo config generator
-│   ├── test.sh                 # 127-check test runner
+│   ├── quality-bench.sh        # Dev quality benchmark runner (correctness + quality)
+│   ├── test.sh                 # 134-check test runner
 │   └── analyze_transcript.py   # Transcript analyzer (+ --html report)
 ├── adapters/
 │   ├── standalone.mdc          # Cursor standalone rule (zero-install)

@@ -178,6 +178,35 @@ check "benchmark.sh --model" bash -c 'bash "'"$SCRIPT_DIR"'/benchmark.sh" --mode
 check "benchmark.sh --output=json" bash -c 'bash "'"$SCRIPT_DIR"'/benchmark.sh" --output=json "test prompt" 2>&1 | grep -q "Config written"'
 check "benchmark.sh --trials" bash -c 'bash "'"$SCRIPT_DIR"'/benchmark.sh" --trials=7 "test prompt" 2>&1 | grep -q "7.*per arm"'
 
+# --- Quality benchmarks ---
+
+check "quality-bench.sh syntax" bash -n "$SCRIPT_DIR/quality-bench.sh"
+check "quality-bench.sh list" bash -c 'bash "'"$SCRIPT_DIR"'/quality-bench.sh" list 2>&1 | grep -q "benchmarks"'
+check "quality-bench.sh show" bash -c 'bash "'"$SCRIPT_DIR"'/quality-bench.sh" show binary-search 2>&1 | grep -q "binary_search"'
+check "quality-bench.sh validate (correct)" bash -c '
+echo "def binary_search(arr, target):
+    left, right = 0, len(arr) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if arr[mid] == target: return mid
+        elif arr[mid] < target: left = mid + 1
+        else: right = mid - 1
+    return -1" > /tmp/st-qb-test.py
+bash "'"$SCRIPT_DIR"'/quality-bench.sh" validate /tmp/st-qb-test.py --benchmark=binary-search | grep -q "\"grade\": \"A\""
+rm /tmp/st-qb-test.py'
+check "quality-bench.sh score" bash -c '
+echo "def binary_search(arr, target):
+    left, right = 0, len(arr) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if arr[mid] == target: return mid
+        elif arr[mid] < target: left = mid + 1
+        else: right = mid - 1
+    return -1" > /tmp/st-qb-test2.py
+bash "'"$SCRIPT_DIR"'/quality-bench.sh" score /tmp/st-qb-test2.py --benchmark=binary-search 2>&1 | grep -q "Grade:.*A"
+rm /tmp/st-qb-test2.py'
+check "quality benchmarks exist (8)" bash -c 'test $(find "'"$REPO_DIR"'/benchmarks/quality" -name "*.json" | wc -l) -ge 8'
+
 # --- Documentation ---
 
 check "README.md exists" test -f "$REPO_DIR/README.md"

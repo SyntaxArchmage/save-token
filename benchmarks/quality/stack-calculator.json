@@ -1,0 +1,18 @@
+{
+  "id": "stack-calculator",
+  "prompt": "Write Python: `eval_rpn(tokens: list[str]) -> float` that evaluates a Reverse Polish Notation expression. Support +, -, *, /. Division is float division. Raise ValueError on invalid input.",
+  "language": "python",
+  "function": "eval_rpn",
+  "tests": [
+    {"args": [["2", "3", "+"]], "expected": 5.0},
+    {"args": [["4", "13", "5", "/", "+"]], "expected": 6.6},
+    {"args": [["3", "4", "*", "2", "-"]], "expected": 10.0},
+    {"args": [["10", "2", "/"]], "expected": 5.0},
+    {"args": [["5", "1", "2", "+", "4", "*", "+", "3", "-"]], "expected": 14.0}
+  ],
+  "quality_checks": {
+    "max_lines": 25,
+    "banned_patterns": ["eval("],
+    "required_patterns": ["def eval_rpn", "stack", "append"]
+  }
+}

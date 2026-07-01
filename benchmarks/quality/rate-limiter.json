@@ -1,0 +1,23 @@
+{
+  "id": "rate-limiter",
+  "prompt": "Write Python: `RateLimiter(max_calls: int, period: float)` with method `allow() -> bool`. Returns True if the call is within the rate limit (max_calls per period seconds), False otherwise. Use a sliding window.",
+  "language": "python",
+  "function": "RateLimiter",
+  "tests": [
+    {
+      "type": "exec",
+      "code": "import time\nrl = RateLimiter(3, 1.0)\nassert rl.allow() == True\nassert rl.allow() == True\nassert rl.allow() == True\nassert rl.allow() == False",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "rl = RateLimiter(1, 0.1)\nassert rl.allow() == True\nassert rl.allow() == False\ntime.sleep(0.15)\nassert rl.allow() == True",
+      "expected": true
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 20,
+    "banned_patterns": [],
+    "required_patterns": ["class RateLimiter", "def allow", "time"]
+  }
+}

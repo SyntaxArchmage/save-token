@@ -1,0 +1,28 @@
+{
+  "id": "retry-decorator",
+  "prompt": "Write Python: a decorator `retry(max_retries=3, delay=1.0)` that retries a function on exception up to max_retries times with delay between attempts. If all retries fail, raise the last exception.",
+  "language": "python",
+  "function": "retry",
+  "tests": [
+    {
+      "type": "exec",
+      "code": "call_count = 0\n@retry(max_retries=3, delay=0)\ndef flaky():\n    global call_count\n    call_count += 1\n    if call_count < 3:\n        raise ValueError('fail')\n    return 'ok'\nassert flaky() == 'ok'\nassert call_count == 3",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "@retry(max_retries=2, delay=0)\ndef always_fail():\n    raise RuntimeError('boom')\ntry:\n    always_fail()\n    assert False, 'should have raised'\nexcept RuntimeError as e:\n    assert str(e) == 'boom'",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "@retry(max_retries=1, delay=0)\ndef instant_ok():\n    return 42\nassert instant_ok() == 42",
+      "expected": true
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 20,
+    "banned_patterns": ["import tenacity", "from tenacity"],
+    "required_patterns": ["def retry", "functools.wraps", "except"]
+  }
+}

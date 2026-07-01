@@ -1,0 +1,17 @@
+{
+  "id": "email-validator",
+  "prompt": "Write Python: `validate_emails(emails: list[str]) -> list[str]` that filters a list and returns only valid email addresses. Use regex. An email is valid if it has: local part (alphanumeric, dots, hyphens, underscores), @, domain with at least one dot.",
+  "language": "python",
+  "function": "validate_emails",
+  "tests": [
+    {"args": [["user@example.com", "bad", "a@b.c", "no@domain", "@missing.com", "user.name@domain.org"]], "expected": ["user@example.com", "a@b.c", "user.name@domain.org"]},
+    {"args": [[]], "expected": []},
+    {"args": [["not-an-email", "also bad", "123"]], "expected": []},
+    {"args": [["test@test.co.uk", "a.b.c@d.e.f"]], "expected": ["test@test.co.uk", "a.b.c@d.e.f"]}
+  ],
+  "quality_checks": {
+    "max_lines": 15,
+    "banned_patterns": ["import email_validator", "from email_validator"],
+    "required_patterns": ["re", "def validate_emails"]
+  }
+}

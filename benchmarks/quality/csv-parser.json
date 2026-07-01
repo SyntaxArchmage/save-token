@@ -1,0 +1,38 @@
+{
+  "id": "csv-parser",
+  "prompt": "Write Python: `parse_csv_column(filepath: str, column: str) -> list[float]` that reads a CSV and returns all values from the specified column as floats, skipping rows with missing or non-numeric values.",
+  "language": "python",
+  "function": "parse_csv_column",
+  "setup": "import tempfile, os\ndef _make_csv(content):\n    f = tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False)\n    f.write(content)\n    f.close()\n    return f.name",
+  "tests": [
+    {
+      "type": "with_setup",
+      "setup_call": "_make_csv('name,age,score\\nAlice,30,95.5\\nBob,25,87.3\\nCharlie,,92.1\\n')",
+      "setup_var": "fp",
+      "call": "parse_csv_column(fp, 'score')",
+      "expected": [95.5, 87.3, 92.1],
+      "cleanup": "os.unlink(fp)"
+    },
+    {
+      "type": "with_setup",
+      "setup_call": "_make_csv('x,y\\n1.0,2.0\\n3.0,bad\\n5.0,6.0\\n')",
+      "setup_var": "fp",
+      "call": "parse_csv_column(fp, 'y')",
+      "expected": [2.0, 6.0],
+      "cleanup": "os.unlink(fp)"
+    },
+    {
+      "type": "with_setup",
+      "setup_call": "_make_csv('a,b\\n1,2\\n3,4\\n')",
+      "setup_var": "fp",
+      "call": "parse_csv_column(fp, 'a')",
+      "expected": [1.0, 3.0],
+      "cleanup": "os.unlink(fp)"
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 20,
+    "banned_patterns": ["import pandas", "from pandas"],
+    "required_patterns": ["csv", "float"]
+  }
+}

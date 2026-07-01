@@ -19,6 +19,7 @@
 | `/save-token tokens` | Track real token usage |
 | `/save-token config` | Team config (show/apply) |
 | `/save-token progress` | Progressive activation |
+| `/save-token quality` | Dev quality benchmarks |
 
 ## Code Ladder (stop at first rung)
 1. YAGNI? Skip

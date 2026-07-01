@@ -125,7 +125,20 @@ tool_calls: <total tool calls you made>
 code_lines: <lines of code in your solution>
 explanation_lines: <lines of non-code explanation>
 files_read: <files you read>
-```'
+```
+
+IMPORTANT: Write your solution code ONLY, no explanations. Put the code in a fenced code block marked ```python so it can be extracted for automated quality testing.'
+
+# Check for matching quality benchmark
+QUALITY_BENCH=""
+if [ -f "$1" ]; then
+  BENCH_NAME=$(basename "$1" .md)
+  if [ -f "${REPO_DIR}/benchmarks/quality/${BENCH_NAME}.json" ]; then
+    QUALITY_BENCH="${BENCH_NAME}"
+    echo "Quality benchmark: $QUALITY_BENCH (correctness + quality checks)"
+    echo
+  fi
+fi
 
 # Generate subagent prompts
 cat > "${RESULTS_DIR}/.baseline-prompt.txt" << BEOF
