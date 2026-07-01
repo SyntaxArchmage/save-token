@@ -1,0 +1,38 @@
+{
+  "id": "trie-prefix",
+  "prompt": "Write Python: a `Trie` class with:\n- `insert(word: str)` — add a word\n- `search(word: str) -> bool` — return True if word exists exactly\n- `starts_with(prefix: str) -> bool` — return True if any word starts with prefix\n\nUse nested dicts internally. Mark word ends with a sentinel key.",
+  "language": "python",
+  "function": "Trie",
+  "tests": [
+    {
+      "type": "exec",
+      "code": "t = Trie()\nt.insert('apple')\nassert t.search('apple') == True",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "t = Trie()\nt.insert('apple')\nassert t.search('app') == False",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "t = Trie()\nt.insert('apple')\nassert t.starts_with('app') == True",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "t = Trie()\nt.insert('apple')\nt.insert('app')\nassert t.search('app') == True",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "t = Trie()\nassert t.search('anything') == False\nassert t.starts_with('any') == False",
+      "expected": true
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 25,
+    "banned_patterns": [],
+    "required_patterns": ["class Trie", "def insert", "def search", "def starts_with"]
+  }
+}

@@ -205,7 +205,10 @@ echo "def binary_search(arr, target):
     return -1" > /tmp/st-qb-test2.py
 bash "'"$SCRIPT_DIR"'/quality-bench.sh" score /tmp/st-qb-test2.py --benchmark=binary-search 2>&1 | grep -q "Grade:.*A"
 rm /tmp/st-qb-test2.py'
-check "quality benchmarks exist (20)" bash -c 'test $(find "'"$REPO_DIR"'/benchmarks/quality" -name "*.json" | wc -l) -ge 20'
+check "quality benchmarks exist (23)" bash -c 'test $(find "'"$REPO_DIR"'/benchmarks/quality" -name "*.json" | wc -l) -ge 23'
+check "trie-prefix benchmark" test -f "$REPO_DIR/benchmarks/quality/trie-prefix.json"
+check "context-timer benchmark" test -f "$REPO_DIR/benchmarks/quality/context-timer.json"
+check "flatten-nested benchmark" test -f "$REPO_DIR/benchmarks/quality/flatten-nested.json"
 check "data-pipeline benchmark" test -f "$REPO_DIR/benchmarks/quality/data-pipeline.json"
 check "singleton-meta benchmark" test -f "$REPO_DIR/benchmarks/quality/singleton-meta.json"
 check "memoize-ttl benchmark" test -f "$REPO_DIR/benchmarks/quality/memoize-ttl.json"

@@ -1,0 +1,38 @@
+{
+  "id": "flatten-nested",
+  "prompt": "Write Python: `flatten(data)` that recursively flattens arbitrarily nested lists into a single flat list. Non-list items should be kept as-is.\n\n```python\nflatten([1, [2, [3, 4]], [5]]) == [1, 2, 3, 4, 5]\nflatten([]) == []\nflatten([[[[1]]]]) == [1]\nflatten([1, 'hello', [2, [True]]]) == [1, 'hello', 2, True]\n```\n\nUse recursion or a generator. Handle empty lists.",
+  "language": "python",
+  "function": "flatten",
+  "tests": [
+    {
+      "type": "exec",
+      "code": "assert flatten([1, [2, [3, 4]], [5]]) == [1, 2, 3, 4, 5]",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "assert flatten([]) == []",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "assert flatten([[[[1]]]]) == [1]",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "assert flatten([1, 'hello', [2, [True]]]) == [1, 'hello', 2, True]",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "assert flatten([1, 2, 3]) == [1, 2, 3]",
+      "expected": true
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 8,
+    "banned_patterns": ["import itertools"],
+    "required_patterns": ["def flatten"]
+  }
+}

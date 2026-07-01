@@ -1,0 +1,33 @@
+{
+  "id": "context-timer",
+  "prompt": "Write Python: a `Timer` context manager that measures elapsed time.\n\n```python\nwith Timer() as t:\n    time.sleep(0.1)\nassert t.elapsed >= 0.1\n```\n\nUse `time.perf_counter()`. The `elapsed` attribute should be `None` before exit, and set to the elapsed seconds after exit. Support `__enter__` and `__exit__`.",
+  "language": "python",
+  "function": "Timer",
+  "tests": [
+    {
+      "type": "exec",
+      "code": "t = Timer()\nassert t.elapsed is None",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "import time\nwith Timer() as t:\n    time.sleep(0.05)\nassert t.elapsed >= 0.04",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "with Timer() as t:\n    pass\nassert isinstance(t.elapsed, float)\nassert t.elapsed >= 0",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "with Timer() as t:\n    _ = sum(range(10000))\nassert t.elapsed < 1.0",
+      "expected": true
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 12,
+    "banned_patterns": ["import datetime"],
+    "required_patterns": ["class Timer", "perf_counter", "__enter__", "__exit__", "elapsed"]
+  }
+}

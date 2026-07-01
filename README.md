@@ -1,6 +1,6 @@
 # save-token
 
-![Tests](https://img.shields.io/badge/tests-140%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-143%20passing-brightgreen)
 ![Trials](https://img.shields.io/badge/A%2FB%20trials-216%20%2B%2034%20quality-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -105,7 +105,7 @@ save-token/
 │   ├── progress.sh             # Progressive activation tracker
 │   ├── export-promptfoo.sh     # promptfoo config generator
 │   ├── quality-bench.sh        # Dev quality benchmark runner (correctness + quality)
-│   ├── test.sh                 # 140-check test runner
+│   ├── test.sh                 # 143-check test runner
 │   └── analyze_transcript.py   # Transcript analyzer (+ --html report)
 ├── adapters/
 │   ├── standalone.mdc          # Cursor standalone rule (zero-install)
