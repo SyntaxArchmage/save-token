@@ -150,6 +150,15 @@ check "load-config.sh init" bash -c 'bash "'"$SCRIPT_DIR"'/load-config.sh" init 
 check "load-config.sh apply" bash -c 'bash "'"$SCRIPT_DIR"'/load-config.sh" apply 2>&1 | grep -q "Applied"'
 check "load-config.sh --help" bash "$SCRIPT_DIR/load-config.sh" --help
 
+# --- Progressive activation (P8) ---
+
+check "progress.sh syntax" bash -n "$SCRIPT_DIR/progress.sh"
+check "progress.sh reset" bash -c 'bash "'"$SCRIPT_DIR"'/progress.sh" reset 2>&1 | grep -q "reset"'
+check "progress.sh show" bash -c 'bash "'"$SCRIPT_DIR"'/progress.sh" show 2>&1 | grep -q "progression"'
+check "progress.sh record" bash -c 'bash "'"$SCRIPT_DIR"'/progress.sh" record B 2>&1 | grep -q "Recorded"'
+check "progress.sh --help" bash "$SCRIPT_DIR/progress.sh" --help
+check "progress.sh bad score" bash -c 'bash "'"$SCRIPT_DIR"'/progress.sh" record Z 2>&1 | grep -q "Invalid"'
+
 # --- Documentation ---
 
 check "README.md exists" test -f "$REPO_DIR/README.md"

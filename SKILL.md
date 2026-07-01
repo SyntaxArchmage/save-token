@@ -38,6 +38,7 @@ That file contains the complete behavior ruleset. Apply it immediately.
 | `/save-token compress [file]` | Compress content (auto-detects type + engine) |
 | `/save-token verbosity` | Analyze verbosity signals + recommend mode |
 | `/save-token config` | Show/apply team config (.save-token.json) |
+| `/save-token progress` | Show progressive activation status |
 
 ## Command: setup
 
