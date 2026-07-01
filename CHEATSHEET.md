@@ -12,16 +12,19 @@
 | `/save-token learn` | Mine past sessions |
 | `/save-token review` | Audit current session |
 | `/save-token bench` | A/B test |
+| `/save-token compress` | Compress content (auto engine) |
+| `/save-token verbosity` | Verbosity profile + recommendation |
 | `/save-token setup` | Install Headroom |
 | `/save-token cost` | Estimate $/month savings |
-| `/save-token cost opus` | Cost for specific model |
 
 ## Code Ladder (stop at first rung)
 1. YAGNI? Skip
 2. Already exists? Reuse
 3. Stdlib? Use it
-4. One line? Do it
-5. Minimum code
+4. Platform native? Use it
+5. Installed dep? Use it
+6. One line? Do it
+7. Minimum code
 
 ## Tool Rules
 - Batch independent calls
@@ -70,8 +73,19 @@ cp hooks/hooks.json.example ~/.cursor/hooks.json
 | IDE | File |
 |-----|------|
 | Claude Code | `adapters/AGENTS.md` → project root |
+| CodeBuddy | `adapters/codebuddy-rule.md` → `~/.codebuddy/rules/` |
 | Windsurf | `adapters/windsurfrules` → `.windsurfrules` |
 | GitHub Copilot | `adapters/copilot-instructions.md` → `.github/` |
+| Generic CLI | `adapters/system-prompt.txt` → system prompt |
+
+## Density Variants
+| Variant | Words | Use for |
+|---------|-------|---------|
+| kernel | 156 | alwaysApply, API system prompts |
+| mid | 357 | Project-level rules |
+| full | 1123 | Complete feature set |
+
+Install: `bash install.sh --density=kernel|mid|full`
 
 ## Quick Stats (200-trial A/B data)
 | Mode | Code | Explanation | Tool Calls |

@@ -34,20 +34,28 @@ That file contains the complete behavior ruleset. Apply it immediately.
 | `/save-token learn` | Mine past sessions for waste patterns |
 | `/save-token review` | Audit current session for token waste |
 | `/save-token cost [model]` | Estimate $/month savings |
+| `/save-token compress [file]` | Compress content (auto-detects type + engine) |
+| `/save-token verbosity` | Analyze verbosity signals + recommend mode |
 
 ## Command: setup
 
 **Agent installation commands** (run these when user asks to install save-token):
 
 ```bash
-# Light mode (rules only, zero scripts):
-bash ~/.cursor/skills/save-token/install.sh light --mode=full
-
-# Heavy mode (full ecosystem — default):
+# Cursor (default):
 bash ~/.cursor/skills/save-token/install.sh heavy --mode=full --hook
 
-# With ultra intensity:
-bash ~/.cursor/skills/save-token/install.sh heavy --mode=ultra --hook
+# Claude Code:
+bash ~/.cursor/skills/save-token/install.sh heavy --platform=claude-code
+
+# CodeBuddy:
+bash ~/.cursor/skills/save-token/install.sh heavy --platform=codebuddy
+
+# Generic CLI:
+bash ~/.cursor/skills/save-token/install.sh light --platform=generic
+
+# Minimal token footprint (kernel rules, 156 words):
+bash ~/.cursor/skills/save-token/install.sh light --density=kernel
 ```
 
 If save-token repo is not yet cloned:
@@ -127,6 +135,32 @@ Analyzes Cursor agent-transcripts for waste patterns:
 - Overly long responses (>2000 chars)
 
 Outputs findings to `~/.save-token/learnings.md`.
+
+## Command: compress
+
+```bash
+bash ~/.cursor/skills/save-token/scripts/compress.sh [options] [FILE]
+```
+
+Content-type-aware compression. Auto-detects content type from file extension:
+- code → treesitter (strip comments/whitespace)
+- tool_output → pointer (compact summary)
+- text → truncate (first N + last N lines)
+- metadata → none (passthrough)
+
+Options: `--type=`, `--engine=`, `--list`, `--stats`, `--install=ENGINE`
+
+Available engines: none, truncate, pointer, treesitter, llmlingua, claw, headroom.
+
+## Command: verbosity
+
+```bash
+bash ~/.cursor/skills/save-token/scripts/learn.sh --verbosity-profile
+```
+
+Scans last 30 days of transcripts for "explain more" vs "too verbose" signals.
+Recommends mode adjustment (lite/full/ultra) with confidence level.
+Saves profile to `~/.save-token/verbosity-profile.json`.
 
 ## Command: review
 

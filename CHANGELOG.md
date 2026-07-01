@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.5.0] — 2026-07-01
+
+### Added
+- **P0: Multi-platform architecture** — 8 adapters: Cursor, Claude Code, CodeBuddy (global + project), Windsurf, GitHub Copilot, generic system prompt, CLI pre-prompt
+- **P1: Content-type-aware compression pipeline** — `compress.sh` with 7 engines (none, truncate, pointer, treesitter, llmlingua, claw, headroom), auto content type detection, lazy dependency installation
+- **P2: Effort routing** — task classification (TRIVIAL/MECHANICAL/COMPLEX) + subagent delegation protocol
+- **P3: Verbosity self-adaptation** — `learn.sh --verbosity-profile` scans 30 days of transcripts for explain-more vs too-verbose signals, recommends mode adjustment
+- **P4: Rules density optimization** — kernel (156 words), mid (357 words), full (1123 words) variants with `--density=` install option
+- **P5: Context eviction** — tool output triage rules (≤20/21-100/>100 lines), no-re-read, conversation length warnings, binary content pointers
+- Multi-platform `install.sh` with `--platform=cursor|claude-code|codebuddy|generic` and `--density=kernel|mid|full`
+- P1 compression baseline benchmark results
+- P4 density cost/benefit analysis document
+- Test suite expanded to 91 checks
+
+### Changed
+- All adapters: code ladder upgraded from 5 to 7 rungs (added platform native + installed dep)
+- All variants: unified opening line to "Persist every response"
+- kernel/mid variants: added "one clarifying question early" rule
+- README.md: updated file tree, compatibility table, adapter table, installation examples
+- SKILL.md: added compress, verbosity commands + multi-platform install examples
+- CHEATSHEET.md: added compress, verbosity, density, CodeBuddy/generic adapters
+
 ## [0.2.0] — 2026-06-30
 
 ### Added

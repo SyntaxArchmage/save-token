@@ -1,6 +1,6 @@
 # save-token
 
-![Tests](https://img.shields.io/badge/tests-55%2B%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-91%20passing-brightgreen)
 ![Trials](https://img.shields.io/badge/A%2FB%20trials-200-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -79,25 +79,33 @@ See [benchmarks/results/full-report.md](benchmarks/results/full-report.md) for p
 save-token/
 ├── SKILL.md                    # Entry point (Cursor reads this)
 ├── CHEATSHEET.md               # Quick-reference card
-├── install.sh                  # One-command installer (+uninstall)
+├── install.sh                  # Multi-platform installer (+uninstall, --density)
 ├── rules/
-│   ├── agent-rules.md          # Full behavior ruleset (lite/full/ultra)
-│   └── save-token.mdc          # Compact Cursor rule (<200 words)
+│   ├── agent-rules.md          # Full behavior ruleset (1123 words)
+│   ├── agent-rules-mid.md      # Mid-density variant (357 words)
+│   └── agent-rules-kernel.md   # Kernel variant (156 words, for alwaysApply)
 ├── scripts/
+│   ├── compress.sh             # Content-type-aware compression pipeline
+│   ├── engines/                # Compression engines (7: none, truncate, pointer, treesitter, llmlingua, claw, headroom)
 │   ├── setup.sh                # Headroom proxy install (OS-aware)
 │   ├── benchmark.sh            # A/B test prompt generator
 │   ├── compare.sh              # Results table (+ --json mode)
 │   ├── stats.sh                # Status + context budget + history
-│   ├── learn.sh                # Session waste + token estimation
+│   ├── learn.sh                # Session waste + verbosity profiling
 │   ├── review.sh               # Real-time session audit
 │   ├── mode.sh                 # Mode persistence + history
 │   ├── cost.sh                 # Cost savings estimator (200-trial calibrated)
-│   ├── test.sh                 # 55+-check test runner
+│   ├── test.sh                 # 91-check test runner
 │   └── analyze_transcript.py   # Transcript analyzer (+ --html report)
 ├── adapters/
+│   ├── standalone.mdc          # Cursor standalone rule (zero-install)
 │   ├── AGENTS.md               # Claude Code adapter
+│   ├── CODEBUDDY.md            # CodeBuddy project adapter
+│   ├── codebuddy-rule.md       # CodeBuddy global rule
 │   ├── windsurfrules           # Windsurf adapter
-│   └── copilot-instructions.md # GitHub Copilot adapter
+│   ├── copilot-instructions.md # GitHub Copilot adapter
+│   ├── system-prompt.txt       # Generic LLM system prompt
+│   └── pre-prompt.sh           # CLI pre-prompt injector
 ├── hooks/
 │   ├── session-start.sh        # Auto-activate hook
 │   └── hooks.json.example      # Hook config template
@@ -109,14 +117,18 @@ save-token/
 │   └── auto-dev-SKILL.md       # Companion auto-dev skill
 └── benchmarks/
     ├── prompts/                # 20 preset test prompts
-    └── results/                # A/B report (200 trials)
+    └── results/                # A/B reports + P1/P4 analysis
 ```
 
 ## Installation
 
 ```bash
 git clone https://github.com/YOUR_USER/save-token.git
-cd save-token && bash install.sh
+cd save-token && bash install.sh                           # Cursor, full density
+bash install.sh --platform=claude-code                     # Claude Code
+bash install.sh --platform=codebuddy                       # CodeBuddy
+bash install.sh --density=kernel                           # Minimal rules (156 words)
+bash install.sh light --platform=generic                   # Generic CLI, rules only
 ```
 
 Or manually symlink: `ln -s /path/to/save-token ~/.cursor/skills/save-token`
@@ -135,28 +147,33 @@ Rules work without Headroom — it's an additive optimization.
 
 ## Requirements
 
-- **Cursor** with Agent mode (CLI or Desktop)
 - **bash** + **python3** (for learn/review/stats scripts)
 - **git** (optional, for install.sh)
 - **Headroom** (optional, for system-level compression)
 
 ## Compatibility
 
-| Platform | Status |
-|----------|--------|
-| Cursor CLI (Linux/macOS) | Tested |
-| Cursor Desktop | Tested |
-| Claude Code | Partial (rules work, scripts need adaptation) |
-| Other AI IDEs | Rules portable, scripts Cursor-specific |
+| Platform | Status | Install |
+|----------|--------|---------|
+| Cursor CLI (Linux/macOS) | Tested | `install.sh --platform=cursor` |
+| Cursor Desktop | Tested | `install.sh --platform=cursor` |
+| Claude Code | Tested | `install.sh --platform=claude-code` |
+| CodeBuddy IDE/CLI | Tested | `install.sh --platform=codebuddy` |
+| Generic CLI (any LLM) | Tested | `install.sh --platform=generic` |
+| Windsurf | Rules only | Copy `adapters/windsurfrules` |
+| GitHub Copilot | Rules only | Copy `adapters/copilot-instructions.md` |
 
-## Adapters (Other AI IDEs)
+## Adapters
 
 | Platform | File | How |
 |----------|------|-----|
-| **Any Cursor (standalone)** | `adapters/standalone.mdc` | Copy to `.cursor/rules/` — zero-install, no skill needed |
+| **Cursor (standalone)** | `adapters/standalone.mdc` | Copy to `.cursor/rules/` — zero-install |
 | **Claude Code** | `adapters/AGENTS.md` | Copy to project root as `AGENTS.md` |
+| **CodeBuddy (global)** | `adapters/codebuddy-rule.md` | Copy to `~/.codebuddy/rules/save-token.md` |
+| **CodeBuddy (project)** | `adapters/CODEBUDDY.md` | Copy to project root |
 | **Windsurf** | `adapters/windsurfrules` | Copy to project root as `.windsurfrules` |
 | **GitHub Copilot** | `adapters/copilot-instructions.md` | Copy to `.github/copilot-instructions.md` |
+| **Generic (any LLM)** | `adapters/system-prompt.txt` | Paste into system prompt, or use `pre-prompt.sh` |
 
 ## Auto-Activation (Cursor Hook)
 
