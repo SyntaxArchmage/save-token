@@ -33,7 +33,8 @@ That file contains the complete behavior ruleset. Apply it immediately.
 | `/save-token stats` | Show savings statistics |
 | `/save-token learn` | Mine past sessions for waste patterns |
 | `/save-token review` | Audit current session for token waste |
-| `/save-token cost [model]` | Estimate $/month savings |
+| `/save-token cost [model]` | Estimate $/month savings (uses real data if tracked) |
+| `/save-token tokens` | Track real token usage across platforms |
 | `/save-token compress [file]` | Compress content (auto-detects type + engine) |
 | `/save-token verbosity` | Analyze verbosity signals + recommend mode |
 
@@ -179,8 +180,24 @@ Outputs a checklist of improvements.
 bash ~/.cursor/skills/save-token/scripts/cost.sh [opus|sonnet|haiku|gpt4o|o3]
 ```
 
-Estimates monthly dollar savings based on model pricing, current mode, and
-200-trial benchmark data. Default model: opus.
+Uses real token data (from `tokens.sh`) if available, otherwise falls back
+to 216-trial benchmark estimation. Default model: opus.
+
+## Command: tokens
+
+```bash
+bash ~/.cursor/skills/save-token/scripts/tokens.sh [command]
+```
+
+Track real token usage. Commands:
+- `detect` — find available token data sources (Cursor, Claude CLI, Helicone, LiteLLM)
+- `collect --source=auto` — auto-collect from detected sources
+- `log INPUT OUTPUT [MODEL]` — manually record a request
+- `summary` — show tracked data + estimated savings
+- `export --format=csv|json` — export tracked data
+- `reset` — clear token log
+
+Supports: Cursor usage.json, Claude Code JSON output, Helicone API, LiteLLM proxy, manual entry.
 
 ## Command: lite / full / ultra
 

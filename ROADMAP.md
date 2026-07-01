@@ -472,7 +472,9 @@ scripts/pointer-bench.sh --threshold=none --trials=20  # no eviction (baseline)
 
 ## Medium Priority
 
-### 6. Real Token Tracking
+### 6. Real Token Tracking ✅ DONE
+
+**Status:** Implemented. `tokens.sh` with 8 commands (detect, collect, log, summary, export, reset, parse-claude). Integrates with `cost.sh` (real data mode + estimation fallback). Supports Cursor, Claude CLI, Helicone, LiteLLM, manual entry. 101 tests.
 
 **Problem:** We measure proxy metrics (tool_calls, code_lines, explanation_lines) but not actual token counts. Users want dollar figures.
 

@@ -128,6 +128,18 @@ check "density analysis doc" test -f "$REPO_DIR/benchmarks/results/p4-density-an
 check "install --density validation" bash -c 'bash "'"$REPO_DIR"'/install.sh" light --platform=generic --density=invalid 2>&1 | grep -q "Invalid density"'
 check "verbosity profile runs" bash -c 'bash "'"$SCRIPT_DIR"'/learn.sh" --verbosity-profile 2>&1 | grep -q "Sessions analyzed"'
 
+# --- Token tracking (P6) ---
+
+check "tokens.sh syntax" bash -n "$SCRIPT_DIR/tokens.sh"
+check "tokens.sh --help" bash "$SCRIPT_DIR/tokens.sh" --help
+check "tokens.sh detect" bash -c 'bash "'"$SCRIPT_DIR"'/tokens.sh" detect 2>&1 | grep -q "token source"'
+check "tokens.sh log" bash -c 'bash "'"$SCRIPT_DIR"'/tokens.sh" log 1000 500 test 2>&1 | grep -q "Logged"'
+check "tokens.sh summary" bash -c 'bash "'"$SCRIPT_DIR"'/tokens.sh" summary 2>&1 | grep -q "token"'
+check "tokens.sh export csv" bash -c 'bash "'"$SCRIPT_DIR"'/tokens.sh" export --format=csv 2>&1 | grep -q "timestamp"'
+check "tokens.sh export json" bash -c 'bash "'"$SCRIPT_DIR"'/tokens.sh" export --format=json 2>&1 | grep -q "input_tokens"'
+check "tokens.sh reset" bash -c 'bash "'"$SCRIPT_DIR"'/tokens.sh" reset 2>&1 | grep -q "cleared"'
+check "cost.sh with estimation fallback" bash -c 'bash "'"$SCRIPT_DIR"'/cost.sh" sonnet 2>&1 | grep -q "estimation"'
+
 # --- Documentation ---
 
 check "README.md exists" test -f "$REPO_DIR/README.md"
