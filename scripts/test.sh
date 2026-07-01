@@ -116,6 +116,18 @@ check "compress truncate works" bash -c 'seq 1 100 | bash "'"$SCRIPT_DIR"'/compr
 check "compress pointer works" bash -c 'seq 1 50 | bash "'"$SCRIPT_DIR"'/compress.sh" --engine=pointer | grep -q "Pointer"'
 check "compress type detection" bash -c 'bash "'"$SCRIPT_DIR"'/compress.sh" --type=code --engine=none < "'"$SCRIPT_DIR"'/compress.sh" | wc -l | grep -q "[0-9]"'
 
+# --- Density variants (P4) ---
+
+check "kernel variant exists" test -f "$REPO_DIR/rules/agent-rules-kernel.md"
+check "mid variant exists" test -f "$REPO_DIR/rules/agent-rules-mid.md"
+check "kernel < mid words" bash -c '[ "$(wc -w < "'"$REPO_DIR"'/rules/agent-rules-kernel.md")" -lt "$(wc -w < "'"$REPO_DIR"'/rules/agent-rules-mid.md")" ]'
+check "mid < full words" bash -c '[ "$(wc -w < "'"$REPO_DIR"'/rules/agent-rules-mid.md")" -lt "$(wc -w < "'"$REPO_DIR"'/rules/agent-rules.md")" ]'
+check "kernel has code ladder" grep -q "Code" "$REPO_DIR/rules/agent-rules-kernel.md"
+check "kernel has never cut" grep -q "Never cut" "$REPO_DIR/rules/agent-rules-kernel.md"
+check "density analysis doc" test -f "$REPO_DIR/benchmarks/results/p4-density-analysis.md"
+check "install --density validation" bash -c 'bash "'"$REPO_DIR"'/install.sh" light --platform=generic --density=invalid 2>&1 | grep -q "Invalid density"'
+check "verbosity profile runs" bash -c 'bash "'"$SCRIPT_DIR"'/learn.sh" --verbosity-profile 2>&1 | grep -q "Sessions analyzed"'
+
 # --- Documentation ---
 
 check "README.md exists" test -f "$REPO_DIR/README.md"

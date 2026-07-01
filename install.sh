@@ -28,6 +28,7 @@ case "${1:-}" in
     echo "Options:"
     echo "  --platform=cursor|claude-code|codebuddy|generic  Target platform (default: cursor)"
     echo "  --mode=lite|full|ultra  Set initial intensity (default: full)"
+    echo "  --density=kernel|mid|full  Rules density variant (default: full)"
     echo "  --hook                  Also install session auto-activation hook (cursor only)"
     echo
     echo "Examples:"
@@ -83,6 +84,11 @@ case "${1:-}" in
     else
       echo "     Mode: full (default)"
     fi
+    if [ -f "${CONFIG_DIR}/density" ]; then
+      echo "     Density: $(cat "${CONFIG_DIR}/density")"
+    else
+      echo "     Density: full (default)"
+    fi
     exit 0
     ;;
   uninstall|remove)
@@ -124,12 +130,14 @@ shift 2>/dev/null || true
 INTENSITY="full"
 INSTALL_HOOK=false
 PLATFORM="cursor"
+DENSITY="full"
 
 for arg in "$@"; do
   case "$arg" in
     --mode=*) INTENSITY="${arg#--mode=}" ;;
     --hook) INSTALL_HOOK=true ;;
     --platform=*) PLATFORM="${arg#--platform=}" ;;
+    --density=*) DENSITY="${arg#--density=}" ;;
   esac
 done
 
@@ -138,6 +146,20 @@ case "$INTENSITY" in
   lite|full|ultra) ;;
   *) echo "[FAIL] Invalid intensity: $INTENSITY. Use lite|full|ultra"; exit 1 ;;
 esac
+
+# Validate density
+case "$DENSITY" in
+  kernel|mid|full) ;;
+  *) echo "[FAIL] Invalid density: $DENSITY. Use kernel|mid|full"; exit 1 ;;
+esac
+
+rules_file() {
+  case "$DENSITY" in
+    kernel) echo "$REPO_DIR/rules/agent-rules-kernel.md" ;;
+    mid)    echo "$REPO_DIR/rules/agent-rules-mid.md" ;;
+    full)   echo "$REPO_DIR/rules/agent-rules.md" ;;
+  esac
+}
 
 # Validate platform
 case "$PLATFORM" in
@@ -274,7 +296,9 @@ case "$INSTALL_MODE" in
 esac
 
 echo "$INTENSITY" > "$CONFIG_DIR/mode"
+echo "$DENSITY" > "$CONFIG_DIR/density"
 echo
 echo "     Platform: $PLATFORM"
 echo "     Intensity: $INTENSITY"
-echo "     Config: $CONFIG_DIR/mode"
+echo "     Density: $DENSITY ($(wc -w < "$(rules_file)") words)"
+echo "     Config: $CONFIG_DIR/"
