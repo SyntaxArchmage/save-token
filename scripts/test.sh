@@ -140,6 +140,16 @@ check "tokens.sh export json" bash -c 'bash "'"$SCRIPT_DIR"'/tokens.sh" export -
 check "tokens.sh reset" bash -c 'bash "'"$SCRIPT_DIR"'/tokens.sh" reset 2>&1 | grep -q "cleared"'
 check "cost.sh with estimation fallback" bash -c 'bash "'"$SCRIPT_DIR"'/cost.sh" sonnet 2>&1 | grep -q "estimation"'
 
+# --- Team config (P7) ---
+
+check "load-config.sh syntax" bash -n "$SCRIPT_DIR/load-config.sh"
+check "load-config.sh show" bash -c 'bash "'"$SCRIPT_DIR"'/load-config.sh" show 2>&1 | grep -q "mode"'
+check "load-config.sh get" bash -c 'bash "'"$SCRIPT_DIR"'/load-config.sh" get mode 2>&1 | grep -q "full"'
+check "load-config.sh sources" bash -c 'bash "'"$SCRIPT_DIR"'/load-config.sh" sources 2>&1 | grep -q "Precedence"'
+check "load-config.sh init" bash -c 'bash "'"$SCRIPT_DIR"'/load-config.sh" init /tmp/st-test-cfg.json && rm /tmp/st-test-cfg.json'
+check "load-config.sh apply" bash -c 'bash "'"$SCRIPT_DIR"'/load-config.sh" apply 2>&1 | grep -q "Applied"'
+check "load-config.sh --help" bash "$SCRIPT_DIR/load-config.sh" --help
+
 # --- Documentation ---
 
 check "README.md exists" test -f "$REPO_DIR/README.md"

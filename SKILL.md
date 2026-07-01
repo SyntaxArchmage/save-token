@@ -37,6 +37,7 @@ That file contains the complete behavior ruleset. Apply it immediately.
 | `/save-token tokens` | Track real token usage across platforms |
 | `/save-token compress [file]` | Compress content (auto-detects type + engine) |
 | `/save-token verbosity` | Analyze verbosity signals + recommend mode |
+| `/save-token config` | Show/apply team config (.save-token.json) |
 
 ## Command: setup
 
@@ -198,6 +199,22 @@ Track real token usage. Commands:
 - `reset` — clear token log
 
 Supports: Cursor usage.json, Claude Code JSON output, Helicone API, LiteLLM proxy, manual entry.
+
+## Command: config
+
+```bash
+bash ~/.cursor/skills/save-token/scripts/load-config.sh [show|get|sources|init|apply]
+```
+
+Team config via `.save-token.json` in project root. Three-level precedence:
+user override (`~/.save-token/config.json`) > team (`.save-token.json`) > defaults.
+
+Subcommands:
+- `show` — display merged config
+- `get <key>` — get a value (dot notation: `compression.code`)
+- `sources` — show which config files are active
+- `init` — create template `.save-token.json`
+- `apply` — apply merged config (sets mode + density)
 
 ## Command: lite / full / ultra
 
