@@ -8,18 +8,40 @@ PROMPTS_DIR="${REPO_DIR}/benchmarks/prompts"
 RULES_FILE="${REPO_DIR}/rules/agent-rules.md"
 TRIALS="${SAVE_TOKEN_TRIALS:-3}"
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
-OUTFILE="${RESULTS_DIR}/bench-${TIMESTAMP}.json"
+MODEL=""
+OUTPUT_FMT=""
 
 mkdir -p "$RESULTS_DIR"
 
 PROMPT_COUNT=$(find "$PROMPTS_DIR" -name "*.md" 2>/dev/null | wc -l)
 
+# Pre-parse flags before positional handling
+POSITIONAL=()
+for arg in "$@"; do
+  case "$arg" in
+    --model=*)  MODEL="${arg#--model=}" ;;
+    --output=*) OUTPUT_FMT="${arg#--output=}" ;;
+    --trials=*) TRIALS="${arg#--trials=}" ;;
+    *)          POSITIONAL+=("$arg") ;;
+  esac
+done
+set -- "${POSITIONAL[@]+"${POSITIONAL[@]}"}"
+
+OUTFILE="${RESULTS_DIR}/bench-${TIMESTAMP}.json"
+
 usage() {
-  echo "Usage: benchmark.sh [prompt_file|prompt_string]"
+  echo "Usage: benchmark.sh [options] [prompt_file|prompt_string]"
   echo
   echo "Runs A/B comparison: baseline vs optimized (with agent-rules)."
   echo "Default: ${TRIALS} trials per arm (set SAVE_TOKEN_TRIALS to change)."
   echo "Available presets: ${PROMPT_COUNT} prompts in benchmarks/prompts/"
+  echo
+  echo "Options:"
+  echo "  --model=MODEL   Target model slug (e.g. claude-4.6-sonnet-medium-thinking)"
+  echo "  --trials=N      Trials per arm (default: 3)"
+  echo "  --output=FMT    Output format: json (writes to file)"
+  echo "  --list           List preset prompts"
+  echo "  --all            Generate prompts for all presets"
   echo
   echo "Presets:"
   for f in "$PROMPTS_DIR"/*.md; do
@@ -30,8 +52,8 @@ usage() {
   echo
   echo "Examples:"
   echo "  benchmark.sh 'Write a function to validate emails'"
-  echo "  benchmark.sh benchmarks/prompts/csv-parser.md"
-  echo "  benchmark.sh --list    # list preset prompts"
+  echo "  benchmark.sh --model=claude-4.6-sonnet-medium-thinking --trials=5 csv-parser"
+  echo "  benchmark.sh --list"
   exit 0
 }
 
@@ -90,6 +112,7 @@ echo "╚═══════════════════════�
 echo
 echo "Prompt: ${PROMPT:0:80}..."
 echo "Trials: $TRIALS per arm (${TRIALS}×2 = $((TRIALS * 2)) total subagents)"
+[ -n "$MODEL" ] && echo "Model:  $MODEL"
 echo "Output: $OUTFILE"
 echo
 
@@ -121,15 +144,36 @@ ${PROMPT}
 ${METRICS_SUFFIX}
 OEOF
 
-echo "Subagent prompts written to ${RESULTS_DIR}/"
-echo
-echo "To run the benchmark in Cursor:"
-echo "  1. Open a new agent chat"
-echo "  2. Say: /save-token bench <your prompt>"
-echo "  3. The SKILL.md will spawn subagents automatically"
-echo
-echo "Or manually launch subagents with these prompts:"
-echo "  Baseline: ${RESULTS_DIR}/.baseline-prompt.txt"
-echo "  Optimized: ${RESULTS_DIR}/.optimized-prompt.txt"
-echo
-echo "[OK] Benchmark prepared. Launch from Cursor to execute."
+if [ "$OUTPUT_FMT" = "json" ]; then
+  python3 -c "
+import json
+data = {
+    'timestamp': '$TIMESTAMP',
+    'trials': $TRIALS,
+    'model': '${MODEL:-default}',
+    'prompt_preview': '''${PROMPT:0:100}''',
+    'baseline_prompt': '${RESULTS_DIR}/.baseline-prompt.txt',
+    'optimized_prompt': '${RESULTS_DIR}/.optimized-prompt.txt'
+}
+with open('$OUTFILE', 'w') as f:
+    json.dump(data, f, indent=2)
+print(f'[OK] Config written to $OUTFILE')
+" 2>/dev/null
+else
+  echo "Subagent prompts written to ${RESULTS_DIR}/"
+  echo
+  echo "To run the benchmark in Cursor:"
+  echo "  1. Open a new agent chat"
+  echo "  2. Say: /save-token bench <your prompt>"
+  if [ -n "$MODEL" ]; then
+    echo "  3. Subagents will use model: $MODEL"
+  else
+    echo "  3. The SKILL.md will spawn subagents automatically"
+  fi
+  echo
+  echo "Or manually launch subagents with these prompts:"
+  echo "  Baseline: ${RESULTS_DIR}/.baseline-prompt.txt"
+  echo "  Optimized: ${RESULTS_DIR}/.optimized-prompt.txt"
+  echo
+  echo "[OK] Benchmark prepared. Launch from Cursor to execute."
+fi

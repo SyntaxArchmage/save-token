@@ -172,6 +172,12 @@ check "export-promptfoo.sh syntax" bash -n "$SCRIPT_DIR/export-promptfoo.sh"
 check "export-promptfoo.sh --help" bash "$SCRIPT_DIR/export-promptfoo.sh" --help
 check "export-promptfoo.sh generates" bash -c 'bash "'"$SCRIPT_DIR"'/export-promptfoo.sh" /tmp/st-pf-test.yaml && grep -q "promptfoo" /tmp/st-pf-test.yaml && rm /tmp/st-pf-test.yaml'
 
+# --- Multi-model A/B (P11) ---
+
+check "benchmark.sh --model" bash -c 'bash "'"$SCRIPT_DIR"'/benchmark.sh" --model=test-model "test prompt" 2>&1 | grep -q "Model:.*test-model"'
+check "benchmark.sh --output=json" bash -c 'bash "'"$SCRIPT_DIR"'/benchmark.sh" --output=json "test prompt" 2>&1 | grep -q "Config written"'
+check "benchmark.sh --trials" bash -c 'bash "'"$SCRIPT_DIR"'/benchmark.sh" --trials=7 "test prompt" 2>&1 | grep -q "7.*per arm"'
+
 # --- Documentation ---
 
 check "README.md exists" test -f "$REPO_DIR/README.md"
