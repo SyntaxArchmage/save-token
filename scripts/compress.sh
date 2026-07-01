@@ -1,0 +1,230 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ENGINE_DIR="$SCRIPT_DIR/engines"
+
+usage() {
+  cat <<'USAGE'
+Usage: compress.sh [options] [FILE]
+
+Content-type-aware compression pipeline. Reads from FILE or stdin.
+
+Options:
+  --type=TYPE       Content type: code|text|tool_output|history|metadata
+                    Auto-detected from file extension if omitted.
+  --engine=ENGINE   Compression engine (see below). Default: auto (best for type).
+  --install=ENGINE  Install an engine's dependencies and exit.
+  --list            List available engines and their status.
+  --stats           Show compression ratio after processing.
+  -h, --help        Show this help.
+
+Engines:
+  treesitter   Strip comments + whitespace from code (requires tree-sitter-cli)
+  truncate     Keep first N + last N lines of tool output (zero deps)
+  pointer      Summarize to pointer reference (zero deps)
+  llmlingua    Perplexity-based pruning for NL (requires llmlingua)
+  claw         AST-aware code compression (requires claw-compactor)
+  headroom     Full Headroom proxy compression (requires headroom-ai)
+  none         Passthrough (no compression)
+
+Auto engine selection by type:
+  code         → treesitter
+  text         → truncate (or llmlingua if installed)
+  tool_output  → pointer
+  history      → truncate
+  metadata     → none
+
+Examples:
+  cat main.py | compress.sh --type=code
+  compress.sh --type=tool_output < build.log
+  compress.sh --engine=truncate app.log
+  compress.sh --install=llmlingua
+  compress.sh --list
+USAGE
+  exit 0
+}
+
+# --- Content type detection ---
+
+detect_type() {
+  local file="${1:-}"
+  if [ -n "$file" ] && [ -f "$file" ]; then
+    case "$file" in
+      *.py|*.js|*.ts|*.tsx|*.jsx|*.rs|*.go|*.c|*.cpp|*.h|*.java|*.rb|*.sh|*.bash)
+        echo "code" ;;
+      *.md|*.txt|*.rst|*.adoc|*.tex)
+        echo "text" ;;
+      *.json|*.yaml|*.yml|*.toml|*.xml|*.csv)
+        echo "metadata" ;;
+      *.log)
+        echo "tool_output" ;;
+      *)
+        echo "text" ;;
+    esac
+  else
+    echo "tool_output"
+  fi
+}
+
+# --- Engine selection ---
+
+auto_engine() {
+  local content_type="$1"
+  case "$content_type" in
+    code)
+      if command -v tree-sitter &>/dev/null; then
+        echo "treesitter"
+      else
+        echo "truncate"
+      fi
+      ;;
+    text)
+      if python3 -c "import llmlingua" 2>/dev/null; then
+        echo "llmlingua"
+      else
+        echo "truncate"
+      fi
+      ;;
+    tool_output)  echo "pointer" ;;
+    history)      echo "truncate" ;;
+    metadata)     echo "none" ;;
+    *)            echo "none" ;;
+  esac
+}
+
+# --- Engine installation ---
+
+install_engine() {
+  local engine="$1"
+  case "$engine" in
+    treesitter)
+      echo "Installing tree-sitter-cli..."
+      if command -v npm &>/dev/null; then
+        npm install -g tree-sitter-cli
+      elif command -v cargo &>/dev/null; then
+        cargo install tree-sitter-cli
+      else
+        echo "[FAIL] Requires npm or cargo." >&2; exit 1
+      fi
+      ;;
+    llmlingua)
+      echo "Installing llmlingua..."
+      pip install llmlingua
+      ;;
+    claw)
+      echo "Installing claw-compactor..."
+      pip install claw-compactor
+      ;;
+    headroom)
+      echo "Installing headroom-ai..."
+      pip install "headroom-ai[proxy]"
+      ;;
+    truncate|pointer|none)
+      echo "[OK] $engine has no dependencies."
+      ;;
+    *)
+      echo "[FAIL] Unknown engine: $engine" >&2; exit 1
+      ;;
+  esac
+  echo "[OK] Engine '$engine' ready."
+}
+
+# --- List engines ---
+
+list_engines() {
+  printf "%-12s %-10s %s\n" "ENGINE" "STATUS" "DESCRIPTION"
+  printf "%-12s %-10s %s\n" "--------" "------" "-----------"
+
+  check_status() {
+    local name="$1" cmd="$2"
+    if eval "$cmd" &>/dev/null; then
+      printf "%-12s %-10s" "$name" "[ready]"
+    else
+      printf "%-12s %-10s" "$name" "[missing]"
+    fi
+  }
+
+  check_status "treesitter" "command -v tree-sitter"
+  echo "Strip comments + whitespace from code"
+  check_status "truncate" "true"
+  echo "Keep first/last N lines (zero deps)"
+  check_status "pointer" "true"
+  echo "Summarize to pointer reference (zero deps)"
+  check_status "llmlingua" "python3 -c 'import llmlingua'"
+  echo "Perplexity-based NL pruning (Microsoft)"
+  check_status "claw" "python3 -c 'import claw_compactor'"
+  echo "AST-aware code compression (reversible)"
+  check_status "headroom" "python3 -c 'import headroom'"
+  echo "Full proxy compression (60-95%)"
+  check_status "none" "true"
+  echo "Passthrough (no compression)"
+}
+
+# --- Engine execution ---
+
+run_engine() {
+  local engine="$1" input_file="$2" show_stats="$3"
+  local engine_script="$ENGINE_DIR/${engine}.sh"
+
+  if [ -f "$engine_script" ]; then
+    local before_size
+    before_size=$(wc -c < "$input_file")
+
+    local output
+    output=$(bash "$engine_script" < "$input_file")
+    echo "$output"
+
+    if [ "$show_stats" = true ]; then
+      local after_size=${#output}
+      if [ "$before_size" -gt 0 ]; then
+        local ratio
+        ratio=$(python3 -c "print(f'{$after_size/$before_size:.1%}')" 2>/dev/null || echo "?")
+        echo "[compress] $engine: ${before_size}B → ${after_size}B ($ratio)" >&2
+      fi
+    fi
+  else
+    echo "[FAIL] Engine script not found: $engine_script" >&2
+    echo "[TIP] Run: compress.sh --install=$engine" >&2
+    cat "$input_file"
+  fi
+}
+
+# --- Parse arguments ---
+
+TYPE=""
+ENGINE=""
+SHOW_STATS=false
+INPUT_FILE=""
+
+for arg in "$@"; do
+  case "$arg" in
+    --type=*)    TYPE="${arg#--type=}" ;;
+    --engine=*)  ENGINE="${arg#--engine=}" ;;
+    --install=*) install_engine "${arg#--install=}"; exit 0 ;;
+    --list)      list_engines; exit 0 ;;
+    --stats)     SHOW_STATS=true ;;
+    -h|--help)   usage ;;
+    -*)          echo "[FAIL] Unknown option: $arg" >&2; exit 1 ;;
+    *)           INPUT_FILE="$arg" ;;
+  esac
+done
+
+# Create temp file for stdin if no file argument
+TMPFILE=""
+if [ -z "$INPUT_FILE" ]; then
+  TMPFILE=$(mktemp)
+  cat > "$TMPFILE"
+  INPUT_FILE="$TMPFILE"
+  trap 'rm -f "$TMPFILE"' EXIT
+fi
+
+if [ ! -f "$INPUT_FILE" ]; then
+  echo "[FAIL] File not found: $INPUT_FILE" >&2
+  exit 1
+fi
+
+[ -z "$TYPE" ] && TYPE=$(detect_type "$INPUT_FILE")
+[ -z "$ENGINE" ] && ENGINE=$(auto_engine "$TYPE")
+
+run_engine "$ENGINE" "$INPUT_FILE" "$SHOW_STATS"

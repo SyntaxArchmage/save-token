@@ -99,6 +99,23 @@ check "install.sh status" bash "$REPO_DIR/install.sh" status
 check "install.sh --help" bash "$REPO_DIR/install.sh" --help
 check "install.sh --platform=generic" bash "$REPO_DIR/install.sh" light --platform=generic
 
+# --- Compression pipeline (P1) ---
+
+check "compress.sh syntax" bash -n "$SCRIPT_DIR/compress.sh"
+check "compress.sh --help" bash "$SCRIPT_DIR/compress.sh" --help
+check "compress.sh --list" bash "$SCRIPT_DIR/compress.sh" --list
+check "engine: none.sh" bash -n "$SCRIPT_DIR/engines/none.sh"
+check "engine: truncate.sh" bash -n "$SCRIPT_DIR/engines/truncate.sh"
+check "engine: pointer.sh" bash -n "$SCRIPT_DIR/engines/pointer.sh"
+check "engine: treesitter.sh" bash -n "$SCRIPT_DIR/engines/treesitter.sh"
+check "engine: llmlingua.sh" bash -n "$SCRIPT_DIR/engines/llmlingua.sh"
+check "engine: claw.sh" bash -n "$SCRIPT_DIR/engines/claw.sh"
+check "engine: headroom.sh" bash -n "$SCRIPT_DIR/engines/headroom.sh"
+check "compress none passthrough" bash -c 'echo "hello" | bash "'"$SCRIPT_DIR"'/compress.sh" --engine=none | grep -q "hello"'
+check "compress truncate works" bash -c 'seq 1 100 | bash "'"$SCRIPT_DIR"'/compress.sh" --engine=truncate | grep -q "omitted"'
+check "compress pointer works" bash -c 'seq 1 50 | bash "'"$SCRIPT_DIR"'/compress.sh" --engine=pointer | grep -q "Pointer"'
+check "compress type detection" bash -c 'bash "'"$SCRIPT_DIR"'/compress.sh" --type=code --engine=none < "'"$SCRIPT_DIR"'/compress.sh" | wc -l | grep -q "[0-9]"'
+
 # --- Documentation ---
 
 check "README.md exists" test -f "$REPO_DIR/README.md"
