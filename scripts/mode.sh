@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CONFIG_DIR="${HOME}/.save-token"
+CONFIG_DIR="${SAVE_TOKEN_DIR:-${HOME}/.save-token}"
 MODE_FILE="${CONFIG_DIR}/mode"
 HISTORY_FILE="${CONFIG_DIR}/mode-history.log"
 mkdir -p "$CONFIG_DIR"

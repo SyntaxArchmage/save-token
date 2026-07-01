@@ -2,7 +2,20 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-ENGINE_DIR="$SCRIPT_DIR/engines"
+ENGINE_DIR="${SAVE_TOKEN_ENGINE_DIR:-$SCRIPT_DIR/engines}"
+CONFIG_DIR="${SAVE_TOKEN_DIR:-${HOME}/.save-token}"
+CONFIG_FILE="${SAVE_TOKEN_CONFIG:-$CONFIG_DIR/compress.conf}"
+
+# Load config file if present (key=value format, lines starting with # ignored)
+if [ -f "$CONFIG_FILE" ]; then
+  while IFS='=' read -r key value; do
+    [[ "$key" =~ ^[[:space:]]*# ]] && continue
+    [ -z "$key" ] && continue
+    key=$(echo "$key" | tr -d '[:space:]')
+    value=$(echo "$value" | tr -d '[:space:]')
+    export "$key"="$value" 2>/dev/null || true
+  done < "$CONFIG_FILE"
+fi
 
 usage() {
   cat <<'USAGE'
@@ -35,10 +48,21 @@ Auto engine selection by type:
   history      → truncate
   metadata     → none
 
+Environment variables:
+  COMPRESS_HEAD       Lines to keep from top (truncate engine, default: 10)
+  COMPRESS_TAIL       Lines to keep from bottom (truncate engine, default: 10)
+  POINTER_HEAD        Preview lines from top (pointer engine, default: 3)
+  POINTER_TAIL        Preview lines from bottom (pointer engine, default: 3)
+  SAVE_TOKEN_ENGINE_DIR  Custom engine directory
+  SAVE_TOKEN_CONFIG   Config file path (default: ~/.save-token/compress.conf)
+
+Config file (key=value, one per line):
+  ~/.save-token/compress.conf
+
 Examples:
   cat main.py | compress.sh --type=code
   compress.sh --type=tool_output < build.log
-  compress.sh --engine=truncate app.log
+  COMPRESS_HEAD=20 compress.sh --engine=truncate app.log
   compress.sh --install=llmlingua
   compress.sh --list
 USAGE

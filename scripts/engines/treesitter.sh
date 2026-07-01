@@ -8,10 +8,10 @@ if command -v tree-sitter &>/dev/null; then
   echo "$input" | tree-sitter highlight --quiet 2>/dev/null || echo "$input"
 else
   echo "$input" \
-    | sed '/^[[:space:]]*#.*$/d' \
-    | sed '/^[[:space:]]*\/\/.*$/d' \
-    | sed '/^[[:space:]]*\*.*$/d' \
-    | sed '/^[[:space:]]*\/\*.*\*\/$/d' \
-    | sed '/^[[:space:]]*$/d' \
+    | sed -e '/^[[:space:]]*#/d' \
+          -e '/^[[:space:]]*\/\//d' \
+          -e '/^[[:space:]]*\*/d' \
+          -e '/^[[:space:]]*\/\*.*\*\/$/d' \
+          -e '/^[[:space:]]*$/d' \
     | cat -s
 fi

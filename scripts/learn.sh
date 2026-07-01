@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CONFIG_DIR="${HOME}/.save-token"
+CONFIG_DIR="${SAVE_TOKEN_DIR:-${HOME}/.save-token}"
 LEARNINGS="${CONFIG_DIR}/learnings.md"
 mkdir -p "$CONFIG_DIR"
 
+VERBOSITY_WINDOW_DAYS="${SAVE_TOKEN_VERBOSITY_WINDOW:-30}"
+VERBOSITY_HIGH_THRESHOLD="${SAVE_TOKEN_VERBOSITY_HIGH:-30}"
+VERBOSITY_MEDIUM_THRESHOLD="${SAVE_TOKEN_VERBOSITY_MEDIUM:-15}"
+MAX_SESSIONS="${SAVE_TOKEN_MAX_SESSIONS:-50}"
+
 TRANSCRIPT_DIRS=(
-  "${HOME}/.cursor/projects"
+  "${SAVE_TOKEN_TRANSCRIPT_DIR:-${HOME}/.cursor/projects}"
 )
 
 # --- Verbosity Profile subcommand ---
@@ -34,14 +39,14 @@ if [ "${1:-}" = "--verbosity-profile" ]; then
         [ -z "$tv" ] && tv=0
         explain_more=$((explain_more + em))
         too_verbose=$((too_verbose + tv))
-      done < <(find "$transcript_dir" -name "*.jsonl" -mtime -30 2>/dev/null | head -50)
+      done < <(find "$transcript_dir" -name "*.jsonl" -mtime "-$VERBOSITY_WINDOW_DAYS" 2>/dev/null | head -n "$MAX_SESSIONS")
     done < <(find "$base_dir" -type d -name "agent-transcripts" 2>/dev/null)
   done
 
   current_mode=$(cat "${CONFIG_DIR}/mode" 2>/dev/null || echo "full")
 
   if [ "$sessions" -eq 0 ]; then
-    echo "No sessions found in last 30 days."
+    echo "No sessions found in last $VERBOSITY_WINDOW_DAYS days."
     echo '{"sessions_analyzed":0,"signals":{"explain_more":0,"too_verbose":0},"current_mode":"'"$current_mode"'","recommended_mode":"'"$current_mode"'","confidence":"LOW","last_updated":"'"$(date -Iseconds)"'"}' > "$PROFILE_FILE"
     exit 0
   fi
@@ -51,25 +56,25 @@ if [ "${1:-}" = "--verbosity-profile" ]; then
 
   recommended="$current_mode"
   confidence="LOW"
-  if [ "$tv_pct" -gt 30 ]; then
+  if [ "$tv_pct" -gt "$VERBOSITY_HIGH_THRESHOLD" ]; then
     case "$current_mode" in
       lite) recommended="full" ;;
       full) recommended="ultra" ;;
       ultra) recommended="ultra" ;;
     esac
     confidence="HIGH"
-  elif [ "$em_pct" -gt 30 ]; then
+  elif [ "$em_pct" -gt "$VERBOSITY_HIGH_THRESHOLD" ]; then
     case "$current_mode" in
       ultra) recommended="full" ;;
       full) recommended="lite" ;;
       lite) recommended="lite" ;;
     esac
     confidence="HIGH"
-  elif [ "$tv_pct" -gt 15 ] || [ "$em_pct" -gt 15 ]; then
+  elif [ "$tv_pct" -gt "$VERBOSITY_MEDIUM_THRESHOLD" ] || [ "$em_pct" -gt "$VERBOSITY_MEDIUM_THRESHOLD" ]; then
     confidence="MEDIUM"
   fi
 
-  printf "  Sessions analyzed: %d (last 30 days)\n" "$sessions"
+  printf "  Sessions analyzed: %d (last %d days)\n" "$sessions" "$VERBOSITY_WINDOW_DAYS"
   printf "  \"explain more\" signals: %d (%d%%)\n" "$explain_more" "$em_pct"
   printf "  \"too verbose\" signals:  %d (%d%%)\n" "$too_verbose" "$tv_pct"
   echo
@@ -118,12 +123,12 @@ for base_dir in "${TRANSCRIPT_DIRS[@]}"; do
     continue
   fi
 
+  SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
   while IFS= read -r transcript_dir; do
     found_any=true
     project_name=$(basename "$(dirname "$transcript_dir")")
     echo "Scanning: $project_name"
 
-    SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
     while IFS= read -r jsonl_file; do
       [ ! -s "$jsonl_file" ] && continue
 
@@ -138,7 +143,7 @@ for base_dir in "${TRANSCRIPT_DIRS[@]}"; do
         all_findings="${all_findings}${findings}"$'\n'
       fi
 
-    done < <(find "$transcript_dir" -name "*.jsonl" -mtime -7 2>/dev/null | head -20)
+    done < <(find "$transcript_dir" -name "*.jsonl" -mtime "-${SAVE_TOKEN_LEARN_WINDOW:-7}" 2>/dev/null | head -n "${SAVE_TOKEN_LEARN_MAX:-20}")
 
   done < <(find "$base_dir" -type d -name "agent-transcripts" 2>/dev/null)
 done
