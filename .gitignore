@@ -22,3 +22,7 @@ benchmarks/results/bench-*.json
 # Keep the report and gitkeep
 !benchmarks/results/full-report.md
 !benchmarks/results/.gitkeep
+
+# Test artifacts
+/a.log
+/b.log
