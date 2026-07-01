@@ -178,6 +178,25 @@ Announce: "save-token deactivated."
 
 See [rules/agent-rules.md](rules/agent-rules.md) for full details.
 
+## Effort Routing (P2)
+
+When the current task is MECHANICAL (>3 files, same transformation), delegate to a subagent:
+
+```
+Task tool prompt template:
+
+"Apply the following transformation to each file listed below.
+Files: {file_list}
+Transformation: {pattern}
+After each file, verify with: {verification_command}
+Return: list of changed files + summary of changes."
+```
+
+Classification:
+- TRIVIAL (≤1 file, no logic): do inline, note "trivial task"
+- MECHANICAL (>3 files, repetitive): spawn cheap subagent
+- COMPLEX (architecture, debugging): stay on current model
+
 ## Troubleshooting
 
 | Issue | Fix |

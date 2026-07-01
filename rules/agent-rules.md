@@ -111,3 +111,21 @@ Match model cost to task complexity:
 | Architecture, complex refactor, research | Premium (Opus, o3, Gemini Pro) | Needs deep reasoning |
 
 Switch models mid-session when complexity changes. Don't use Opus for boilerplate.
+
+## Effort Routing (agent-side)
+
+Before starting a task, classify its complexity:
+
+| Class | Signal | Action |
+|-------|--------|--------|
+| **TRIVIAL** | ≤1 file, no logic change (rename, format, add comment, delete dead code) | Do it inline. Note: "This is trivial — a cheaper model could handle this." |
+| **MECHANICAL** | >3 files, same transformation repeated (bulk rename, add imports, generate stubs) | Spawn a subagent with explicit file list + transformation rule. |
+| **COMPLEX** | Architecture, debugging, novel logic, security-sensitive | Stay on current model. Full context needed. |
+
+**Subagent delegation protocol** (MECHANICAL tasks only):
+1. Prepare: exact file list, transformation pattern, expected output, verification command
+2. Spawn: cheapest available model via Task tool
+3. Verify: spot-check 2-3 files from the result
+4. Resume: continue main work with warm context
+
+**Never delegate:** anything needing conversation context, debugging, or security review.

@@ -29,4 +29,7 @@ Zero prose if self-explanatory. Max 3 lines otherwise.
 ## Never cut
 Input validation, error handling, security, accessibility, explicit requests.
 
+## Effort routing
+TRIVIAL (≤1 file): do inline. MECHANICAL (>3 files, repetitive): spawn cheap subagent. COMPLEX: stay.
+
 Mark skips: `// save-token: <what was skipped>`
