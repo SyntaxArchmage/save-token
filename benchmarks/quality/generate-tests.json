@@ -1,0 +1,28 @@
+{
+  "id": "generate-tests",
+  "prompt": "Write pytest-style tests for the following function. Cover: normal cases, edge cases (empty list, single element, exact chunk size), and error cases (size <= 0). Use plain assert statements. No fixtures, no classes.\n\n```python\ndef chunk_list(lst: list, size: int) -> list[list]:\n    \"\"\"Split a list into chunks of given size. Last chunk may be smaller.\"\"\"\n    if size <= 0:\n        raise ValueError(\"size must be positive\")\n    return [lst[i:i+size] for i in range(0, len(lst), size)]\n```\n\nOutput ONLY the test functions. Include `chunk_list` definition at the top so tests are self-contained.",
+  "language": "python",
+  "function": "chunk_list",
+  "tests": [
+    {
+      "type": "exec",
+      "code": "test_names = [n for n in dir() if n.startswith('test_') and callable(eval(n))]\nassert len(test_names) >= 4, f'Need >=4 test functions, got {len(test_names)}'",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "for name in [n for n in dir() if n.startswith('test_')]:\n    func = eval(name)\n    if callable(func):\n        func()",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "assert chunk_list([1,2,3,4,5], 2) == [[1,2],[3,4],[5]]",
+      "expected": true
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 30,
+    "banned_patterns": ["import unittest", "class Test"],
+    "required_patterns": ["def test_", "assert", "chunk_list", "ValueError"]
+  }
+}

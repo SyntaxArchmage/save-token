@@ -1,0 +1,28 @@
+{
+  "id": "optimize-n-plus-one",
+  "prompt": "The following code has an N+1 query pattern (simulated with a list-of-dicts database). Optimize it to avoid the N+1 problem. Return the optimized function.\n\n```python\ndef get_order_summaries(db):\n    \"\"\"db has 'orders' and 'users' tables (lists of dicts).\n    Each order has 'user_id', 'amount'. Each user has 'id', 'name'.\n    Returns list of dicts with 'user_name', 'total_amount'.\"\"\"\n    result = []\n    for order in db['orders']:\n        # N+1: looks up user for EACH order\n        for user in db['users']:\n            if user['id'] == order['user_id']:\n                found = False\n                for r in result:\n                    if r['user_name'] == user['name']:\n                        r['total_amount'] += order['amount']\n                        found = True\n                        break\n                if not found:\n                    result.append({'user_name': user['name'], 'total_amount': order['amount']})\n                break\n    return sorted(result, key=lambda x: x['user_name'])\n```\n\nOptimize to O(n) instead of O(n*m). Preserve exact output format.",
+  "language": "python",
+  "function": "get_order_summaries",
+  "tests": [
+    {
+      "type": "simple",
+      "args": [{"orders": [{"user_id": 1, "amount": 100}, {"user_id": 2, "amount": 50}, {"user_id": 1, "amount": 75}], "users": [{"id": 1, "name": "Alice"}, {"id": 2, "name": "Bob"}]}],
+      "expected": [{"user_name": "Alice", "total_amount": 175}, {"user_name": "Bob", "total_amount": 50}]
+    },
+    {
+      "type": "simple",
+      "args": [{"orders": [], "users": [{"id": 1, "name": "Alice"}]}],
+      "expected": []
+    },
+    {
+      "type": "simple",
+      "args": [{"orders": [{"user_id": 1, "amount": 10}], "users": [{"id": 1, "name": "Zoe"}]}],
+      "expected": [{"user_name": "Zoe", "total_amount": 10}]
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 15,
+    "banned_patterns": ["for user in db['users']:\n            if user['id']"],
+    "required_patterns": ["def get_order_summaries"]
+  }
+}

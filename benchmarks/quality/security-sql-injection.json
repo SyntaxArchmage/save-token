@@ -1,0 +1,28 @@
+{
+  "id": "security-sql-injection",
+  "prompt": "The following function is vulnerable to SQL injection. Fix it using parameterized queries. Return the fixed function.\n\n```python\nimport sqlite3\n\ndef search_users(db_path: str, name: str) -> list[dict]:\n    conn = sqlite3.connect(db_path)\n    conn.row_factory = sqlite3.Row\n    cursor = conn.cursor()\n    query = f\"SELECT id, name, email FROM users WHERE name LIKE '%{name}%'\"\n    cursor.execute(query)\n    results = [dict(row) for row in cursor.fetchall()]\n    conn.close()\n    return results\n```\n\nFix the SQL injection vulnerability. Keep the LIKE search functionality. Use stdlib only.",
+  "language": "python",
+  "function": "search_users",
+  "tests": [
+    {
+      "type": "exec",
+      "code": "import sqlite3, tempfile, os\ndb = tempfile.mktemp(suffix='.db')\nconn = sqlite3.connect(db)\nconn.execute('CREATE TABLE users (id INTEGER, name TEXT, email TEXT)')\nconn.execute(\"INSERT INTO users VALUES (1, 'Alice', 'alice@test.com')\")\nconn.execute(\"INSERT INTO users VALUES (2, 'Bob', 'bob@test.com')\")\nconn.execute(\"INSERT INTO users VALUES (3, 'Charlie', 'charlie@test.com')\")\nconn.commit()\nconn.close()\nresult = search_users(db, 'Ali')\nassert len(result) == 1 and result[0]['name'] == 'Alice'\nos.unlink(db)",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "import sqlite3, tempfile, os\ndb = tempfile.mktemp(suffix='.db')\nconn = sqlite3.connect(db)\nconn.execute('CREATE TABLE users (id INTEGER, name TEXT, email TEXT)')\nconn.execute(\"INSERT INTO users VALUES (1, 'Alice', 'a@t.com')\")\nconn.commit()\nconn.close()\nresult = search_users(db, \"'; DROP TABLE users; --\")\nassert isinstance(result, list)\nos.unlink(db)",
+      "expected": true
+    },
+    {
+      "type": "exec",
+      "code": "import sqlite3, tempfile, os\ndb = tempfile.mktemp(suffix='.db')\nconn = sqlite3.connect(db)\nconn.execute('CREATE TABLE users (id INTEGER, name TEXT, email TEXT)')\nconn.execute(\"INSERT INTO users VALUES (1, 'Alice', 'a@t.com')\")\nconn.execute(\"INSERT INTO users VALUES (2, 'Bob', 'b@t.com')\")\nconn.commit()\nconn.close()\nresult = search_users(db, '')\nassert len(result) == 2\nos.unlink(db)",
+      "expected": true
+    }
+  ],
+  "quality_checks": {
+    "max_lines": 15,
+    "banned_patterns": ["f\"SELECT", "f'SELECT", "\".format(", "% name", "%s"],
+    "required_patterns": ["def search_users", "sqlite3", "?"]
+  }
+}
