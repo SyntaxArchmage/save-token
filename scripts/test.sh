@@ -166,6 +166,12 @@ check "compare.sh --fail-if-regression (pass)" bash -c 'echo -e "METRICS:\ntool_
 check "compare.sh --fail-if-regression (fail)" bash -c 'echo -e "METRICS:\ntool_calls: 10\ncode_lines: 50\nexplanation_lines: 20\nfiles_read: 5" > /tmp/st-b.txt && echo -e "METRICS:\ntool_calls: 15\ncode_lines: 60\nexplanation_lines: 30\nfiles_read: 7" > /tmp/st-o.txt && ! bash "'"$SCRIPT_DIR"'/compare.sh" --fail-if-regression=10% /tmp/st-b.txt /tmp/st-o.txt 2>/dev/null && rm /tmp/st-b.txt /tmp/st-o.txt'
 check "GitHub workflow exists" test -f "$REPO_DIR/.github/workflows/benchmark.yml"
 
+# --- promptfoo integration (P10) ---
+
+check "export-promptfoo.sh syntax" bash -n "$SCRIPT_DIR/export-promptfoo.sh"
+check "export-promptfoo.sh --help" bash "$SCRIPT_DIR/export-promptfoo.sh" --help
+check "export-promptfoo.sh generates" bash -c 'bash "'"$SCRIPT_DIR"'/export-promptfoo.sh" /tmp/st-pf-test.yaml && grep -q "promptfoo" /tmp/st-pf-test.yaml && rm /tmp/st-pf-test.yaml'
+
 # --- Documentation ---
 
 check "README.md exists" test -f "$REPO_DIR/README.md"
