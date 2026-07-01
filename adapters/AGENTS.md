@@ -4,7 +4,7 @@ Place this file at the root of your project as `AGENTS.md` to activate
 save-token rules in Claude Code. Or copy the rules section below into
 your existing AGENTS.md.
 
-Validated: 200 A/B trials → -51% code, -93% explanation, -39% tool calls (ultra).
+Validated: 216 A/B trials → -51% code, -93% explanation, -39% tool calls (ultra).
 
 ---
 

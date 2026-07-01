@@ -1,7 +1,7 @@
 # save-token
 
 ![Tests](https://img.shields.io/badge/tests-91%20passing-brightgreen)
-![Trials](https://img.shields.io/badge/A%2FB%20trials-200-blue)
+![Trials](https://img.shields.io/badge/A%2FB%20trials-216-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 A Cursor skill that minimizes token consumption when using expensive AI models (Opus, o3, etc.) — without sacrificing output quality.
@@ -39,7 +39,7 @@ Enforces a **three-layer optimization** every response:
 
 ## A/B Tested Results
 
-Verified across **200 independent subagent trials** (16 tasks, 3 intensity levels):
+Verified across **216 independent subagent trials** (16 tasks, 3 intensity levels):
 
 | Mode | Code | Explanation | Tool Calls | Correctness |
 |------|------|-------------|------------|-------------|
@@ -188,7 +188,7 @@ Or merge the `sessionStart` entry into your existing `hooks.json`.
 ## FAQ
 
 **Does this affect code quality?**
-No. 200 A/B trials show zero correctness regressions. The rules cut waste (verbose explanations, redundant reads, over-engineered features), not essential logic.
+No. 216 A/B trials show zero correctness regressions. The rules cut waste (verbose explanations, redundant reads, over-engineered features), not essential logic.
 
 **Which mode should I use?**
 Start with `full` (default). Switch to `ultra` for boilerplate/simple tasks. Use `lite` if you want gentle hints without strict enforcement.

@@ -1,7 +1,7 @@
 ---
 description: >-
   Standalone token saver. Copy this ONE file to .cursor/rules/ — zero setup.
-  200-trial tested: -51% code, -93% prose, -39% tool calls (ultra).
+  216-trial tested: -51% code, -93% prose, -39% tool calls (ultra).
   Active every response. Off: say "save-token off".
 globs:
 alwaysApply: true

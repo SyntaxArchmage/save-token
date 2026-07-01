@@ -4,7 +4,7 @@ Place this file at the root of your project as `CODEBUDDY.md` to activate
 save-token rules in CodeBuddy IDE/CLI. CodeBuddy also supports `AGENTS.md`
 as a fallback if `CODEBUDDY.md` is absent.
 
-Validated: 200 A/B trials → -51% code, -93% explanation, -39% tool calls (ultra).
+Validated: 216 A/B trials → -51% code, -93% explanation, -39% tool calls (ultra).
 
 ---
 

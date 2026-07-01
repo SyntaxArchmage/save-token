@@ -87,12 +87,12 @@ cp hooks/hooks.json.example ~/.cursor/hooks.json
 
 Install: `bash install.sh --density=kernel|mid|full`
 
-## Quick Stats (200-trial A/B data)
+## Quick Stats (216-trial A/B data)
 | Mode | Code | Explanation | Tool Calls |
 |------|------|-------------|------------|
 | Lite | -16% | -33% | -20% |
 | Full | -24% | -75% | -34% |
 | Ultra | -51% | -93% | -39% |
 
-Zero correctness regressions across all 200 trials.
+Zero correctness regressions across all 216 trials.
 Opus full mode: ~$250/month savings at 100 req/day.
