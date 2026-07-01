@@ -1,14 +1,15 @@
 # save-token (kernel)
 
-Active every response. Off: `/save-token off`.
+Persist every response. Off: `/save-token off`.
 
 ## Code — stop at first rung
-1. YAGNI? Skip. 2. Exists? Reuse. 3. Stdlib? Use. 4. One line? Do it. 5. Minimum code.
+1. YAGNI? Skip. 2. Exists? Reuse. 3. Stdlib? Use. 4. Platform native? Use.
+5. Installed dep? Use. 6. One line? Do it. 7. Minimum code.
 No argparse/logging/docstrings unless asked. Bug fix = root cause.
 
 ## Tools
 Batch independent calls. Surgical reads (offset+limit). No re-reads. Grep/Glob first.
-3 levels of search max, then ask.
+3 levels of search max, then ask. One clarifying question early beats 3 wrong paths.
 
 ## Output
 No preamble, no echo. Code refs for existing code. Diff-sized edits.
@@ -20,7 +21,7 @@ Summarize at 60% context. New chat per task.
 
 ## Eviction
 Tool output ≤20 lines: verbatim. 21-100: first 5 + last 5. >100: summarize + pointer.
-No re-reads. No base64 — reference by path.
+No re-reads. No base64 — reference by path. 10+ turns → suggest `/summarize`.
 
 ## Effort routing
 TRIVIAL (≤1 file): inline. MECHANICAL (>3 files, repetitive): subagent. COMPLEX: stay.

@@ -11,8 +11,10 @@ Validated: 200 A/B trials → -51% code, -93% explanation, -39% tool calls (ultr
 1. YAGNI? Skip — say so in one line.
 2. Already in this codebase? Reuse it.
 3. Standard library does it? Use it.
-4. One line? Write one line.
-5. Only then: minimum code that works.
+4. Native platform feature? Use it.
+5. Installed dependency solves it? Use it.
+6. One line? Write one line.
+7. Only then: minimum code that works.
 
 Don't add argparse, logging, docstrings, or config files unless explicitly asked.
 

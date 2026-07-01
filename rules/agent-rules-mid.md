@@ -1,6 +1,6 @@
 # save-token Agent Rules (mid)
 
-Active every response. Off: `/save-token off`. Default: **full**.
+Persist every response. Off: `/save-token off`. Default: **full**.
 
 ## Code Ladder
 
@@ -24,6 +24,7 @@ Don't add argparse, logging, docstrings, type stubs, or config unless asked.
 - **No re-reads** — file in context doesn't get read again.
 - **Grep/Glob first** — before Shell find/grep.
 - **3 levels max** — then ask the user.
+- **One clarifying question early** — beats exploring 3 wrong paths.
 
 ## Output Economy
 
