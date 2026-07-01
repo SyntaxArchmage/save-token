@@ -84,8 +84,8 @@ save-token/
 ├── install.sh                  # Multi-platform installer (+uninstall, --density)
 ├── rules/
 │   ├── agent-rules.md          # Full behavior ruleset (1123 words)
-│   ├── agent-rules-mid.md      # Mid-density variant (357 words)
-│   └── agent-rules-kernel.md   # Kernel variant (156 words, for alwaysApply)
+│   ├── agent-rules-mid.md      # Mid-density variant (368 words)
+│   └── agent-rules-kernel.md   # Kernel variant (177 words, for alwaysApply)
 ├── scripts/
 │   ├── compress.sh             # Content-type-aware compression pipeline
 │   ├── engines/                # Compression engines (7: none, truncate, pointer, treesitter, llmlingua, claw, headroom)
@@ -130,7 +130,7 @@ git clone https://github.com/YOUR_USER/save-token.git
 cd save-token && bash install.sh                           # Cursor, full density
 bash install.sh --platform=claude-code                     # Claude Code
 bash install.sh --platform=codebuddy                       # CodeBuddy
-bash install.sh --density=kernel                           # Minimal rules (156 words)
+bash install.sh --density=kernel                           # Minimal rules (177 words)
 bash install.sh light --platform=generic                   # Generic CLI, rules only
 ```
 

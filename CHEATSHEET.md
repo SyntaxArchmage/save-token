@@ -82,8 +82,8 @@ cp hooks/hooks.json.example ~/.cursor/hooks.json
 ## Density Variants
 | Variant | Words | Use for |
 |---------|-------|---------|
-| kernel | 156 | alwaysApply, API system prompts |
-| mid | 357 | Project-level rules |
+| kernel | 177 | alwaysApply, API system prompts |
+| mid | 368 | Project-level rules |
 | full | 1123 | Complete feature set |
 
 Install: `bash install.sh --density=kernel|mid|full`

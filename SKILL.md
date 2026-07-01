@@ -55,7 +55,7 @@ bash ~/.cursor/skills/save-token/install.sh heavy --platform=codebuddy
 # Generic CLI:
 bash ~/.cursor/skills/save-token/install.sh light --platform=generic
 
-# Minimal token footprint (kernel rules, 156 words):
+# Minimal token footprint (kernel rules, 177 words):
 bash ~/.cursor/skills/save-token/install.sh light --density=kernel
 ```
 

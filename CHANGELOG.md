@@ -7,7 +7,7 @@
 - **P1: Content-type-aware compression pipeline** — `compress.sh` with 7 engines (none, truncate, pointer, treesitter, llmlingua, claw, headroom), auto content type detection, lazy dependency installation
 - **P2: Effort routing** — task classification (TRIVIAL/MECHANICAL/COMPLEX) + subagent delegation protocol
 - **P3: Verbosity self-adaptation** — `learn.sh --verbosity-profile` scans 30 days of transcripts for explain-more vs too-verbose signals, recommends mode adjustment
-- **P4: Rules density optimization** — kernel (156 words), mid (357 words), full (1123 words) variants with `--density=` install option
+- **P4: Rules density optimization** — kernel (177 words), mid (368 words), full (1123 words) variants with `--density=` install option
 - **P5: Context eviction** — tool output triage rules (≤20/21-100/>100 lines), no-re-read, conversation length warnings, binary content pointers
 - **P6: Real token tracking** — `tokens.sh` with 8 commands (detect, collect, log, summary, export, reset, parse-claude); supports Cursor, Claude CLI, Helicone, LiteLLM, manual entry; integrates with `cost.sh` (real data + estimation fallback)
 - Multi-platform `install.sh` with `--platform=cursor|claude-code|codebuddy|generic` and `--density=kernel|mid|full`

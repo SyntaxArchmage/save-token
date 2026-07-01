@@ -335,5 +335,5 @@ print(f'$(date -Iseconds),{model},{inp},{out}')
 " 2>/dev/null >> "$TOKENS_LOG"
     echo "[OK] Parsed Claude output → $TOKENS_LOG"
     ;;
-  *)          echo "[FAIL] Unknown command: $CMD" >&2; usage ;;
+  *)          echo "[FAIL] Unknown command: $CMD" >&2; usage | head -n 1 >&2; exit 1 ;;
 esac

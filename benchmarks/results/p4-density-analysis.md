@@ -6,8 +6,8 @@ Generated: 2026-07-01
 
 | Variant | Words | Est. Tokens | Lines | Content Coverage |
 |---------|-------|-------------|-------|-----------------|
-| kernel  | 156   | ~203        | 25    | Core rules only (code ladder, tools, output, eviction) |
-| mid     | 357   | ~464        | 60    | Core + examples + effort routing + never-cut |
+| kernel  | 177   | ~230        | 32    | Core rules only (code ladder, tools, output, eviction) |
+| mid     | 368   | ~478        | 69    | Core + examples + effort routing + never-cut |
 | full    | 1123  | ~1460       | 151   | Everything including modes, model routing, detailed examples |
 
 ## Per-Request Cost Impact
@@ -16,15 +16,15 @@ Context window: 200k tokens (Claude Sonnet 4)
 
 | Variant | Tokens | % of 200k | % of 128k | Cost/1M in ($3 Sonnet) |
 |---------|--------|-----------|-----------|----------------------|
-| kernel  | ~203   | 0.10%     | 0.16%     | $0.0006              |
-| mid     | ~464   | 0.23%     | 0.36%     | $0.0014              |
+| kernel  | ~230   | 0.12%     | 0.18%     | $0.0007              |
+| mid     | ~478   | 0.24%     | 0.37%     | $0.0014              |
 | full    | ~1460  | 0.73%     | 1.14%     | $0.0044              |
 
 Per 1000 requests:
-- kernel: $0.61
-- mid: $1.39
+- kernel: $0.69
+- mid: $1.43
 - full: $4.38
-- Savings kernel→full: $3.77/1k requests
+- Savings kernel→full: $3.69/1k requests
 
 ## Feature Matrix — What's Preserved
 
@@ -43,7 +43,7 @@ Per 1000 requests:
 | Never-cut section | compressed | ✅ | ✅ |
 | A/B data citations | ❌ | ❌ | ✅ |
 
-## Empirical Compliance from A/B Corpus (200 trials)
+## Empirical Compliance from A/B Corpus (216 trials)
 
 Based on prior A/B testing with full rules:
 
@@ -64,7 +64,7 @@ All 4 are present in kernel variant.
 
 | Use Case | Recommended Variant |
 |----------|-------------------|
-| alwaysApply rules (every request) | **kernel** — 203 tokens is negligible cost |
+| alwaysApply rules (every request) | **kernel** — 230 tokens is negligible cost |
 | Project-level .cursorrules | **mid** — good coverage, under 500 tokens |
 | Standalone .mdc or detailed reference | **full** — complete feature set |
 | API/system prompt with tight budget | **kernel** — minimal per-call overhead |
@@ -72,3 +72,5 @@ All 4 are present in kernel variant.
 **Default recommendation**: Use **kernel** for `alwaysApply: true` global rules, **full** for
 project-specific rules loaded on demand. The 7x token difference (203 vs 1460) is
 meaningful at scale but negligible for individual sessions.
+
+**Note:** Word counts are based on actual `wc -w` measurements. Token estimates use ~1.3 tokens/word.
