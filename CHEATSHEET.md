@@ -16,6 +16,7 @@
 | `/save-token verbosity` | Verbosity profile + recommendation |
 | `/save-token setup` | Install Headroom |
 | `/save-token cost` | Estimate $/month savings |
+| `/save-token tokens` | Track real token usage |
 
 ## Code Ladder (stop at first rung)
 1. YAGNI? Skip

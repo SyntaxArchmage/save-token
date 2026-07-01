@@ -9,10 +9,12 @@
 - **P3: Verbosity self-adaptation** — `learn.sh --verbosity-profile` scans 30 days of transcripts for explain-more vs too-verbose signals, recommends mode adjustment
 - **P4: Rules density optimization** — kernel (156 words), mid (357 words), full (1123 words) variants with `--density=` install option
 - **P5: Context eviction** — tool output triage rules (≤20/21-100/>100 lines), no-re-read, conversation length warnings, binary content pointers
+- **P6: Real token tracking** — `tokens.sh` with 8 commands (detect, collect, log, summary, export, reset, parse-claude); supports Cursor, Claude CLI, Helicone, LiteLLM, manual entry; integrates with `cost.sh` (real data + estimation fallback)
 - Multi-platform `install.sh` with `--platform=cursor|claude-code|codebuddy|generic` and `--density=kernel|mid|full`
 - P1 compression baseline benchmark results
 - P4 density cost/benefit analysis document
-- Test suite expanded to 91 checks
+- P6 functional A/B test results
+- Test suite expanded to 101 checks
 
 ### Changed
 - All adapters: code ladder upgraded from 5 to 7 rungs (added platform native + installed dep)

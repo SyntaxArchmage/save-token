@@ -1,6 +1,6 @@
 # save-token
 
-![Tests](https://img.shields.io/badge/tests-91%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-101%20passing-brightgreen)
 ![Trials](https://img.shields.io/badge/A%2FB%20trials-216-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -64,6 +64,8 @@ See [benchmarks/results/full-report.md](benchmarks/results/full-report.md) for p
 | `/save-token learn` | Mine past sessions for waste |
 | `/save-token review` | Audit current session |
 | `/save-token cost [model]` | Estimate $/month savings |
+| `/save-token tokens` | Track real token usage |
+| `/save-token compress [file]` | Content-type-aware compression |
 
 ## Intensity Levels
 
@@ -94,8 +96,9 @@ save-token/
 │   ├── learn.sh                # Session waste + verbosity profiling
 │   ├── review.sh               # Real-time session audit
 │   ├── mode.sh                 # Mode persistence + history
-│   ├── cost.sh                 # Cost savings estimator (200-trial calibrated)
-│   ├── test.sh                 # 91-check test runner
+│   ├── cost.sh                 # Cost savings estimator (real data + 216-trial fallback)
+│   ├── tokens.sh               # Real token tracking (multi-platform)
+│   ├── test.sh                 # 101-check test runner
 │   └── analyze_transcript.py   # Transcript analyzer (+ --html report)
 ├── adapters/
 │   ├── standalone.mdc          # Cursor standalone rule (zero-install)
@@ -210,4 +213,4 @@ Run `/save-token review` mid-session to get a waste score (A+ to F). Run `/save-
 | Approach | Code ladder + tool + output | Decision ladder + code diet | Input/output compression |
 | Measurement | A/B subagent testing | Manual benchmarks | Automatic perf stats |
 | Integration | Cursor skill | Cursor rule | API proxy |
-| Unique | 200-trial A/B tested + session learning | Anti-bloat focus | Reversible compression |
+| Unique | 216-trial A/B tested + real token tracking | Anti-bloat focus | Reversible compression |

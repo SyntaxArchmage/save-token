@@ -89,6 +89,12 @@ case "${1:-}" in
     else
       echo "     Density: full (default)"
     fi
+    if [ -f "${CONFIG_DIR}/tokens.log" ] && [ -s "${CONFIG_DIR}/tokens.log" ]; then
+      entries=$(wc -l < "${CONFIG_DIR}/tokens.log")
+      echo "     Token log: ${entries} entries"
+    else
+      echo "     Token log: empty (use: tokens.sh log INPUT OUTPUT)"
+    fi
     exit 0
     ;;
   uninstall|remove)
@@ -302,3 +308,11 @@ echo "     Platform: $PLATFORM"
 echo "     Intensity: $INTENSITY"
 echo "     Density: $DENSITY ($(wc -w < "$(rules_file)") words)"
 echo "     Config: $CONFIG_DIR/"
+if [ "$INSTALL_MODE" = "heavy" ]; then
+  echo
+  echo "Key commands:"
+  echo "  /save-token              Activate rules"
+  echo "  /save-token cost [model] Estimate savings"
+  echo "  /save-token tokens       Track real token usage"
+  echo "  /save-token compress     Content-type-aware compression"
+fi

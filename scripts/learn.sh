@@ -118,12 +118,13 @@ echo
 found_any=false
 all_findings=""
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 for base_dir in "${TRANSCRIPT_DIRS[@]}"; do
   if [ ! -d "$base_dir" ]; then
     continue
   fi
 
-  SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
   while IFS= read -r transcript_dir; do
     found_any=true
     project_name=$(basename "$(dirname "$transcript_dir")")
