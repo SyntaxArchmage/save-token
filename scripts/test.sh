@@ -228,6 +228,7 @@ check "event-emitter benchmark" test -f "$REPO_DIR/benchmarks/quality/event-emit
 check "component-bench.sh syntax" bash -n "$SCRIPT_DIR/component-bench.sh"
 check "component-report.sh syntax" bash -n "$SCRIPT_DIR/component-report.sh"
 check "export-promptfoo.sh syntax" bash -n "$SCRIPT_DIR/export-promptfoo.sh"
+check "analyze_transcript.py syntax" python3 -c "import py_compile; py_compile.compile('$SCRIPT_DIR/analyze_transcript.py', doraise=True)"
 
 # --- Documentation ---
 
