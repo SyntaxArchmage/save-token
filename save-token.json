@@ -42,7 +42,7 @@
   //                  A/B data: 60-95% reduction. Install: pip install headroom-ai[proxy]
   "compression": {
     // Default: headroom for all compressible types. Pure software, no API keys,
-    // works offline. Auto-installed with `install.sh` (heavy mode).
+    // works offline. Auto-installed with `install.sh`.
     // If headroom is not installed, compress.sh auto-falls back to zero-dep engines.
     //
     // Fallback chain: headroom → type-specific fallback → none

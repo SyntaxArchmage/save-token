@@ -89,12 +89,12 @@ From our original research (56 techniques), these have **reusable building block
 
 | Platform | Rules delivery | Adapter file | Install command |
 |----------|---------------|-------------|-----------------|
-| Cursor IDE/CLI | SKILL.md + .mdc | `standalone.mdc` | `install.sh heavy --platform=cursor` |
-| Claude Code | AGENTS.md | `AGENTS.md` | `install.sh light --platform=claude-code` |
-| CodeBuddy IDE/CLI | `.codebuddy/rules/` + CODEBUDDY.md | `codebuddy-rule.md`, `CODEBUDDY.md` | `install.sh heavy --platform=codebuddy` |
+| Cursor IDE/CLI | SKILL.md + .mdc | `standalone.mdc` | `install.sh --platform=cursor` |
+| Claude Code | AGENTS.md | `AGENTS.md` | `install.sh --platform=claude-code` |
+| CodeBuddy IDE/CLI | `.codebuddy/rules/` + CODEBUDDY.md | `codebuddy-rule.md`, `CODEBUDDY.md` | `install.sh --platform=codebuddy` |
 | GitHub Copilot | `.github/copilot-instructions.md` | `copilot-instructions.md` | Manual copy |
 | Windsurf | `.windsurfrules` | `windsurfrules` | Manual copy |
-| Any LLM CLI | Pipe via pre-prompt.sh | `system-prompt.txt`, `pre-prompt.sh` | `install.sh light --platform=generic` |
+| Any LLM CLI | Pipe via pre-prompt.sh | `system-prompt.txt`, `pre-prompt.sh` | `install.sh --platform=generic` |
 
 Core rules (`rules/agent-rules.md`) are platform-agnostic. All scripts work on any platform with bash+python3.
 

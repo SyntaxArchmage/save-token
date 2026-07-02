@@ -33,22 +33,22 @@ Options:
   -h, --help        Show this help.
 
 Engines:
-  treesitter   Strip comments + whitespace from code (requires tree-sitter-cli)
-  truncate     Keep first N + last N lines of tool output (zero deps)
-  pointer      Summarize to pointer reference (zero deps)
-  llmlingua    Perplexity-based pruning for NL (requires llmlingua)
-  claw         AST-aware code compression (requires claw-compactor)
-  headroom     Full Headroom proxy compression (requires headroom-ai)
   none         Passthrough (no compression)
+  truncate     Keep first N + last N lines of tool output (built-in)
+  pointer      Summarize to pointer reference (built-in)
+  headroom     Local ML compression via Headroom (auto-installed)
+  treesitter   Strip comments + whitespace from code (regex fallback built-in)
+  llmlingua    Perplexity-based pruning for NL (auto-installed, needs model download)
+  claw         AST-aware code compression (not available: PyPI package is unrelated)
 
 Auto engine selection by type:
-  code         → treesitter (or claw/headroom if installed)
-  text         → truncate (or llmlingua/headroom if installed)
-  json         → truncate (or headroom/SmartCrusher if installed)
-  logs         → truncate (or headroom/LogCompressor if installed)
-  diff         → truncate (preserves hunks)
-  html         → truncate (or headroom/HTMLExtractor if installed)
-  search       → pointer (or headroom/SearchCompressor if installed)
+  code         → headroom (or treesitter fallback)
+  text         → headroom (or truncate/llmlingua fallback)
+  json         → headroom (or truncate fallback)
+  logs         → headroom (or truncate fallback)
+  diff         → headroom (or truncate fallback)
+  html         → headroom (or truncate fallback)
+  search       → pointer (or headroom/SearchCompressor)
   tool_output  → pointer
   history      → truncate
   metadata     → none

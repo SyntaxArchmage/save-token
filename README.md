@@ -1,6 +1,6 @@
 # save-token
 
-![Tests](https://img.shields.io/badge/tests-147%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-149%20passing-brightgreen)
 ![Trials](https://img.shields.io/badge/A%2FB%20trials-1216%20(216%20%2B%201000%20component)-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -139,7 +139,7 @@ Then use `/save-token` in any agent chat.
 
 ## Compression Engines
 
-save-token includes a pluggable compression pipeline (`/save-token compress`) that auto-detects content type and routes each to the best engine. 10 content types, 7 engines — configure each independently in `.save-token.json`:
+save-token includes a pluggable compression pipeline (`/save-token compress`) that auto-detects content type and routes each to the best engine. 10 content types, 7 engines (5 ready, 2 require external deps) — configure each independently in `.save-token.json`:
 
 | Content Type | Default Engine | Headroom Equivalent | What It Does |
 |-------------|---------------|---------------------|--------------|
@@ -372,7 +372,7 @@ Pluggable engines reduce tokens before they reach the model. The pipeline auto-d
 
 Headroom is the default for compressible types — pure software, runs a local ONNX model (Kompress-v2-base from HuggingFace), no API keys needed. Auto-installed with `install.sh`. Each type is independently configurable. If headroom isn't installed, auto-falls back to zero-dep engines.
 
-**7 engines available** — 3 zero-dep (built-in), 4 installable on demand:
+**7 engines** — 3 built-in, 2 auto-installed, 2 require external deps:
 
 | Engine | Dependencies | Status | What it does |
 |--------|-------------|--------|--------------|
