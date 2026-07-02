@@ -35,7 +35,7 @@
   //   "treesitter" — strip comments + whitespace (best for: code files)
   //                  A/B data: 3-9% reduction (regex fallback), needs tree-sitter-cli for better
   //   "claw"       — AST-aware compression, reversible (best for: code context)
-  //                  Expected: 15-82% reduction. Install: pip install claw-compactor
+  //                  Expected: 15-82% reduction. Not available: PyPI package is unrelated
   //   "llmlingua"  — perplexity-based NL pruning (best for: natural language text)
   //                  Install: pip install llmlingua
   //   "headroom"   — system-level proxy compression (best for: all input types)
@@ -51,7 +51,7 @@
     // Options: "headroom" | "treesitter" | "claw" | "pointer" | "none"
     //   headroom   — CodeCompressor: AST-aware, preserves signatures (40-70%)
     //   treesitter — strips comments + whitespace (3-9%, zero-dep fallback)
-    //   claw       — AST-aware, reversible (15-82%), pip install claw-compactor
+    //   claw       — AST-aware, reversible (15-82%), not available (PyPI mismatch)
     "code": "headroom",
 
     // Text and documentation (.md, .txt, .rst, .tex, .adoc)
@@ -155,6 +155,7 @@
 
   // ─── Platform Adapters ─────────────────────────────────────────────
   // Which platforms this config targets. Used by install.sh.
-  // Options: "cursor" | "claude-code" | "codebuddy" | "windsurf" | "copilot" | "generic"
+  // Options: "cursor" | "claude-code" | "codebuddy" | "augment" | "roo-code" | "kilo-code" |
+  //          "opencode" | "pi-agent" | "aider" | "gemini-cli" | "cline" | "windsurf" | "copilot" | "generic"
   "platforms": ["cursor"]
 }

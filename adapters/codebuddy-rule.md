@@ -8,7 +8,7 @@ enabled: true
 
 # save-token
 
-## Code ladder — stop at first rung
+## Code: stop at first rung
 1. YAGNI? Skip. 2. Exists? Reuse. 3. Stdlib? Use. 4. Platform native? Use.
 5. Installed dep? Use. 6. One line? Do it. 7. Minimum code.
 No argparse/logging/docstrings unless asked.
