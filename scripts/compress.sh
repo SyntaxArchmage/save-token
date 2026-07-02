@@ -24,8 +24,8 @@ Usage: compress.sh [options] [FILE]
 Content-type-aware compression pipeline. Reads from FILE or stdin.
 
 Options:
-  --type=TYPE       Content type: code|text|tool_output|history|metadata
-                    Auto-detected from file extension if omitted.
+  --type=TYPE       Content type (auto-detected from file extension if omitted):
+                    code|text|json|logs|diff|html|search|tool_output|history|metadata
   --engine=ENGINE   Compression engine (see below). Default: auto (best for type).
   --install=ENGINE  Install an engine's dependencies and exit.
   --list            List available engines and their status.
@@ -42,8 +42,13 @@ Engines:
   none         Passthrough (no compression)
 
 Auto engine selection by type:
-  code         → treesitter
-  text         → truncate (or llmlingua if installed)
+  code         → treesitter (or claw/headroom if installed)
+  text         → truncate (or llmlingua/headroom if installed)
+  json         → truncate (or headroom/SmartCrusher if installed)
+  logs         → truncate (or headroom/LogCompressor if installed)
+  diff         → truncate (preserves hunks)
+  html         → truncate (or headroom/HTMLExtractor if installed)
+  search       → pointer (or headroom/SearchCompressor if installed)
   tool_output  → pointer
   history      → truncate
   metadata     → none
@@ -75,19 +80,33 @@ detect_type() {
   local file="${1:-}"
   if [ -n "$file" ] && [ -f "$file" ]; then
     case "$file" in
-      *.py|*.js|*.ts|*.tsx|*.jsx|*.rs|*.go|*.c|*.cpp|*.h|*.java|*.rb|*.sh|*.bash)
+      *.py|*.js|*.ts|*.tsx|*.jsx|*.rs|*.go|*.c|*.cpp|*.h|*.java|*.rb|*.sh|*.bash|*.swift|*.kt|*.scala|*.zig|*.lua|*.pl|*.pm|*.r|*.R|*.jl|*.ex|*.exs|*.erl|*.hs|*.ml|*.fs|*.v|*.sv|*.vhd|*.php|*.cs|*.dart)
         echo "code" ;;
-      *.md|*.txt|*.rst|*.adoc|*.tex)
-        echo "text" ;;
-      *.json|*.yaml|*.yml|*.toml|*.xml|*.csv)
+      *.json|*.jsonl|*.ndjson)
+        echo "json" ;;
+      *.yaml|*.yml|*.toml|*.xml|*.csv|*.tsv|*.ini|*.cfg|*.conf|*.properties)
         echo "metadata" ;;
       *.log)
-        echo "tool_output" ;;
+        echo "logs" ;;
+      *.diff|*.patch)
+        echo "diff" ;;
+      *.html|*.htm|*.xhtml)
+        echo "html" ;;
+      *.md|*.txt|*.rst|*.adoc|*.tex)
+        echo "text" ;;
       *)
         echo "text" ;;
     esac
   else
-    echo "tool_output"
+    # stdin — try content sniffing
+    local head_line
+    head_line=$(head -c 200 "$file" 2>/dev/null || echo "")
+    case "$head_line" in
+      '{"'*|'[{'*|'['*)      echo "json" ;;
+      'diff --'*|'---'*a/**)  echo "diff" ;;
+      '<html'*|'<!DOCTYPE'*|'<HTML'*)  echo "html" ;;
+      *)                      echo "tool_output" ;;
+    esac
   fi
 }
 
@@ -95,21 +114,37 @@ detect_type() {
 
 auto_engine() {
   local content_type="$1"
+  local has_headroom=false
+  python3 -c "import headroom" 2>/dev/null && has_headroom=true
+
   case "$content_type" in
     code)
-      if command -v tree-sitter &>/dev/null; then
-        echo "treesitter"
-      else
-        echo "truncate"
-      fi
-      ;;
+      if [ "$has_headroom" = true ]; then echo "headroom"
+      elif command -v tree-sitter &>/dev/null; then echo "treesitter"
+      else echo "truncate"
+      fi ;;
     text)
-      if python3 -c "import llmlingua" 2>/dev/null; then
-        echo "llmlingua"
-      else
-        echo "truncate"
-      fi
-      ;;
+      if [ "$has_headroom" = true ]; then echo "headroom"
+      elif python3 -c "import llmlingua" 2>/dev/null; then echo "llmlingua"
+      else echo "truncate"
+      fi ;;
+    json)
+      if [ "$has_headroom" = true ]; then echo "headroom"
+      else echo "truncate"
+      fi ;;
+    logs)
+      if [ "$has_headroom" = true ]; then echo "headroom"
+      else echo "truncate"
+      fi ;;
+    diff)         echo "truncate" ;;
+    html)
+      if [ "$has_headroom" = true ]; then echo "headroom"
+      else echo "truncate"
+      fi ;;
+    search)
+      if [ "$has_headroom" = true ]; then echo "headroom"
+      else echo "pointer"
+      fi ;;
     tool_output)  echo "pointer" ;;
     history)      echo "truncate" ;;
     metadata)     echo "none" ;;

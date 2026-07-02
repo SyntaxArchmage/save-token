@@ -147,12 +147,20 @@ Then use `/save-token` in any agent chat.
 
 ## Compression Engines
 
-save-token includes a pluggable compression pipeline (`/save-token compress`) that auto-detects content type and applies the right engine:
+save-token includes a pluggable compression pipeline (`/save-token compress`) that auto-detects content type and routes each to the best engine. 10 content types, 7 engines — configure each independently in `.save-token.json`:
 
-| Content Type | Default Engine | What It Does |
-|-------------|---------------|--------------|
-| Code | treesitter | Strip comments and whitespace |
-| Tool output | pointer | Compact summary with line pointers |
+| Content Type | Default Engine | Headroom Equivalent | What It Does |
+|-------------|---------------|---------------------|--------------|
+| Code (.py, .js, .go, ...) | treesitter | CodeCompressor | Strip comments + whitespace (AST-aware) |
+| Text (.md, .txt, .rst) | truncate | Kompress-v2-base | First/last N lines or perplexity pruning |
+| JSON (.json, .jsonl) | truncate | SmartCrusher | Keep errors/anomalies, drop boilerplate |
+| Logs (.log, CI output) | truncate | LogCompressor | Keep failures/errors, drop passing noise |
+| Diffs (.diff, .patch) | truncate | DiffCompressor | Preserve change hunks, drop unchanged |
+| HTML (.html, .htm) | truncate | HTMLExtractor | Strip markup, extract readable content |
+| Search (grep output) | pointer | SearchCompressor | Rank by relevance, keep top matches |
+| Tool output (stdin) | pointer | — | Compact summary with line pointers |
+| History (conversation) | truncate | — | First/last N lines |
+| Metadata (.yaml, .toml) | none | — | Passthrough (structure required) |
 | Text | truncate | First N + last N lines |
 | Metadata | none | Passthrough |
 
@@ -358,17 +366,26 @@ The rules injected into each request have their own token cost. Three density va
 
 ### Layer 3: Compression Engines (input token reduction)
 
-Pluggable engines reduce tokens before they reach the model. The pipeline auto-detects content type from file extension and applies the right engine. Configure defaults in `.save-token.json` under `compression`:
+Pluggable engines reduce tokens before they reach the model. The pipeline auto-detects content type (10 types) and routes to the best engine. Configure per-type defaults in `.save-token.json`:
 
 ```json
 {
   "compression": {
     "code": "treesitter",
     "text": "truncate",
-    "tool_output": "pointer"
+    "json": "truncate",
+    "logs": "truncate",
+    "diff": "truncate",
+    "html": "truncate",
+    "search": "pointer",
+    "tool_output": "pointer",
+    "history": "truncate",
+    "metadata": "none"
   }
 }
 ```
+
+When Headroom is installed, auto-detection prefers it for code, text, json, logs, and html. Each type is independently configurable — use Headroom for logs but treesitter for code, or llmlingua for text but pointer for search.
 
 **7 engines available** — 3 zero-dep (built-in), 4 installable on demand:
 
@@ -384,13 +401,18 @@ Pluggable engines reduce tokens before they reach the model. The pipeline auto-d
 
 **Measured compression by content type and engine:**
 
-| Content Type | Config key | Default engine | Alternatives | Measured reduction |
-|-------------|-----------|----------------|--------------|-------------------|
-| **Code** (.py, .js, .ts, .sh, .go, .rs, .java, ...) | `compression.code` | treesitter | claw, pointer, none | treesitter: 3–9%, claw: 15–82%, pointer: 69–98% |
-| **Text/docs** (.md, .txt, .rst, .tex) | `compression.text` | truncate | llmlingua, pointer | truncate: 56–95%, pointer: 69–98% |
-| **Tool output** (stdin, .log) | `compression.tool_output` | pointer | truncate, none | pointer: 69–98% (constant ~460B), truncate: 32–80% |
-| **History** (conversation context) | — | truncate | — | truncate: 32–80% |
-| **Metadata** (.json, .yaml, .toml, .xml, .csv) | — | none | — | 0% (full fidelity required) |
+| Content Type | Config key | Default | Alternatives | Measured reduction |
+|-------------|-----------|---------|--------------|-------------------|
+| **Code** (.py, .js, .ts, .go, .rs, .java, ...) | `compression.code` | treesitter | claw, headroom, pointer | treesitter: 3–9%, claw: 15–82%, headroom: 40–70% |
+| **Text** (.md, .txt, .rst, .tex) | `compression.text` | truncate | llmlingua, headroom, pointer | truncate: 56–95%, llmlingua: 60–80%, headroom: 60–80% |
+| **JSON** (.json, .jsonl, API responses) | `compression.json` | truncate | headroom | truncate: 32–80%, headroom/SmartCrusher: 70–90% |
+| **Logs** (.log, CI/build/test output) | `compression.logs` | truncate | headroom, pointer | truncate: 32–80%, headroom/LogCompressor: 85–95% |
+| **Diffs** (.diff, .patch, git diff) | `compression.diff` | truncate | headroom | truncate: 32–80%, headroom/DiffCompressor: 60–80% |
+| **HTML** (.html, .htm, web scrapes) | `compression.html` | truncate | headroom | truncate: 32–80%, headroom/HTMLExtractor: 50–70% |
+| **Search** (grep/rg output) | `compression.search` | pointer | headroom | pointer: 69–98%, headroom/SearchCompressor: 80–95% |
+| **Tool output** (stdin, misc) | `compression.tool_output` | pointer | truncate, none | pointer: 69–98% (constant ~460B), truncate: 32–80% |
+| **History** (conversation) | `compression.history` | truncate | none | truncate: 32–80% |
+| **Metadata** (.yaml, .toml, .xml, .csv, .ini) | `compression.metadata` | none | truncate | 0% (full fidelity recommended) |
 
 **Size-dependent performance** (tool output, measured):
 
@@ -401,7 +423,7 @@ Pluggable engines reduce tokens before they reach the model. The pipeline auto-d
 | 100 lines | 9% | 20% |
 | 500 lines | 2% | 4% |
 
-**Takeaway:** Compression is additive to behavior rules. Start with defaults (auto-detect content type). For maximum savings, install `headroom` as system-level proxy or `claw` for AST-aware code compression. For NL-heavy contexts, install `llmlingua`.
+**Takeaway:** Compression is additive to behavior rules. Start with defaults (auto-detect across 10 content types). For maximum savings, install `headroom` — it provides specialized compressors (SmartCrusher, LogCompressor, CodeCompressor, etc.) that save-token auto-selects per content type. Or mix engines: `headroom` for JSON/logs, `treesitter` for code, `llmlingua` for text. Each type is independently configurable.
 
 ### Layer 4: Effort Routing (delegate cheap tasks to cheap models)
 
