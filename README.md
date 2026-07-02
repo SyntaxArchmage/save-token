@@ -50,13 +50,15 @@ Each layer is a modular component. Third-party tools (like [Headroom](https://gi
 
 ### Configuration
 
-All layers are tunable via a `.save-token.json` config file (team-level) with user overrides (`~/.save-token/config.json`). Three-level precedence: user > team > defaults.
+All layers are tunable via a `.save-token.json` config file (team-level) with user overrides (`~/.save-token/config.json`). Three-level precedence: user > team > defaults. Supports JSONC (comments allowed).
 
 ```bash
-/save-token config init    # create template config
+/save-token config init    # create .save-token.json from annotated default
 /save-token config show    # view merged config
 /save-token config apply   # apply settings
 ```
+
+The default config ([`save-token.json`](save-token.json)) ships with the repo — fully commented with all options and A/B data for each choice. Copy it to your project root as `.save-token.json` and customize.
 
 ## A/B Tested Results
 
@@ -188,6 +190,7 @@ Or merge the `sessionStart` entry into your existing `hooks.json`.
 save-token/
 ├── SKILL.md                    # Entry point (Cursor reads this)
 ├── CHEATSHEET.md               # Quick-reference card
+├── save-token.json             # Annotated default config (JSONC, all options documented)
 ├── install.sh                  # Multi-platform installer (+uninstall, --density)
 ├── rules/
 │   ├── agent-rules.md          # Full behavior ruleset (1123 words)

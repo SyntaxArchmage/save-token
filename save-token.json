@@ -1,0 +1,117 @@
+{
+  // ─── Intensity Level ───────────────────────────────────────────────
+  // Controls code ladder + output economy enforcement.
+  // Options: "lite" | "full" | "ultra"
+  //   lite  — code ladder advisory, output economy enforced, explanations up to 5 lines
+  //           A/B data: -16% code, -33% explanation, -20% tool calls
+  //   full  — all rules enforced, shortest diff + shortest explanation (recommended)
+  //           A/B data: -24% code, -75% explanation, -34% tool calls, 100% quality
+  //   ultra — YAGNI extremist, zero prose, single-expression preference
+  //           A/B data: -51% code, -93% explanation, -39% tool calls
+  "mode": "full",
+
+  // ─── Rules Density ─────────────────────────────────────────────────
+  // How many tokens the injected rules consume per request.
+  // Options: "kernel" | "mid" | "full"
+  //   kernel — 177 words (~299 tokens, $0.90/1000 req). Code ladder + tool + output compressed.
+  //            Best for: alwaysApply global rules, API system prompts
+  //   mid    — 368 words (~578 tokens, $1.73/1000 req). Adds bad/good examples, effort routing table.
+  //            Best for: project-level rules
+  //   full   — 1123 words (~1796 tokens, $5.39/1000 req). Complete: intensity levels, model routing, A/B data.
+  //            Best for: on-demand skill activation (default)
+  "density": "full",
+
+  // ─── Compression Engines ───────────────────────────────────────────
+  // Maps content types to compression engines. Auto-detected from file extension.
+  // Each key: content type detected by compress.sh
+  // Each value: engine name
+  //
+  // Available engines:
+  //   "none"       — passthrough, 0% reduction (best for: metadata, small outputs)
+  //   "truncate"   — keep first N + last N lines (best for: text, medium tool output)
+  //                  A/B data: 32-80% reduction on tool output, 56-95% on long docs
+  //   "pointer"    — 3+3 line preview + stats (best for: large tool output, code references)
+  //                  A/B data: 69-98% reduction, constant ~460B regardless of input size
+  //   "treesitter" — strip comments + whitespace (best for: code files)
+  //                  A/B data: 3-9% reduction (regex fallback), needs tree-sitter-cli for better
+  //   "claw"       — AST-aware compression, reversible (best for: code context)
+  //                  Expected: 15-82% reduction. Install: pip install claw-compactor
+  //   "llmlingua"  — perplexity-based NL pruning (best for: natural language text)
+  //                  Install: pip install llmlingua
+  //   "headroom"   — system-level proxy compression (best for: all input types)
+  //                  A/B data: 60-95% reduction. Install: pip install headroom-ai[proxy]
+  "compression": {
+    // Source code files (.py, .js, .ts, .sh, .go, .rs, .java, .rb, .c, .cpp)
+    // Options: "treesitter" | "claw" | "pointer" | "none"
+    "code": "treesitter",
+
+    // Text and documentation (.md, .txt, .rst, .tex, .adoc)
+    // Options: "truncate" | "llmlingua" | "pointer" | "none"
+    "text": "truncate",
+
+    // Tool output (stdin, .log, build/test output)
+    // Options: "pointer" | "truncate" | "none"
+    // pointer recommended: constant ~460B output regardless of input size
+    "tool_output": "pointer",
+
+    // Conversation history (past turns in long sessions)
+    // Options: "truncate" | "none"
+    "history": "truncate",
+
+    // Structured data (.json, .yaml, .toml, .xml, .csv)
+    // Options: "none" | "truncate"
+    // none recommended: structured data loses meaning when compressed
+    "metadata": "none"
+  },
+
+  // ─── Truncation Tuning ─────────────────────────────────────────────
+  // Fine-tune how many lines truncate and pointer engines keep.
+  // These map to env vars COMPRESS_HEAD, COMPRESS_TAIL, POINTER_HEAD, POINTER_TAIL.
+  "truncate_params": {
+    // truncate engine: lines kept from top and bottom
+    "head": 10,
+    "tail": 10,
+    // pointer engine: preview lines from top and bottom
+    "pointer_head": 3,
+    "pointer_tail": 3
+  },
+
+  // ─── Effort Routing ────────────────────────────────────────────────
+  // Auto-classify tasks and delegate cheap work to cheap models.
+  // Options: true | false
+  //   true  — classify TRIVIAL/MECHANICAL/COMPLEX, delegate mechanical to subagents
+  //   false — always use current model for everything
+  // Biggest savings come from not using Opus/o3 for mechanical bulk transforms.
+  "effort_routing": true,
+
+  // ─── Context Hygiene ───────────────────────────────────────────────
+  // Tool output triage thresholds (lines).
+  // Output ≤ small: include verbatim
+  // Output small+1 to large: first 5 + last 5 + omission note
+  // Output > large: summarize to ≤10 lines + pointer
+  "context_hygiene": {
+    "small_output_threshold": 20,
+    "large_output_threshold": 100
+  },
+
+  // ─── Quality Gate ──────────────────────────────────────────────────
+  // Minimum review score to maintain current mode.
+  // Used by progressive activation (progress.sh) to auto-promote/demote.
+  // Options: "A+" | "A" | "B" | "C" | "F" | null
+  //   null — no enforcement (always stays at configured mode)
+  //   "B"  — demote if session scores below B (recommended)
+  //   "A"  — strict: demote if below A
+  "enforce_review_score": "B",
+
+  // ─── Progressive Activation ────────────────────────────────────────
+  // Auto-promote intensity after qualifying sessions.
+  // Options: true | false
+  //   true  — track scores, promote lite→full→ultra after consistent good scores
+  //   false — stay at manually configured mode
+  "progressive_activation": true,
+
+  // ─── Platform Adapters ─────────────────────────────────────────────
+  // Which platforms this config targets. Used by install.sh.
+  // Options: "cursor" | "claude-code" | "codebuddy" | "windsurf" | "copilot" | "generic"
+  "platforms": ["cursor"]
+}

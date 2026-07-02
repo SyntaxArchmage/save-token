@@ -33,13 +33,24 @@ DEFAULTS='{
     "tool_output": "pointer"
   },
   "effort_routing": true,
+  "context_hygiene": {
+    "small_output_threshold": 20,
+    "large_output_threshold": 100
+  },
   "enforce_review_score": null,
+  "progressive_activation": true,
   "platforms": ["cursor"]
 }'
 
 merge_json() {
   python3 -c "
-import json, sys
+import json, sys, re
+
+def strip_jsonc(text):
+    # Strip // comments (not inside strings) and trailing commas
+    text = re.sub(r'(?<!:)//.*$', '', text, flags=re.MULTILINE)
+    text = re.sub(r',\s*([\]}])', r'\1', text)
+    return text
 
 def deep_merge(base, override):
     result = base.copy()
@@ -55,7 +66,7 @@ merged = json.loads(configs[0])
 for cfg_path in configs[1:]:
     try:
         with open(cfg_path) as f:
-            merged = deep_merge(merged, json.load(f))
+            merged = deep_merge(merged, json.loads(strip_jsonc(f.read())))
     except (FileNotFoundError, json.JSONDecodeError):
         pass
 print(json.dumps(merged, indent=2))
@@ -110,7 +121,11 @@ print(json.dumps(data) if isinstance(data, (dict, list)) else data)
     if [ -f "$TARGET" ]; then
       echo "[SKIP] $TARGET already exists." >&2; exit 1
     fi
-    cat > "$TARGET" <<'TMPL'
+    SAVE_TOKEN_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+    if [ -f "$SAVE_TOKEN_ROOT/save-token.json" ]; then
+      cp "$SAVE_TOKEN_ROOT/save-token.json" "$TARGET"
+    else
+      cat > "$TARGET" <<'TMPL'
 {
   "mode": "full",
   "density": "full",
@@ -120,10 +135,16 @@ print(json.dumps(data) if isinstance(data, (dict, list)) else data)
     "tool_output": "pointer"
   },
   "effort_routing": true,
+  "context_hygiene": {
+    "small_output_threshold": 20,
+    "large_output_threshold": 100
+  },
   "enforce_review_score": "B",
+  "progressive_activation": true,
   "platforms": ["cursor"]
 }
 TMPL
+    fi
     echo "[OK] Created $TARGET"
     ;;
   apply)
