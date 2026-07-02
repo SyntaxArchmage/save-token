@@ -97,7 +97,7 @@ check "install.sh reinstall" bash "$REPO_DIR/install.sh"
 check "install.sh --version" bash "$REPO_DIR/install.sh" --version
 check "install.sh status" bash "$REPO_DIR/install.sh" status
 check "install.sh --help" bash "$REPO_DIR/install.sh" --help
-check "install.sh --platform=generic" bash "$REPO_DIR/install.sh" light --platform=generic
+check "install.sh --platform=generic" bash "$REPO_DIR/install.sh" --platform=generic
 
 # --- Compression pipeline (P1) ---
 
@@ -125,7 +125,7 @@ check "mid < full words" bash -c '[ "$(wc -w < "'"$REPO_DIR"'/rules/agent-rules-
 check "kernel has code ladder" grep -q "Code" "$REPO_DIR/rules/agent-rules-kernel.md"
 check "kernel has never cut" grep -q "Never cut" "$REPO_DIR/rules/agent-rules-kernel.md"
 check "density analysis doc" test -f "$REPO_DIR/benchmarks/results/p4-density-analysis.md"
-check "install --density validation" bash -c 'bash "'"$REPO_DIR"'/install.sh" light --platform=generic --density=invalid 2>&1 | grep -q "Invalid density"'
+check "install --density validation" bash -c 'bash "'"$REPO_DIR"'/install.sh" --platform=generic --density=invalid 2>&1 | grep -q "Invalid density"'
 check "verbosity profile runs" bash -c 'bash "'"$SCRIPT_DIR"'/learn.sh" --verbosity-profile 2>&1 | grep -q "Sessions analyzed"'
 
 # --- Token tracking (P6) ---

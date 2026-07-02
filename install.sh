@@ -218,9 +218,26 @@ mkdir -p "$CONFIG_DIR"
 install_cursor() {
   SKILL_DIR="${HOME}/.cursor/skills/save-token"
   mkdir -p "$(dirname "$SKILL_DIR")"
+
+  # If repo IS the skill dir (or resolves to it), skip symlink
+  local real_repo real_skill
+  real_repo="$(cd "$REPO_DIR" && pwd -P)"
+  if [ -d "$SKILL_DIR" ] && [ ! -L "$SKILL_DIR" ]; then
+    real_skill="$(cd "$SKILL_DIR" && pwd -P)"
+    if [ "$real_repo" = "$real_skill" ]; then
+      echo "[OK] Repo is already at $SKILL_DIR (no symlink needed)."
+      echo "     Use: /save-token in any Cursor agent chat"
+      return
+    fi
+  fi
+
   if [ -L "$SKILL_DIR" ]; then
-    current=$(readlink -f "$SKILL_DIR")
-    if [ "$current" = "$REPO_DIR" ]; then
+    current=$(readlink "$SKILL_DIR")
+    # Prevent self-referencing symlink
+    if [ "$current" = "$SKILL_DIR" ]; then
+      rm "$SKILL_DIR"
+      ln -s "$REPO_DIR" "$SKILL_DIR"
+    elif [ "$(readlink -f "$SKILL_DIR" 2>/dev/null)" = "$real_repo" ]; then
       echo "[OK] Skill symlink already exists."
     else
       echo "[..] Updating symlink from $current"
