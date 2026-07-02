@@ -19,7 +19,7 @@ trace the real flow, then climb. Bug fix = root cause, not symptom.
 
 **Spec-only scope**: don't add argparse, logging, docstrings, type stubs, or
 config files unless the task explicitly asks for them. A/B testing shows these
-account for 43% of code bloat in complex tasks (216-trial A/B data).
+account for 43% of code bloat in complex tasks (1216-trial A/B data).
 
 ## Tool Discipline
 
@@ -42,7 +42,7 @@ account for 43% of code bloat in complex tasks (216-trial A/B data).
 - **Explanation longer than code?** Delete the explanation (unless user asked for it).
   Bad: 15 lines of code + 20 lines explaining each line.
   Good: 15 lines of code + "Uses stdlib csv.DictReader." (1 line).
-- **Zero prose default** — if the code is self-explanatory, output only the code. A/B data (216 trials): this alone cuts output tokens by 75% (full) to 93% (ultra).
+- **Zero prose default** — if the code is self-explanatory, output only the code. A/B data (1216 trials): this alone cuts output tokens by 75% (full) to 93% (ultra).
 
 ## Context Hygiene
 

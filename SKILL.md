@@ -180,7 +180,7 @@ bash ~/.cursor/skills/save-token/scripts/cost.sh [opus|sonnet|haiku|gpt4o|o3]
 ```
 
 Uses real token data (from `tokens.sh`) if available, otherwise falls back
-to 216-trial benchmark estimation. Default model: opus.
+to 1216-trial benchmark estimation. Default model: opus.
 
 ## Command: tokens
 
