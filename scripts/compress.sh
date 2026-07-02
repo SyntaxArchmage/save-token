@@ -192,32 +192,37 @@ install_engine() {
 # --- List engines ---
 
 list_engines() {
-  printf "%-12s %-10s %s\n" "ENGINE" "STATUS" "DESCRIPTION"
-  printf "%-12s %-10s %s\n" "--------" "------" "-----------"
+  printf "%-12s %-12s %s\n" "ENGINE" "STATUS" "DESCRIPTION"
+  printf "%-12s %-12s %s\n" "--------" "--------" "-----------"
 
-  check_status() {
-    local name="$1" cmd="$2"
-    if eval "$cmd" &>/dev/null; then
-      printf "%-12s %-10s" "$name" "[ready]"
-    else
-      printf "%-12s %-10s" "$name" "[missing]"
-    fi
+  show_engine() {
+    local name="$1" status="$2" desc="$3"
+    printf "%-12s %-12s %s\n" "$name" "$status" "$desc"
   }
 
-  check_status "treesitter" "command -v tree-sitter"
-  echo "Strip comments + whitespace from code"
-  check_status "truncate" "true"
-  echo "Keep first/last N lines (zero deps)"
-  check_status "pointer" "true"
-  echo "Summarize to pointer reference (zero deps)"
-  check_status "llmlingua" "python3 -c 'import llmlingua'"
-  echo "Perplexity-based NL pruning (Microsoft)"
-  check_status "claw" "python3 -c 'import claw_compactor'"
-  echo "AST-aware code compression (reversible)"
-  check_status "headroom" "python3 -c 'import headroom'"
-  echo "Full proxy compression (60-95%)"
-  check_status "none" "true"
-  echo "Passthrough (no compression)"
+  show_engine "none"       "[ready]"       "Passthrough (no compression)"
+  show_engine "truncate"   "[ready]"       "Keep first/last N lines (built-in)"
+  show_engine "pointer"    "[ready]"       "Summarize to pointer reference (built-in)"
+
+  if python3 -c "import headroom" 2>/dev/null; then
+    show_engine "headroom" "[ready]"       "Local ML compression (40-95%)"
+  else
+    show_engine "headroom" "[missing]"     "Local ML compression — pip install headroom-ai"
+  fi
+
+  if command -v tree-sitter &>/dev/null; then
+    show_engine "treesitter" "[ready]"     "AST-aware comment/whitespace stripping"
+  else
+    show_engine "treesitter" "[fallback]"  "Regex comment/whitespace stripping (install tree-sitter-cli for full AST)"
+  fi
+
+  if python3 -c "from llmlingua import PromptCompressor" 2>/dev/null; then
+    show_engine "llmlingua" "[ready]"      "Perplexity-based NL pruning (needs model download on first use)"
+  else
+    show_engine "llmlingua" "[missing]"    "Perplexity-based NL pruning — pip install llmlingua"
+  fi
+
+  show_engine "claw"       "[blocked]"     "PyPI package is unrelated project; real tool not on PyPI"
 }
 
 # --- Engine execution ---
