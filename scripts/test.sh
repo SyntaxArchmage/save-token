@@ -117,6 +117,8 @@ check "compress pointer works" bash -c 'seq 1 50 | bash "'"$SCRIPT_DIR"'/compres
 check "compress type detection" bash -c 'bash "'"$SCRIPT_DIR"'/compress.sh" --type=code --engine=none < "'"$SCRIPT_DIR"'/compress.sh" | wc -l | grep -q "[0-9]"'
 check "compress --list shows engines" bash -c 'bash "'"$SCRIPT_DIR"'/compress.sh" --list | grep -q "headroom"'
 check "compress --install=claw blocked" bash -c '! bash "'"$SCRIPT_DIR"'/compress.sh" --install=claw 2>/dev/null'
+check "compress-bench.sh syntax" bash -n "$SCRIPT_DIR/compress-bench.sh"
+check "compress-report.sh syntax" bash -n "$SCRIPT_DIR/compress-report.sh"
 
 # --- Density variants (P4) ---
 
@@ -149,6 +151,7 @@ check "load-config.sh show" bash -c 'bash "'"$SCRIPT_DIR"'/load-config.sh" show 
 check "load-config.sh get" bash -c 'bash "'"$SCRIPT_DIR"'/load-config.sh" get mode 2>&1 | grep -q "full"'
 check "load-config.sh sources" bash -c 'bash "'"$SCRIPT_DIR"'/load-config.sh" sources 2>&1 | grep -q "Precedence"'
 check "load-config.sh init" bash -c 'bash "'"$SCRIPT_DIR"'/load-config.sh" init /tmp/st-test-cfg.json && rm /tmp/st-test-cfg.json'
+check "load-config.sh init defaults" bash -c 'bash "'"$SCRIPT_DIR"'/load-config.sh" init /tmp/st-test-cfg2.json && grep -q "headroom" /tmp/st-test-cfg2.json && grep -q "pointer" /tmp/st-test-cfg2.json && rm /tmp/st-test-cfg2.json'
 check "load-config.sh apply" bash -c 'bash "'"$SCRIPT_DIR"'/load-config.sh" apply 2>&1 | grep -q "Applied"'
 check "load-config.sh --help" bash "$SCRIPT_DIR/load-config.sh" --help
 
@@ -219,6 +222,12 @@ check "memoize-ttl benchmark" test -f "$REPO_DIR/benchmarks/quality/memoize-ttl.
 check "debug-race-condition benchmark" test -f "$REPO_DIR/benchmarks/quality/debug-race-condition.json"
 check "multi-file-refactor benchmark" test -f "$REPO_DIR/benchmarks/quality/multi-file-refactor.json"
 check "event-emitter benchmark" test -f "$REPO_DIR/benchmarks/quality/event-emitter.json"
+
+# --- Untested script syntax ---
+
+check "component-bench.sh syntax" bash -n "$SCRIPT_DIR/component-bench.sh"
+check "component-report.sh syntax" bash -n "$SCRIPT_DIR/component-report.sh"
+check "export-promptfoo.sh syntax" bash -n "$SCRIPT_DIR/export-promptfoo.sh"
 
 # --- Documentation ---
 
