@@ -143,14 +143,14 @@ bash ~/.cursor/skills/save-token/scripts/compress.sh [options] [FILE]
 ```
 
 Content-type-aware compression. Auto-detects content type from file extension:
-- code → treesitter (strip comments/whitespace)
-- tool_output → pointer (compact summary)
-- text → truncate (first N + last N lines)
+- code, text, json, logs, diff, html → headroom (40-95% reduction)
+- search, tool_output → pointer (compact summary, ~460B)
+- history → truncate (first N + last N lines)
 - metadata → none (passthrough)
 
-Options: `--type=`, `--engine=`, `--list`, `--stats`, `--install=ENGINE`
+Options: `--type=`, `--engine=`, `--list`, `--stats`
 
-Available engines: none, truncate, pointer, treesitter, llmlingua, claw, headroom.
+Engines: none, truncate, pointer, headroom, treesitter, llmlingua (auto-installed).
 
 ## Command: verbosity
 
