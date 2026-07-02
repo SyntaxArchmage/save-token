@@ -126,6 +126,12 @@ case "${1:-}" in
     else
       echo "     Token log: empty (use: tokens.sh log INPUT OUTPUT)"
     fi
+    # Engine status
+    engines=""
+    python3 -c "import headroom" 2>/dev/null && engines="${engines} headroom"
+    python3 -c "from llmlingua import PromptCompressor" 2>/dev/null && engines="${engines} llmlingua"
+    engines="${engines} truncate pointer none"
+    echo "     Engines: ${engines# }"
     exit 0
     ;;
   uninstall|remove)
