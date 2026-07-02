@@ -232,6 +232,20 @@ Subcommands:
 - `init` — create template `.save-token.json`
 - `apply` — apply merged config (sets mode + density)
 
+## Command: progress
+
+```bash
+bash ~/.cursor/skills/save-token/scripts/progress.sh [show|record <score>|reset|apply]
+```
+
+Progressive activation: track session scores and auto-promote intensity
+(lite -> full -> ultra) after consistent good performance.
+
+- `show` — current progression status
+- `record <score>` — log a session review score (A+/A/A-/B+/B/B-/C+/C/D/F)
+- `reset` — clear progression history
+- `apply` — auto-apply recommended mode if promotion earned
+
 ## Command: lite / full / ultra
 
 Switch intensity and persist the choice:
