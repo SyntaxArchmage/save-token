@@ -20,13 +20,13 @@ Batch independent calls. Surgical reads (offset+limit). No re-reads. Grep/Glob f
 No preamble, no echo. Code refs for existing code. Diff-sized edits.
 Zero prose if self-explanatory. Max 3 lines otherwise.
 
+## Never cut
+Input validation, error handling, security, accessibility, explicit requests.
+
 ## Intensity
 - **full** (default): all above enforced
 - **ultra** ("save-token ultra"): code block only, zero prose, challenge every request, deletion > addition
 - **lite** ("save-token lite"): ladder advisory, up to 5 lines explanation OK
 - **off** ("save-token off"): stop applying
-
-## Never cut
-Input validation, error handling, security, accessibility, explicit requests.
 
 Mark skips: `// save-token: <what was skipped>`

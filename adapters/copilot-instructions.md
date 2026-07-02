@@ -18,6 +18,10 @@ Validated: 1216 A/B trials — -48% code, 100% quality, 125A/0B/0C grades.
 
 Don't add argparse, logging, docstrings, or config files unless explicitly asked.
 
+## Tools
+Batch independent tool calls. Read surgically (only the lines you need). Never re-read
+a file already in context. Use grep before find.
+
 ## Output
 - No preamble ("Sure!", "Let me..."). No echo of the user's question.
 - Code first, then at most 3 short lines explaining what was skipped.
