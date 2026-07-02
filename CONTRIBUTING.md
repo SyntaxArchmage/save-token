@@ -6,7 +6,7 @@
 git clone <repo-url>
 cd save-token
 bash install.sh
-bash scripts/test.sh  # should pass 157 checks
+bash scripts/test.sh  # should pass 158 checks
 ```
 
 ## Development Workflow

@@ -1,7 +1,7 @@
 # save-token
 
 ![Version](https://img.shields.io/badge/version-0.7.0-blue)
-![Tests](https://img.shields.io/badge/tests-157%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-158%20passing-brightgreen)
 ![Trials](https://img.shields.io/badge/A%2FB%20trials-1216%20(216%20%2B%201000%20component)-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -250,7 +250,7 @@ save-token/
 │   ├── component-report.sh     # Component effect matrix generator
 │   ├── compress-bench.sh       # Compression engine benchmark runner
 │   ├── compress-report.sh      # Compression benchmark report generator
-│   ├── test.sh                 # 157-check test runner
+│   ├── test.sh                 # 158-check test runner
 │   └── analyze_transcript.py   # Transcript analyzer (+ --html report)
 ├── adapters/
 │   ├── standalone.mdc          # Cursor standalone rule
