@@ -19,9 +19,18 @@
 ### Changed
 - `install.sh` version bump to 0.7.0
 - `install.sh` now auto-installs all available compression engines (headroom, llmlingua, treesitter) — not just headroom
+- `install.sh status` now shows available compression engines
+- `install_cursor()` prevents self-referencing symlink when repo is at skill path
+- `compress.sh --list` shows accurate engine status ([ready]/[fallback]/[blocked])
+- `compress.sh --install=claw` blocked with explanation (PyPI mismatch)
+- `compress.sh auto_engine()` defaults aligned with save-token.json (diff→headroom, search→pointer)
+- `compress.sh engine_available()` checks match `compress-bench.sh engine_installed()`
+- `save-token.json` search default changed to pointer (81% avg vs headroom 36%)
 - Compression benchmark report updated to 103 measurements across 5 engines (was 100/4)
 - README compression matrix now includes treesitter column
 - Engine table in README now shows availability status per engine
+- SKILL.md compress section shows headroom as default for most types
+- Test suite expanded from 147 to 151 checks
 
 ## [0.6.0] — 2026-07-01
 
