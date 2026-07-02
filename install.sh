@@ -130,7 +130,7 @@ case "${1:-}" in
     engines=""
     python3 -c "import headroom" 2>/dev/null && engines="${engines} headroom"
     python3 -c "from llmlingua import PromptCompressor" 2>/dev/null && engines="${engines} llmlingua"
-    engines="${engines} truncate pointer none"
+    engines="${engines} treesitter(regex) truncate pointer none"
     echo "     Engines: ${engines# }"
     exit 0
     ;;
@@ -168,8 +168,8 @@ case "${1:-}" in
     done
     if [ "$removed" = false ]; then
       echo "[--] Not installed (nothing to remove)."
-      echo "[TIP] Project-level files (AGENTS.md, CODEBUDDY.md, .github/copilot-instructions.md) must be removed manually."
     fi
+    echo "[TIP] Shared project files (AGENTS.md, CODEBUDDY.md, .github/copilot-instructions.md) must be removed manually."
     exit 0
     ;;
 esac
