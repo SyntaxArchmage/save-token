@@ -41,53 +41,59 @@
   //   "headroom"   — system-level proxy compression (best for: all input types)
   //                  A/B data: 60-95% reduction. Install: pip install headroom-ai[proxy]
   "compression": {
+    // Default: headroom for all compressible types. Pure software, no API keys,
+    // works offline. Auto-installed with `install.sh` (heavy mode).
+    // If headroom is not installed, compress.sh auto-falls back to zero-dep engines.
+    //
+    // Fallback chain: headroom → type-specific fallback → none
+
     // Source code (.py, .js, .ts, .go, .rs, .java, .rb, .c, .cpp, .sh, etc.)
-    // Options: "treesitter" | "claw" | "headroom" | "pointer" | "none"
-    //   treesitter — strips comments + whitespace (3-9%, regex fallback)
+    // Options: "headroom" | "treesitter" | "claw" | "pointer" | "none"
+    //   headroom   — CodeCompressor: AST-aware, preserves signatures (40-70%)
+    //   treesitter — strips comments + whitespace (3-9%, zero-dep fallback)
     //   claw       — AST-aware, reversible (15-82%), pip install claw-compactor
-    //   headroom   — AST-aware CodeCompressor (40-70%), pip install headroom-ai
-    "code": "treesitter",
+    "code": "headroom",
 
     // Text and documentation (.md, .txt, .rst, .tex, .adoc)
-    // Options: "truncate" | "llmlingua" | "headroom" | "pointer" | "none"
-    //   truncate  — first N + last N lines (56-95% on long docs)
+    // Options: "headroom" | "truncate" | "llmlingua" | "pointer" | "none"
+    //   headroom  — Kompress-v2-base model trained on agentic traces (60-80%)
+    //   truncate  — first N + last N lines (56-95%, zero-dep fallback)
     //   llmlingua — perplexity-based pruning (60-80%), pip install llmlingua
-    //   headroom  — Kompress-v2-base model (60-80%), pip install headroom-ai
-    "text": "truncate",
+    "text": "headroom",
 
     // JSON data (.json, .jsonl, .ndjson — API responses, tool results)
-    // Options: "truncate" | "headroom" | "none"
-    //   truncate — first/last lines (32-80%)
+    // Options: "headroom" | "truncate" | "none"
     //   headroom — SmartCrusher: statistical analysis, keeps errors/anomalies (70-90%)
-    "json": "truncate",
+    //   truncate — first/last lines (32-80%, zero-dep fallback)
+    "json": "headroom",
 
     // Build/test logs (.log, CI output, pytest/npm/make output)
-    // Options: "truncate" | "headroom" | "pointer" | "none"
-    //   truncate — first/last lines (32-80%)
+    // Options: "headroom" | "truncate" | "pointer" | "none"
     //   headroom — LogCompressor: keeps failures/errors/warnings, drops passing noise (85-95%)
-    "logs": "truncate",
+    //   truncate — first/last lines (32-80%, zero-dep fallback)
+    "logs": "headroom",
 
     // Git diffs (.diff, .patch, unified diff format)
-    // Options: "truncate" | "headroom" | "none"
-    //   truncate — first/last lines
+    // Options: "headroom" | "truncate" | "none"
     //   headroom — DiffCompressor: preserves change hunks, drops unchanged context (60-80%)
-    "diff": "truncate",
+    //   truncate — first/last lines (zero-dep fallback)
+    "diff": "headroom",
 
     // HTML content (.html, .htm, scraped web pages)
-    // Options: "truncate" | "headroom" | "none"
-    //   truncate — first/last lines
+    // Options: "headroom" | "truncate" | "none"
     //   headroom — HTMLExtractor: strips markup, extracts readable content (50-70%)
-    "html": "truncate",
+    //   truncate — first/last lines (zero-dep fallback)
+    "html": "headroom",
 
     // Search results (grep/ripgrep output, file:line:content format)
-    // Options: "pointer" | "headroom" | "truncate" | "none"
-    //   pointer  — summary + preview lines (~460B constant output)
+    // Options: "headroom" | "pointer" | "truncate" | "none"
     //   headroom — SearchCompressor: ranks by query relevance, keeps top matches (80-95%)
-    "search": "pointer",
+    //   pointer  — summary + preview lines (~460B constant, zero-dep fallback)
+    "search": "headroom",
 
     // Generic tool output (stdin, unrecognized format, command results)
-    // Options: "pointer" | "truncate" | "none"
-    //   pointer recommended: constant ~460B output regardless of input size
+    // Options: "pointer" | "headroom" | "truncate" | "none"
+    //   pointer recommended for generic: constant ~460B regardless of input size
     "tool_output": "pointer",
 
     // Conversation history (past turns in long sessions)

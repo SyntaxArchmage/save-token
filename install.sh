@@ -504,6 +504,19 @@ echo "     Intensity: $INTENSITY"
 echo "     Density: $DENSITY ($(wc -w < "$(rules_file)") words)"
 echo "     Config: $CONFIG_DIR/"
 if [ "$INSTALL_MODE" = "heavy" ]; then
+  # Auto-install headroom for compression (default engine, pure software, no API keys)
+  if python3 -c "import headroom" 2>/dev/null; then
+    echo "     Compression: headroom (already installed)"
+  else
+    echo
+    echo "Installing headroom (default compression engine, 40-95% token reduction)..."
+    if pip install headroom-ai 2>/dev/null; then
+      echo "[OK] headroom installed — compression active for code, text, JSON, logs, diffs, HTML, search"
+    else
+      echo "[SKIP] headroom install failed (optional). Zero-dep engines (truncate, pointer) will be used."
+      echo "       Retry later: pip install headroom-ai"
+    fi
+  fi
   echo
   echo "Key commands:"
   echo "  /save-token              Activate rules"

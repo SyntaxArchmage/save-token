@@ -286,4 +286,39 @@ fi
 [ -z "$TYPE" ] && TYPE=$(detect_type "$INPUT_FILE")
 [ -z "$ENGINE" ] && ENGINE=$(auto_engine "$TYPE")
 
+# Fallback: if configured engine isn't installed, use zero-dep default
+fallback_engine() {
+  local content_type="$1"
+  case "$content_type" in
+    code)        echo "truncate" ;;
+    text)        echo "truncate" ;;
+    json)        echo "truncate" ;;
+    logs)        echo "truncate" ;;
+    diff)        echo "truncate" ;;
+    html)        echo "truncate" ;;
+    search)      echo "pointer" ;;
+    tool_output) echo "pointer" ;;
+    history)     echo "truncate" ;;
+    *)           echo "none" ;;
+  esac
+}
+
+engine_available() {
+  local engine="$1"
+  case "$engine" in
+    headroom)   python3 -c "import headroom" 2>/dev/null ;;
+    treesitter) command -v tree-sitter &>/dev/null ;;
+    llmlingua)  python3 -c "import llmlingua" 2>/dev/null ;;
+    claw)       python3 -c "import claw_compactor" 2>/dev/null ;;
+    truncate|pointer|none) return 0 ;;
+    *)          return 1 ;;
+  esac
+}
+
+if ! engine_available "$ENGINE"; then
+  FALLBACK=$(fallback_engine "$TYPE")
+  echo "[compress] $ENGINE not installed, falling back to $FALLBACK. Install: compress.sh --install=$ENGINE" >&2
+  ENGINE="$FALLBACK"
+fi
+
 run_engine "$ENGINE" "$INPUT_FILE" "$SHOW_STATS"

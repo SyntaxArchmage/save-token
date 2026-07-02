@@ -151,16 +151,19 @@ save-token includes a pluggable compression pipeline (`/save-token compress`) th
 
 | Content Type | Default Engine | Headroom Equivalent | What It Does |
 |-------------|---------------|---------------------|--------------|
-| Code (.py, .js, .go, ...) | treesitter | CodeCompressor | Strip comments + whitespace (AST-aware) |
-| Text (.md, .txt, .rst) | truncate | Kompress-v2-base | First/last N lines or perplexity pruning |
-| JSON (.json, .jsonl) | truncate | SmartCrusher | Keep errors/anomalies, drop boilerplate |
-| Logs (.log, CI output) | truncate | LogCompressor | Keep failures/errors, drop passing noise |
-| Diffs (.diff, .patch) | truncate | DiffCompressor | Preserve change hunks, drop unchanged |
-| HTML (.html, .htm) | truncate | HTMLExtractor | Strip markup, extract readable content |
-| Search (grep output) | pointer | SearchCompressor | Rank by relevance, keep top matches |
-| Tool output (stdin) | pointer | — | Compact summary with line pointers |
+| Code (.py, .js, .go, ...) | **headroom** | CodeCompressor | AST-aware, preserves signatures (40-70%) |
+| Text (.md, .txt, .rst) | **headroom** | Kompress-v2-base | Trained on agentic traces (60-80%) |
+| JSON (.json, .jsonl) | **headroom** | SmartCrusher | Statistical analysis, keeps errors/anomalies (70-90%) |
+| Logs (.log, CI output) | **headroom** | LogCompressor | Keeps failures/errors, drops passing noise (85-95%) |
+| Diffs (.diff, .patch) | **headroom** | DiffCompressor | Preserves change hunks, drops unchanged (60-80%) |
+| HTML (.html, .htm) | **headroom** | HTMLExtractor | Strips markup, extracts readable content (50-70%) |
+| Search (grep output) | **headroom** | SearchCompressor | Ranks by relevance, keeps top matches (80-95%) |
+| Tool output (stdin) | pointer | — | Compact summary with line pointers (~460B) |
 | History (conversation) | truncate | — | First/last N lines |
 | Metadata (.yaml, .toml) | none | — | Passthrough (structure required) |
+
+> Headroom is auto-installed with `install.sh` (heavy mode). Pure software — no API keys, works offline.
+> If headroom is not installed, compress.sh auto-falls back to zero-dep engines (truncate, pointer).
 | Text | truncate | First N + last N lines |
 | Metadata | none | Passthrough |
 
@@ -372,12 +375,12 @@ Pluggable engines reduce tokens before they reach the model. The pipeline auto-d
 {
   "compression": {
     "code": "treesitter",
-    "text": "truncate",
-    "json": "truncate",
-    "logs": "truncate",
-    "diff": "truncate",
-    "html": "truncate",
-    "search": "pointer",
+    "text": "headroom",
+    "json": "headroom",
+    "logs": "headroom",
+    "diff": "headroom",
+    "html": "headroom",
+    "search": "headroom",
     "tool_output": "pointer",
     "history": "truncate",
     "metadata": "none"
@@ -385,7 +388,7 @@ Pluggable engines reduce tokens before they reach the model. The pipeline auto-d
 }
 ```
 
-When Headroom is installed, auto-detection prefers it for code, text, json, logs, and html. Each type is independently configurable — use Headroom for logs but treesitter for code, or llmlingua for text but pointer for search.
+Headroom is the default for all compressible types — pure software, no API keys, 40-95% reduction. Auto-installed with `install.sh`. Each type is independently configurable — swap any to a different engine (e.g., `treesitter` for code, `llmlingua` for text). If headroom isn't installed, auto-falls back to zero-dep engines.
 
 **7 engines available** — 3 zero-dep (built-in), 4 installable on demand:
 
@@ -403,14 +406,14 @@ When Headroom is installed, auto-detection prefers it for code, text, json, logs
 
 | Content Type | Config key | Default | Alternatives | Measured reduction |
 |-------------|-----------|---------|--------------|-------------------|
-| **Code** (.py, .js, .ts, .go, .rs, .java, ...) | `compression.code` | treesitter | claw, headroom, pointer | treesitter: 3–9%, claw: 15–82%, headroom: 40–70% |
-| **Text** (.md, .txt, .rst, .tex) | `compression.text` | truncate | llmlingua, headroom, pointer | truncate: 56–95%, llmlingua: 60–80%, headroom: 60–80% |
-| **JSON** (.json, .jsonl, API responses) | `compression.json` | truncate | headroom | truncate: 32–80%, headroom/SmartCrusher: 70–90% |
-| **Logs** (.log, CI/build/test output) | `compression.logs` | truncate | headroom, pointer | truncate: 32–80%, headroom/LogCompressor: 85–95% |
-| **Diffs** (.diff, .patch, git diff) | `compression.diff` | truncate | headroom | truncate: 32–80%, headroom/DiffCompressor: 60–80% |
-| **HTML** (.html, .htm, web scrapes) | `compression.html` | truncate | headroom | truncate: 32–80%, headroom/HTMLExtractor: 50–70% |
-| **Search** (grep/rg output) | `compression.search` | pointer | headroom | pointer: 69–98%, headroom/SearchCompressor: 80–95% |
-| **Tool output** (stdin, misc) | `compression.tool_output` | pointer | truncate, none | pointer: 69–98% (constant ~460B), truncate: 32–80% |
+| **Code** (.py, .js, .ts, .go, .rs, .java, ...) | `compression.code` | **headroom** | treesitter, claw, pointer | headroom: 40–70%, treesitter: 3–9%, claw: 15–82% |
+| **Text** (.md, .txt, .rst, .tex) | `compression.text` | **headroom** | truncate, llmlingua, pointer | headroom: 60–80%, truncate: 56–95%, llmlingua: 60–80% |
+| **JSON** (.json, .jsonl, API responses) | `compression.json` | **headroom** | truncate | headroom/SmartCrusher: 70–90%, truncate: 32–80% |
+| **Logs** (.log, CI/build/test output) | `compression.logs` | **headroom** | truncate, pointer | headroom/LogCompressor: 85–95%, truncate: 32–80% |
+| **Diffs** (.diff, .patch, git diff) | `compression.diff` | **headroom** | truncate | headroom/DiffCompressor: 60–80%, truncate: 32–80% |
+| **HTML** (.html, .htm, web scrapes) | `compression.html` | **headroom** | truncate | headroom/HTMLExtractor: 50–70%, truncate: 32–80% |
+| **Search** (grep/rg output) | `compression.search` | **headroom** | pointer | headroom/SearchCompressor: 80–95%, pointer: 69–98% |
+| **Tool output** (stdin, misc) | `compression.tool_output` | pointer | headroom, truncate | pointer: 69–98% (constant ~460B), truncate: 32–80% |
 | **History** (conversation) | `compression.history` | truncate | none | truncate: 32–80% |
 | **Metadata** (.yaml, .toml, .xml, .csv, .ini) | `compression.metadata` | none | truncate | 0% (full fidelity recommended) |
 
@@ -423,7 +426,7 @@ When Headroom is installed, auto-detection prefers it for code, text, json, logs
 | 100 lines | 9% | 20% |
 | 500 lines | 2% | 4% |
 
-**Takeaway:** Compression is additive to behavior rules. Start with defaults (auto-detect across 10 content types). For maximum savings, install `headroom` — it provides specialized compressors (SmartCrusher, LogCompressor, CodeCompressor, etc.) that save-token auto-selects per content type. Or mix engines: `headroom` for JSON/logs, `treesitter` for code, `llmlingua` for text. Each type is independently configurable.
+**Takeaway:** Compression is additive to behavior rules. Headroom is the default engine for 7 of 10 content types — auto-installed with `install.sh`, pure software, no API keys. Each type is independently configurable: swap any to `treesitter`, `claw`, `llmlingua`, `truncate`, or `pointer`. If headroom isn't available, compress.sh gracefully falls back to zero-dep engines.
 
 ### Layer 4: Effort Routing (delegate cheap tasks to cheap models)
 
