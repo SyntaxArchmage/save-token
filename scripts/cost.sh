@@ -21,7 +21,7 @@ esac
 
 MODE=$(bash "$SCRIPT_DIR/mode.sh" get)
 
-# Savings percentages from 216-trial benchmark
+# Savings percentages from 1216-trial A/B benchmark (216 efficiency + 1000 component)
 case "$MODE" in
   ultra) CODE_PCT=51; EXPL_PCT=93; TOOL_PCT=39 ;;
   full)  CODE_PCT=24; EXPL_PCT=75; TOOL_PCT=34 ;;
@@ -36,7 +36,7 @@ echo
 echo "Model: $NAME"
 echo "Mode:  $MODE"
 echo
-echo "Expected savings per request (from 216-trial benchmark):"
+echo "Expected savings per request (from 1216-trial A/B benchmark):"
 echo "  Code output:       -${CODE_PCT}%"
 echo "  Explanation output: -${EXPL_PCT}%"
 echo "  Tool calls:        -${TOOL_PCT}%"
@@ -92,7 +92,7 @@ if count > 0:
     print(f'  Projected monthly:        \${monthly_saved:.2f} savings (at 100 req/day)')
 " 2>/dev/null
 else
-  echo "Data source: estimation (216-trial A/B benchmark)"
+  echo "Data source: estimation (1216-trial A/B benchmark)"
   echo
   AVG_OUTPUT=2000
   SAVED_OUTPUT=$((AVG_OUTPUT * EXPL_PCT / 100))
