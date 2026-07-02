@@ -307,9 +307,9 @@ engine_available() {
   local engine="$1"
   case "$engine" in
     headroom)   python3 -c "import headroom" 2>/dev/null ;;
-    treesitter) command -v tree-sitter &>/dev/null ;;
-    llmlingua)  python3 -c "import llmlingua" 2>/dev/null ;;
-    claw)       python3 -c "import claw_compactor" 2>/dev/null ;;
+    treesitter) return 0 ;;  # regex fallback always works
+    llmlingua)  python3 -c "from llmlingua import PromptCompressor" 2>/dev/null ;;
+    claw)       python3 -c "from claw_compactor import compress" 2>/dev/null ;;
     truncate|pointer|none) return 0 ;;
     *)          return 1 ;;
   esac
