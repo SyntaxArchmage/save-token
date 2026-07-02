@@ -172,8 +172,9 @@ install_engine() {
       pip install llmlingua
       ;;
     claw)
-      echo "Installing claw-compactor..."
-      pip install claw-compactor
+      echo "[FAIL] claw-compactor on PyPI is an unrelated package (EngramEngine)." >&2
+      echo "       The real Claw Compactor AST tool is not available on PyPI." >&2
+      exit 1
       ;;
     headroom)
       echo "Installing headroom-ai..."
