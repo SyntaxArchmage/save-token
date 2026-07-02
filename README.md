@@ -356,13 +356,13 @@ Pluggable engines reduce tokens before they reach the model. The pipeline auto-d
 ```json
 {
   "compression": {
-    "code": "treesitter",
+    "code": "headroom",
     "text": "headroom",
     "json": "headroom",
     "logs": "headroom",
     "diff": "headroom",
     "html": "headroom",
-    "search": "headroom",
+    "search": "pointer",
     "tool_output": "pointer",
     "history": "truncate",
     "metadata": "none"

@@ -87,10 +87,10 @@
     "html": "headroom",
 
     // Search results (grep/ripgrep output, file:line:content format)
-    // Options: "headroom" | "pointer" | "truncate" | "none"
-    //   headroom — SearchCompressor: ranks by query relevance, keeps top matches (80-95%)
-    //   pointer  — summary + preview lines (~460B constant, zero-dep fallback)
-    "search": "headroom",
+    // Options: "pointer" | "headroom" | "truncate" | "none"
+    //   pointer  — summary + preview lines (~460B constant, 81% avg reduction)
+    //   headroom — SearchCompressor: ranks by query relevance (36% avg — weaker on search)
+    "search": "pointer",
 
     // Generic tool output (stdin, unrecognized format, command results)
     // Options: "pointer" | "headroom" | "truncate" | "none"
