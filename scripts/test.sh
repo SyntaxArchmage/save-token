@@ -115,6 +115,8 @@ check "compress none passthrough" bash -c 'echo "hello" | bash "'"$SCRIPT_DIR"'/
 check "compress truncate works" bash -c 'seq 1 100 | bash "'"$SCRIPT_DIR"'/compress.sh" --engine=truncate | grep -q "omitted"'
 check "compress pointer works" bash -c 'seq 1 50 | bash "'"$SCRIPT_DIR"'/compress.sh" --engine=pointer | grep -q "Pointer"'
 check "compress type detection" bash -c 'bash "'"$SCRIPT_DIR"'/compress.sh" --type=code --engine=none < "'"$SCRIPT_DIR"'/compress.sh" | wc -l | grep -q "[0-9]"'
+check "compress --list shows engines" bash -c 'bash "'"$SCRIPT_DIR"'/compress.sh" --list | grep -q "headroom"'
+check "compress --install=claw blocked" bash -c '! bash "'"$SCRIPT_DIR"'/compress.sh" --install=claw 2>/dev/null'
 
 # --- Density variants (P4) ---
 

@@ -1,6 +1,6 @@
 # save-token
 
-![Tests](https://img.shields.io/badge/tests-149%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-151%20passing-brightgreen)
 ![Trials](https://img.shields.io/badge/A%2FB%20trials-1216%20(216%20%2B%201000%20component)-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
