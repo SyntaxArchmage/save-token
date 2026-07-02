@@ -48,32 +48,27 @@ That file contains the complete behavior ruleset. Apply it immediately.
 
 ```bash
 # Cursor (default):
-bash ~/.cursor/skills/save-token/install.sh heavy --mode=full --hook
+bash ~/.cursor/skills/save-token/install.sh --hook
 
 # Claude Code:
-bash ~/.cursor/skills/save-token/install.sh heavy --platform=claude-code
+bash ~/.cursor/skills/save-token/install.sh --platform=claude-code
 
 # CodeBuddy:
-bash ~/.cursor/skills/save-token/install.sh heavy --platform=codebuddy
+bash ~/.cursor/skills/save-token/install.sh --platform=codebuddy
 
 # Generic CLI:
-bash ~/.cursor/skills/save-token/install.sh light --platform=generic
+bash ~/.cursor/skills/save-token/install.sh --platform=generic
 
 # Minimal token footprint (kernel rules, 177 words):
-bash ~/.cursor/skills/save-token/install.sh light --density=kernel
+bash ~/.cursor/skills/save-token/install.sh --density=kernel
 ```
 
 If save-token repo is not yet cloned:
 ```bash
-git clone https://github.com/YOUR_USER/save-token.git /tmp/save-token && bash /tmp/save-token/install.sh heavy --hook
+git clone https://github.com/YOUR_USER/save-token.git /tmp/save-token && bash /tmp/save-token/install.sh --hook
 ```
 
-After installation, optionally configure Headroom proxy for input compression:
-```bash
-bash ~/.cursor/skills/save-token/scripts/setup.sh
-```
-
-Headroom is optional — rules work without it.
+The installer auto-installs all available compression engines (headroom, llmlingua, treesitter fallback).
 
 ## Command: bench
 

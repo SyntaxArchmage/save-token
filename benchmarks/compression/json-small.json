@@ -1,0 +1,217 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "user_0001",
+      "email": "user1@company.example.com",
+      "full_name": "User Bob Smith",
+      "status": "suspended",
+      "department": "product",
+      "role": "editor",
+      "created_at": "2026-02-24T03:43:00Z",
+      "last_login": "2026-07-01T18:27:00Z",
+      "metadata": {
+        "login_count": 17,
+        "api_calls_today": 3,
+        "storage_used_mb": 468.5,
+        "preferences": {
+          "theme": "light",
+          "language": "de",
+          "notifications": true
+        }
+      }
+    },
+    {
+      "id": 2,
+      "username": "user_0002",
+      "email": "user2@company.example.com",
+      "full_name": "User Diana Taylor",
+      "status": "pending_verification",
+      "department": "product",
+      "role": "manager",
+      "created_at": "2026-05-09T00:48:00Z",
+      "last_login": "2026-07-01T22:27:00Z",
+      "metadata": {
+        "login_count": 175,
+        "api_calls_today": 35,
+        "storage_used_mb": 777.4,
+        "preferences": {
+          "theme": "dark",
+          "language": "en",
+          "notifications": true
+        }
+      }
+    },
+    {
+      "id": 3,
+      "username": "user_0003",
+      "email": "user3@company.example.com",
+      "full_name": "User Grace Smith",
+      "status": "suspended",
+      "department": "design",
+      "role": "contributor",
+      "created_at": "2026-03-26T01:46:00Z",
+      "last_login": "2026-07-02T17:07:00Z",
+      "metadata": {
+        "login_count": 499,
+        "api_calls_today": 48,
+        "storage_used_mb": 394.0,
+        "preferences": {
+          "theme": "dark",
+          "language": "fr",
+          "notifications": false
+        }
+      }
+    },
+    {
+      "id": 4,
+      "username": "user_0004",
+      "email": "user4@company.example.com",
+      "full_name": "User Diana Taylor",
+      "status": "active",
+      "department": "engineering",
+      "role": "editor",
+      "created_at": "2026-03-03T07:55:00Z",
+      "last_login": "2026-07-01T12:17:00Z",
+      "metadata": {
+        "login_count": 233,
+        "api_calls_today": 81,
+        "storage_used_mb": 4170.6,
+        "preferences": {
+          "theme": "light",
+          "language": "ja",
+          "notifications": false
+        }
+      }
+    },
+    {
+      "id": 5,
+      "username": "user_0005",
+      "email": "user5@company.example.com",
+      "full_name": "User Diana Taylor",
+      "status": "suspended",
+      "department": "support",
+      "role": "admin",
+      "created_at": "2026-05-21T05:34:00Z",
+      "last_login": "2026-07-01T05:29:00Z",
+      "metadata": {
+        "login_count": 195,
+        "api_calls_today": 34,
+        "storage_used_mb": 4947.6,
+        "preferences": {
+          "theme": "auto",
+          "language": "fr",
+          "notifications": true
+        }
+      }
+    },
+    {
+      "id": 6,
+      "username": "user_0006",
+      "email": "user6@company.example.com",
+      "full_name": "User Frank Smith",
+      "status": "inactive",
+      "department": "engineering",
+      "role": "viewer",
+      "created_at": "2026-04-09T02:13:00Z",
+      "last_login": "2026-07-02T06:41:00Z",
+      "metadata": {
+        "login_count": 256,
+        "api_calls_today": 50,
+        "storage_used_mb": 4423.4,
+        "preferences": {
+          "theme": "auto",
+          "language": "es",
+          "notifications": true
+        }
+      }
+    },
+    {
+      "id": 7,
+      "username": "user_0007",
+      "email": "user7@company.example.com",
+      "full_name": "User Eve Jones",
+      "status": "inactive",
+      "department": "support",
+      "role": "contributor",
+      "created_at": "2026-05-09T23:37:00Z",
+      "last_login": "2026-07-02T18:25:00Z",
+      "metadata": {
+        "login_count": 186,
+        "api_calls_today": 28,
+        "storage_used_mb": 4986.6,
+        "preferences": {
+          "theme": "light",
+          "language": "de",
+          "notifications": false
+        }
+      }
+    },
+    {
+      "id": 8,
+      "username": "user_0008",
+      "email": "user8@company.example.com",
+      "full_name": "User Bob Smith",
+      "status": "active",
+      "department": "product",
+      "role": "editor",
+      "created_at": "2026-06-14T19:04:00Z",
+      "last_login": "2026-07-02T12:38:00Z",
+      "metadata": {
+        "login_count": 240,
+        "api_calls_today": 67,
+        "storage_used_mb": 1257.1,
+        "preferences": {
+          "theme": "auto",
+          "language": "en",
+          "notifications": true
+        }
+      }
+    },
+    {
+      "id": 9,
+      "username": "user_0009",
+      "email": "user9@company.example.com",
+      "full_name": "User Eve Taylor",
+      "status": "suspended",
+      "department": "engineering",
+      "role": "viewer",
+      "created_at": "2026-04-06T14:00:00Z",
+      "last_login": "2026-07-02T16:48:00Z",
+      "metadata": {
+        "login_count": 92,
+        "api_calls_today": 64,
+        "storage_used_mb": 4563.1,
+        "preferences": {
+          "theme": "auto",
+          "language": "ja",
+          "notifications": true
+        }
+      }
+    },
+    {
+      "id": 10,
+      "username": "user_0010",
+      "email": "user10@company.example.com",
+      "full_name": "User Charlie Brown",
+      "status": "inactive",
+      "department": "sales",
+      "role": "contributor",
+      "created_at": "2026-01-20T10:31:00Z",
+      "last_login": "2026-07-01T03:59:00Z",
+      "metadata": {
+        "login_count": 186,
+        "api_calls_today": 39,
+        "storage_used_mb": 1197.3,
+        "preferences": {
+          "theme": "light",
+          "language": "de",
+          "notifications": true
+        }
+      }
+    }
+  ],
+  "total": 10,
+  "page": 1,
+  "per_page": 10
+}

@@ -1,0 +1,80 @@
+# Deployment configuration
+# Environment: production
+# Last updated: 2026-07-02
+
+version: "3.8"
+
+services:
+  worker-0:
+    image: registry.example.com/worker:v5.8.31
+    replicas: 1
+    resources:
+      cpu: "250m"
+      memory: "512Mi"
+    env:
+      DATABASE_URL: "postgresql://db:5432/worker"
+      REDIS_URL: "redis://cache:6379/0"
+      LOG_LEVEL: "info"
+      ENABLE_METRICS: "true"
+    ports:
+      - 8000:8000
+    healthcheck:
+      path: /health
+      interval: 30s
+      timeout: 5s
+    depends_on:
+      - database
+      - redis  notification-service-1:
+    image: registry.example.com/notification-service:v4.15.30
+    replicas: 2
+    resources:
+      cpu: "500m"
+      memory: "512Mi"
+    env:
+      DATABASE_URL: "postgresql://db:5432/notification_service"
+      REDIS_URL: "redis://cache:6379/1"
+      LOG_LEVEL: "warn"
+      ENABLE_METRICS: "false"
+    ports:
+      - 8001:8001
+    healthcheck:
+      path: /health
+      interval: 10s
+      timeout: 5s
+    depends_on:
+      - database
+      - redis  scheduler-2:
+    image: registry.example.com/scheduler:v2.18.51
+    replicas: 3
+    resources:
+      cpu: "1000m"
+      memory: "256Mi"
+    env:
+      DATABASE_URL: "postgresql://db:5432/scheduler"
+      REDIS_URL: "redis://cache:6379/2"
+      LOG_LEVEL: "info"
+      ENABLE_METRICS: "true"
+    ports:
+      - 8002:8002
+    healthcheck:
+      path: /health
+      interval: 15s
+      timeout: 5s
+    depends_on:
+      - database
+      - redis
+
+  database:
+    image: postgres:16-alpine
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    env:
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+
+volumes:
+  pgdata:
+    driver: local

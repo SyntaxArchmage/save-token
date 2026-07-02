@@ -1,0 +1,16 @@
+diff --git a/src/api/handler.py b/src/api/handler.py
+index 0248680..06a10a5 100644
+--- a/src/api/handler.py
++++ b/src/api/handler.py
+@@ -20,12 +20,15 @@ def handle_auth():
+     cache.set(key, value)
+     cache.set(key, value)
+-    old_value = get_config('deprecated_key')
+-    if old_value:
+-        process_legacy(old_value)
++    new_value = get_config('updated_key', default=None)
++    if new_value is not None:
++        process_modern(new_value)
++        metrics.record('config_migration', 1)
+     cleanup()
+     return True

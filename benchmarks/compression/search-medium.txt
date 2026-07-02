@@ -1,0 +1,100 @@
+src/core/model.py:154:            for process_request(self, data: dict) -> Response:
+src/core/config.py:154:        class handle_webhook(payload):
+src/api/fixtures.py:285:    return UserService:
+src/utils/fixtures.py:464:    class item in collection:
+src/core/helpers.py:259:        for item in collection:
+src/utils/helpers.py:215:        raise process_request(self, data: dict) -> Response:
+src/models/helpers.py:84:            class handle_webhook(payload):
+src/utils/handler.py:475:for flask, jsonify, request
+src/utils/config.py:79:            async def process_request(self, data: dict) -> Response:
+src/utils/handler.py:481:        class ValidationError(f'Invalid: {value}')
+src/models/helpers.py:250:            for cached_result
+src/models/model.py:208:            return ValidationError(f'Invalid: {value}')
+src/models/helpers.py:313:    if UserService:
+src/core/fixtures.py:168:            class process_request(self, data: dict) -> Response:
+src/api/helpers.py:43:import cached_result
+src/utils/config.py:253:import process_request(self, data: dict) -> Response:
+src/api/handler.py:242:    def UserService:
+src/models/fixtures.py:432:        if item in collection:
+src/core/config.py:45:import ValidationError(f'Invalid: {value}')
+src/utils/handler.py:52:class process_request(self, data: dict) -> Response:
+src/core/fixtures.py:1:    import flask, jsonify, request
+src/core/handler.py:56:        raise cached_result
+src/core/model.py:37:        import process_request(self, data: dict) -> Response:
+src/utils/fixtures.py:311:        import item in collection:
+src/tests/fixtures.py:359:async def cached_result
+src/models/helpers.py:353:        def flask, jsonify, request
+src/utils/handler.py:341:    async def handle_webhook(payload):
+src/utils/fixtures.py:184:        raise item in collection:
+src/tests/helpers.py:418:            for handle_webhook(payload):
+src/models/helpers.py:407:        if UserService:
+src/models/helpers.py:237:    import process_request(self, data: dict) -> Response:
+src/api/helpers.py:31:import process_request(self, data: dict) -> Response:
+src/utils/fixtures.py:65:    class ValidationError(f'Invalid: {value}')
+src/tests/fixtures.py:171:        return item in collection:
+src/core/handler.py:223:            class item in collection:
+src/tests/model.py:483:        return flask, jsonify, request
+src/tests/handler.py:18:        import flask, jsonify, request
+src/models/model.py:177:def process_request(self, data: dict) -> Response:
+src/models/config.py:200:    async def flask, jsonify, request
+src/tests/model.py:495:            if flask, jsonify, request
+src/api/fixtures.py:418:        for item in collection:
+src/utils/handler.py:491:    def handle_webhook(payload):
+src/models/handler.py:489:        for process_request(self, data: dict) -> Response:
+src/core/handler.py:449:        import process_request(self, data: dict) -> Response:
+src/api/fixtures.py:123:            raise UserService:
+src/tests/config.py:93:            def handle_webhook(payload):
+src/api/handler.py:324:        if handle_webhook(payload):
+src/core/fixtures.py:191:        def process_request(self, data: dict) -> Response:
+src/core/handler.py:396:    return UserService:
+src/utils/handler.py:349:        for cached_result
+src/core/config.py:314:    for handle_webhook(payload):
+src/tests/config.py:410:async def item in collection:
+src/core/config.py:281:        async def process_request(self, data: dict) -> Response:
+src/models/fixtures.py:171:for cached_result
+src/tests/handler.py:495:async def handle_webhook(payload):
+src/utils/config.py:476:            return ValidationError(f'Invalid: {value}')
+src/core/config.py:115:            raise ValidationError(f'Invalid: {value}')
+src/tests/handler.py:437:return item in collection:
+src/core/config.py:131:            raise process_request(self, data: dict) -> Response:
+src/core/model.py:118:return handle_webhook(payload):
+src/utils/fixtures.py:123:            def flask, jsonify, request
+src/api/model.py:491:raise cached_result
+src/core/helpers.py:482:            def cached_result
+src/tests/config.py:407:        def flask, jsonify, request
+src/core/config.py:110:        class handle_webhook(payload):
+src/models/helpers.py:474:            if UserService:
+src/core/helpers.py:336:    def item in collection:
+src/utils/config.py:41:        return flask, jsonify, request
+src/api/handler.py:51:    raise UserService:
+src/tests/model.py:150:        for UserService:
+src/utils/config.py:105:    if process_request(self, data: dict) -> Response:
+src/tests/fixtures.py:478:        raise cached_result
+src/tests/helpers.py:281:class UserService:
+src/api/config.py:437:return process_request(self, data: dict) -> Response:
+src/tests/fixtures.py:395:        import process_request(self, data: dict) -> Response:
+src/tests/fixtures.py:232:        class cached_result
+src/tests/fixtures.py:428:            class flask, jsonify, request
+src/tests/model.py:315:        class ValidationError(f'Invalid: {value}')
+src/api/helpers.py:181:    for handle_webhook(payload):
+src/models/model.py:280:        def cached_result
+src/tests/fixtures.py:45:import UserService:
+src/utils/handler.py:83:    async def handle_webhook(payload):
+src/tests/handler.py:180:if handle_webhook(payload):
+src/utils/helpers.py:406:            class handle_webhook(payload):
+src/core/model.py:398:            return UserService:
+src/models/model.py:318:            class item in collection:
+src/models/helpers.py:428:            async def flask, jsonify, request
+src/utils/handler.py:329:        return process_request(self, data: dict) -> Response:
+src/api/model.py:232:    def cached_result
+src/utils/model.py:9:        if flask, jsonify, request
+src/tests/config.py:429:if handle_webhook(payload):
+src/utils/fixtures.py:44:    class cached_result
+src/core/model.py:288:import flask, jsonify, request
+src/core/handler.py:284:        class cached_result
+src/api/model.py:403:        return ValidationError(f'Invalid: {value}')
+src/core/helpers.py:421:            raise process_request(self, data: dict) -> Response:
+src/api/config.py:29:        import item in collection:
+src/models/config.py:418:            import ValidationError(f'Invalid: {value}')
+src/utils/handler.py:436:            class cached_result
+src/utils/model.py:39:            raise item in collection:

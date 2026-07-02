@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Project</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <script defer src="/assets/js/app.js"></script>
+</head>
+<body>
+    <header class="site-header">
+      <nav class="main-nav" role="navigation" aria-label="Main">
+        <div class="nav-brand"><a href="/">ProjectName</a></div>
+        <ul class="nav-links">
+          <li><a href="/docs">Docs</a></li>
+          <li><a href="/api">API</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="https://github.com/org/project" target="_blank">GitHub</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main class="documentation">
+      <aside class="sidebar">
+        <nav class="toc" aria-label="Table of contents">
+          <ol>
+          <li><a href="#section-0">Section 1</a></li>
+          <li><a href="#section-1">Section 2</a></li>
+          <li><a href="#section-2">Section 3</a></li>
+          </ol>
+        </nav>
+      </aside>
+      <article class="doc-content">
+      <section id="section-0" class="content-section">
+        <h2>FAQ</h2>
+        <p>This section covers the basic patterns of the platform. It integrates with Redis for caching.</p>
+        <p>Understand how to use the core patterns of the application. </p>
+        <p>Here we describe the essential workflows of the platform. </p>
+        <p>Learn about the core patterns of the application. It integrates with AWS S3 for orchestration.</p>
+        <pre><code class="language-python">
+def configure():
+    config = load_config("settings.yaml")
+    db = Database(config["database_url"])
+    return App(config=config, db=db)
+        </code></pre>
+      </section>
+      <section id="section-1" class="content-section">
+        <h2>Troubleshooting</h2>
+        <p>This section covers the core patterns of the application. </p>
+        <p>Learn about the essential features of the application. </p>
+        <pre><code class="language-python">
+def initialize():
+    config = load_config("settings.yaml")
+    db = Database(config["database_url"])
+    return App(config=config, db=db)
+        </code></pre>
+      </section>
+      <section id="section-2" class="content-section">
+        <h2>Security</h2>
+        <p>Learn about the basic features of the system. </p>
+        <p>Here we describe the essential features of the system. It integrates with Redis for storage.</p>
+      </section>
+      </article>
+    </main>
+    <footer class="site-footer">
+      <div class="footer-content">
+        <p>&copy; 2026 ProjectName. Released under MIT License.</p>
+        <nav class="footer-links">
+          <a href="/privacy">Privacy</a>
+          <a href="/terms">Terms</a>
+          <a href="/contact">Contact</a>
+        </nav>
+      </div>
+    </footer>
+</body>
+</html>

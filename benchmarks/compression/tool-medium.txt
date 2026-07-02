@@ -1,0 +1,105 @@
+$ npm install
+
+added react@16.7.11
+  + @webpack/runtime@10.11.10
+added next@7.7.4
+  + @types/config@8.7.9
+added typescript@7.5.0
+  + @babel/runtime@4.11.3
+  + @types/core@7.13.1
+added eslint@17.11.1
+  + @babel/core@1.17.7
+  + @types/config@3.12.9
+added prettier@16.3.24
+  + @types/core@7.1.1
+  + @types/runtime@2.4.6
+  + @types/runtime@9.7.8
+added jest@18.5.22
+  + @babel/config@7.8.8
+added tailwindcss@9.12.15
+  + @babel/runtime@5.4.2
+added postcss@7.6.22
+  + @types/core@9.0.10
+added autoprefixer@4.9.8
+  + @babel/config@10.4.10
+added lodash@6.5.23
+  + @babel/core@7.5.9
+  + @babel/core@6.20.0
+added axios@13.7.26
+  + @webpack/runtime@4.2.10
+  + @types/config@1.8.6
+  + @webpack/runtime@5.3.3
+added zustand@1.15.21
+  + @types/config@5.3.10
+  + @webpack/runtime@3.0.10
+added swr@3.7.24
+  + @types/runtime@1.16.4
+  + @webpack/runtime@4.18.7
+added zod@12.12.2
+  + @webpack/runtime@8.1.5
+  + @babel/runtime@10.2.2
+added @tanstack/react-query@3.11.2
+  + @webpack/runtime@2.2.9
+  + @webpack/runtime@6.13.4
+
+added 117 packages in 23s
+
+$ python -m pytest tests/ -v
+======================================================================
+test session starts
+platform linux -- Python 3.12.1, pytest-8.1.0
+collected 50 items
+
+tests/test_utils.py::test_validate_user FAILED
+tests/test_utils.py::test_delete_cache PASSED
+tests/test_models.py::test_update_auth PASSED
+tests/test_models.py::test_update_task PASSED
+tests/test_api.py::test_parse_user PASSED
+tests/test_api.py::test_update_task PASSED
+tests/test_utils.py::test_validate_user PASSED
+tests/test_api.py::test_parse_event PASSED
+tests/test_api.py::test_read_event PASSED
+tests/test_utils.py::test_update_user PASSED
+tests/test_utils.py::test_read_event PASSED
+tests/test_utils.py::test_delete_auth PASSED
+tests/test_api.py::test_validate_auth PASSED
+tests/test_api.py::test_list_cache PASSED
+tests/test_models.py::test_create_task PASSED
+tests/test_utils.py::test_delete_task PASSED
+tests/test_models.py::test_parse_task PASSED
+tests/test_models.py::test_validate_auth PASSED
+tests/test_utils.py::test_update_event FAILED
+tests/test_utils.py::test_list_cache PASSED
+tests/test_api.py::test_list_auth PASSED
+tests/test_utils.py::test_parse_event PASSED
+tests/test_api.py::test_validate_cache PASSED
+tests/test_utils.py::test_create_cache PASSED
+tests/test_models.py::test_parse_auth PASSED
+tests/test_utils.py::test_read_user PASSED
+tests/test_api.py::test_validate_cache PASSED
+tests/test_api.py::test_read_user PASSED
+tests/test_api.py::test_read_user FAILED
+tests/test_models.py::test_update_user PASSED
+tests/test_models.py::test_parse_auth PASSED
+tests/test_models.py::test_list_event PASSED
+tests/test_api.py::test_delete_user PASSED
+tests/test_models.py::test_read_auth PASSED
+tests/test_utils.py::test_delete_config PASSED
+tests/test_models.py::test_validate_auth PASSED
+tests/test_utils.py::test_update_cache PASSED
+tests/test_models.py::test_delete_config PASSED
+tests/test_models.py::test_parse_task PASSED
+tests/test_models.py::test_delete_event PASSED
+tests/test_api.py::test_parse_config PASSED
+tests/test_models.py::test_delete_task PASSED
+tests/test_api.py::test_validate_task PASSED
+tests/test_models.py::test_create_cache PASSED
+tests/test_api.py::test_list_auth SKIPPED
+tests/test_api.py::test_delete_auth PASSED
+tests/test_api.py::test_validate_cache PASSED
+tests/test_api.py::test_list_event PASSED
+tests/test_utils.py::test_update_task PASSED
+tests/test_utils.py::test_update_cache PASSED
+
+======================================================================
+48 passed, 1 failed, 1 skipped in 1.07s

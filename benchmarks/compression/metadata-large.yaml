@@ -1,0 +1,308 @@
+# Deployment configuration
+# Environment: development
+# Last updated: 2026-07-02
+
+version: "3.8"
+
+services:
+  scheduler-0:
+    image: registry.example.com/scheduler:v4.14.48
+    replicas: 2
+    resources:
+      cpu: "1000m"
+      memory: "512Mi"
+    env:
+      DATABASE_URL: "postgresql://db:5432/scheduler"
+      REDIS_URL: "redis://cache:6379/0"
+      LOG_LEVEL: "debug"
+      ENABLE_METRICS: "false"
+    ports:
+      - 8000:8000
+    healthcheck:
+      path: /health
+      interval: 10s
+      timeout: 5s
+    depends_on:
+      - database
+      - redis  cdn-proxy-1:
+    image: registry.example.com/cdn-proxy:v2.7.92
+    replicas: 3
+    resources:
+      cpu: "500m"
+      memory: "256Mi"
+    env:
+      DATABASE_URL: "postgresql://db:5432/cdn_proxy"
+      REDIS_URL: "redis://cache:6379/1"
+      LOG_LEVEL: "info"
+      ENABLE_METRICS: "true"
+    ports:
+      - 8001:8001
+    healthcheck:
+      path: /health
+      interval: 30s
+      timeout: 5s
+    depends_on:
+      - database
+      - redis  scheduler-2:
+    image: registry.example.com/scheduler:v1.18.12
+    replicas: 3
+    resources:
+      cpu: "250m"
+      memory: "256Mi"
+    env:
+      DATABASE_URL: "postgresql://db:5432/scheduler"
+      REDIS_URL: "redis://cache:6379/2"
+      LOG_LEVEL: "debug"
+      ENABLE_METRICS: "true"
+    ports:
+      - 8002:8002
+    healthcheck:
+      path: /health
+      interval: 10s
+      timeout: 5s
+    depends_on:
+      - database
+      - redis  scheduler-3:
+    image: registry.example.com/scheduler:v5.8.37
+    replicas: 2
+    resources:
+      cpu: "500m"
+      memory: "1Gi"
+    env:
+      DATABASE_URL: "postgresql://db:5432/scheduler"
+      REDIS_URL: "redis://cache:6379/3"
+      LOG_LEVEL: "debug"
+      ENABLE_METRICS: "true"
+    ports:
+      - 8003:8003
+    healthcheck:
+      path: /health
+      interval: 30s
+      timeout: 5s
+    depends_on:
+      - database
+      - redis  cdn-proxy-4:
+    image: registry.example.com/cdn-proxy:v5.4.77
+    replicas: 1
+    resources:
+      cpu: "2000m"
+      memory: "1Gi"
+    env:
+      DATABASE_URL: "postgresql://db:5432/cdn_proxy"
+      REDIS_URL: "redis://cache:6379/4"
+      LOG_LEVEL: "debug"
+      ENABLE_METRICS: "true"
+    ports:
+      - 8004:8004
+    healthcheck:
+      path: /health
+      interval: 15s
+      timeout: 5s
+    depends_on:
+      - database
+      - redis  auth-service-5:
+    image: registry.example.com/auth-service:v3.4.49
+    replicas: 1
+    resources:
+      cpu: "2000m"
+      memory: "1Gi"
+    env:
+      DATABASE_URL: "postgresql://db:5432/auth_service"
+      REDIS_URL: "redis://cache:6379/5"
+      LOG_LEVEL: "debug"
+      ENABLE_METRICS: "true"
+    ports:
+      - 8005:8005
+    healthcheck:
+      path: /health
+      interval: 10s
+      timeout: 5s
+    depends_on:
+      - database
+      - redis  billing-6:
+    image: registry.example.com/billing:v2.3.3
+    replicas: 1
+    resources:
+      cpu: "2000m"
+      memory: "1Gi"
+    env:
+      DATABASE_URL: "postgresql://db:5432/billing"
+      REDIS_URL: "redis://cache:6379/6"
+      LOG_LEVEL: "info"
+      ENABLE_METRICS: "true"
+    ports:
+      - 8006:8006
+    healthcheck:
+      path: /health
+      interval: 30s
+      timeout: 5s
+    depends_on:
+      - database
+      - redis  scheduler-7:
+    image: registry.example.com/scheduler:v2.13.80
+    replicas: 2
+    resources:
+      cpu: "500m"
+      memory: "2Gi"
+    env:
+      DATABASE_URL: "postgresql://db:5432/scheduler"
+      REDIS_URL: "redis://cache:6379/7"
+      LOG_LEVEL: "debug"
+      ENABLE_METRICS: "false"
+    ports:
+      - 8007:8007
+    healthcheck:
+      path: /health
+      interval: 15s
+      timeout: 5s
+    depends_on:
+      - database
+      - redis  gateway-8:
+    image: registry.example.com/gateway:v2.2.53
+    replicas: 1
+    resources:
+      cpu: "2000m"
+      memory: "2Gi"
+    env:
+      DATABASE_URL: "postgresql://db:5432/gateway"
+      REDIS_URL: "redis://cache:6379/8"
+      LOG_LEVEL: "debug"
+      ENABLE_METRICS: "false"
+    ports:
+      - 8008:8008
+    healthcheck:
+      path: /health
+      interval: 10s
+      timeout: 5s
+    depends_on:
+      - database
+      - redis  analytics-9:
+    image: registry.example.com/analytics:v1.6.71
+    replicas: 3
+    resources:
+      cpu: "250m"
+      memory: "512Mi"
+    env:
+      DATABASE_URL: "postgresql://db:5432/analytics"
+      REDIS_URL: "redis://cache:6379/9"
+      LOG_LEVEL: "debug"
+      ENABLE_METRICS: "true"
+    ports:
+      - 8009:8009
+    healthcheck:
+      path: /health
+      interval: 15s
+      timeout: 5s
+    depends_on:
+      - database
+      - redis  cdn-proxy-10:
+    image: registry.example.com/cdn-proxy:v3.5.79
+    replicas: 3
+    resources:
+      cpu: "500m"
+      memory: "1Gi"
+    env:
+      DATABASE_URL: "postgresql://db:5432/cdn_proxy"
+      REDIS_URL: "redis://cache:6379/10"
+      LOG_LEVEL: "info"
+      ENABLE_METRICS: "true"
+    ports:
+      - 8010:8010
+    healthcheck:
+      path: /health
+      interval: 30s
+      timeout: 5s
+    depends_on:
+      - database
+      - redis  analytics-11:
+    image: registry.example.com/analytics:v3.1.16
+    replicas: 5
+    resources:
+      cpu: "1000m"
+      memory: "256Mi"
+    env:
+      DATABASE_URL: "postgresql://db:5432/analytics"
+      REDIS_URL: "redis://cache:6379/11"
+      LOG_LEVEL: "warn"
+      ENABLE_METRICS: "false"
+    ports:
+      - 8011:8011
+    healthcheck:
+      path: /health
+      interval: 15s
+      timeout: 5s
+    depends_on:
+      - database
+      - redis  notification-service-12:
+    image: registry.example.com/notification-service:v5.5.54
+    replicas: 5
+    resources:
+      cpu: "2000m"
+      memory: "512Mi"
+    env:
+      DATABASE_URL: "postgresql://db:5432/notification_service"
+      REDIS_URL: "redis://cache:6379/12"
+      LOG_LEVEL: "debug"
+      ENABLE_METRICS: "true"
+    ports:
+      - 8012:8012
+    healthcheck:
+      path: /health
+      interval: 15s
+      timeout: 5s
+    depends_on:
+      - database
+      - redis  scheduler-13:
+    image: registry.example.com/scheduler:v1.1.31
+    replicas: 5
+    resources:
+      cpu: "500m"
+      memory: "1Gi"
+    env:
+      DATABASE_URL: "postgresql://db:5432/scheduler"
+      REDIS_URL: "redis://cache:6379/13"
+      LOG_LEVEL: "warn"
+      ENABLE_METRICS: "false"
+    ports:
+      - 8013:8013
+    healthcheck:
+      path: /health
+      interval: 15s
+      timeout: 5s
+    depends_on:
+      - database
+      - redis  search-service-14:
+    image: registry.example.com/search-service:v1.9.73
+    replicas: 5
+    resources:
+      cpu: "1000m"
+      memory: "1Gi"
+    env:
+      DATABASE_URL: "postgresql://db:5432/search_service"
+      REDIS_URL: "redis://cache:6379/14"
+      LOG_LEVEL: "warn"
+      ENABLE_METRICS: "false"
+    ports:
+      - 8014:8014
+    healthcheck:
+      path: /health
+      interval: 30s
+      timeout: 5s
+    depends_on:
+      - database
+      - redis
+
+  database:
+    image: postgres:16-alpine
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    env:
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+
+volumes:
+  pgdata:
+    driver: local

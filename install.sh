@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="0.6.0"
+VERSION="0.7.0"
 CONFIG_DIR="${SAVE_TOKEN_DIR:-${HOME}/.save-token}"
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 
@@ -13,34 +13,32 @@ case "${1:-}" in
   -h|--help|help)
     echo "save-token installer v${VERSION}"
     echo
-    echo "Usage: install.sh [mode] [options]"
+    echo "Usage: bash install.sh [--platform=PLATFORM] [options]"
     echo
-    echo "Modes:"
-    echo "  light    Rules only — copy adapter to target platform (no scripts)"
-    echo "  heavy    Full skill — symlink + all scripts/benchmarks/adapters (default)"
+    echo "Installs save-token: adapter + scripts + compression engines."
+    echo "Default: Cursor platform, full intensity, all available engines."
     echo
-    echo "Commands:"
-    echo "  uninstall  Remove everything"
-    echo "  status     Show installation status"
-    echo "  version    Show version"
-    echo "  help       Show this help"
+    echo "Platforms:"
+    echo "  cursor (default), claude-code, codebuddy, augment, roo-code,"
+    echo "  kilo-code, opencode, pi-agent, aider, gemini-cli, cline,"
+    echo "  windsurf, copilot, generic"
     echo
     echo "Options:"
-    echo "  --platform=PLATFORM  Target platform (default: cursor)"
-    echo "    Platforms: cursor, claude-code, codebuddy, augment, roo-code,"
-    echo "    kilo-code, opencode, pi-agent, aider, gemini-cli, cline, windsurf,"
-    echo "    copilot, generic"
-    echo "  --mode=lite|full|ultra  Set initial intensity (default: full)"
-    echo "  --density=kernel|mid|full  Rules density variant (default: full)"
-    echo "  --hook                  Also install session auto-activation hook (cursor only)"
+    echo "  --platform=PLATFORM       Target platform"
+    echo "  --mode=lite|full|ultra    Intensity (default: full)"
+    echo "  --density=kernel|mid|full Rules density (default: full)"
+    echo "  --hook                    Auto-activation hook (cursor only)"
+    echo
+    echo "Commands:"
+    echo "  status     Show what's installed"
+    echo "  uninstall  Remove everything"
+    echo "  version    Show version"
     echo
     echo "Examples:"
-    echo "  bash install.sh                                   # cursor heavy, full intensity"
-    echo "  bash install.sh light                             # cursor rules-only"
-    echo "  bash install.sh light --platform=claude-code      # AGENTS.md to project root"
-    echo "  bash install.sh light --platform=codebuddy        # CodeBuddy rules"
-    echo "  bash install.sh heavy --platform=cursor --hook    # full cursor + auto-activation"
-    echo "  bash install.sh heavy --mode=ultra"
+    echo "  bash install.sh                            # just works"
+    echo "  bash install.sh --platform=claude-code     # Claude Code"
+    echo "  bash install.sh --hook                     # cursor + auto-activation"
+    echo "  bash install.sh --mode=ultra               # ultra intensity"
     exit 0
     ;;
   status)
@@ -54,10 +52,10 @@ case "${1:-}" in
     RULES_DIR="${HOME}/.cursor/rules"
     if [ -L "$SKILL_DIR" ]; then
       target=$(readlink -f "$SKILL_DIR")
-      echo "[OK] Cursor (heavy): $SKILL_DIR -> $target"
+      echo "[OK] Cursor: $SKILL_DIR -> $target"
       found=true
     elif [ -f "$RULES_DIR/save-token.mdc" ]; then
-      echo "[OK] Cursor (light): $RULES_DIR/save-token.mdc"
+      echo "[OK] Cursor (standalone rule): $RULES_DIR/save-token.mdc"
       found=true
     fi
     # CodeBuddy
@@ -170,10 +168,7 @@ case "${1:-}" in
     ;;
 esac
 
-# Parse mode and options
-INSTALL_MODE="${1:-heavy}"
-shift 2>/dev/null || true
-
+# Parse options
 INTENSITY="full"
 INSTALL_HOOK=false
 PLATFORM="cursor"
@@ -185,6 +180,8 @@ for arg in "$@"; do
     --hook) INSTALL_HOOK=true ;;
     --platform=*) PLATFORM="${arg#--platform=}" ;;
     --density=*) DENSITY="${arg#--density=}" ;;
+    --*) ;;
+    *) ;; # ignore positional args (backward compat: old 'heavy' arg)
   esac
 done
 
@@ -218,15 +215,7 @@ mkdir -p "$CONFIG_DIR"
 
 # --- Platform-specific installation functions ---
 
-install_cursor_light() {
-  RULES_DIR="${HOME}/.cursor/rules"
-  mkdir -p "$RULES_DIR"
-  cp "$REPO_DIR/adapters/standalone.mdc" "$RULES_DIR/save-token.mdc"
-  echo "[OK] Installed: $RULES_DIR/save-token.mdc"
-  echo "     Active on every response. Say 'save-token off' to deactivate."
-}
-
-install_cursor_heavy() {
+install_cursor() {
   SKILL_DIR="${HOME}/.cursor/skills/save-token"
   mkdir -p "$(dirname "$SKILL_DIR")"
   if [ -L "$SKILL_DIR" ]; then
@@ -259,35 +248,28 @@ install_cursor_heavy() {
   fi
 }
 
-install_claude_code_light() {
-  TARGET="${PWD}/AGENTS.md"
+install_agents_md() {
+  local TARGET="${PWD}/AGENTS.md"
   if [ -f "$TARGET" ]; then
     echo "[WARN] AGENTS.md already exists. Backing up to AGENTS.md.bak"
     cp "$TARGET" "${TARGET}.bak"
   fi
   cp "$REPO_DIR/adapters/AGENTS.md" "$TARGET"
   echo "[OK] Installed: ./AGENTS.md"
-  echo "     Claude Code will load rules from project root."
 }
 
-install_claude_code_heavy() {
-  install_claude_code_light
+install_claude_code() {
+  install_agents_md
+  echo "     Claude Code will load rules from project root."
   echo "[OK] Scripts available at: $REPO_DIR/scripts/"
   echo "     Run: bash $REPO_DIR/scripts/mode.sh [lite|full|ultra|off]"
 }
 
-install_codebuddy_light() {
-  # Global rule: ~/.codebuddy/rules/save-token.md
+install_codebuddy() {
   CB_RULES="${HOME}/.codebuddy/rules"
   mkdir -p "$CB_RULES"
   cp "$REPO_DIR/adapters/codebuddy-rule.md" "$CB_RULES/save-token.md"
   echo "[OK] Installed: $CB_RULES/save-token.md (global, all projects)"
-  echo "     Alternatively, copy to .codebuddy/rules/save-token.md in a project."
-}
-
-install_codebuddy_heavy() {
-  install_codebuddy_light
-  # Also install CODEBUDDY.md to current project if in a project directory
   if [ -d ".git" ] || [ -f "package.json" ] || [ -f "pyproject.toml" ]; then
     if [ ! -f "CODEBUDDY.md" ]; then
       cp "$REPO_DIR/adapters/CODEBUDDY.md" "./CODEBUDDY.md"
@@ -299,94 +281,60 @@ install_codebuddy_heavy() {
   echo "[OK] Scripts available at: $REPO_DIR/scripts/"
 }
 
-install_augment_light() {
+install_augment() {
   local RULES_DIR="${PWD}/.augment/rules"
   mkdir -p "$RULES_DIR"
   cp "$REPO_DIR/adapters/augment-rules.md" "$RULES_DIR/save-token.md"
   echo "[OK] Installed: $RULES_DIR/save-token.md"
   echo "     Augment Code will auto-apply on every prompt."
-}
-
-install_augment_heavy() {
-  install_augment_light
   echo "[OK] Scripts available at: $REPO_DIR/scripts/"
 }
 
-install_roo_code_light() {
+install_roo_code() {
   local RULES_DIR="${PWD}/.roo/rules"
   mkdir -p "$RULES_DIR"
   cp "$REPO_DIR/adapters/roo-rules.md" "$RULES_DIR/save-token.md"
   echo "[OK] Installed: $RULES_DIR/save-token.md"
   echo "     Roo Code / Zoo Code will auto-apply on every prompt."
-}
-
-install_roo_code_heavy() {
-  install_roo_code_light
   echo "[OK] Scripts available at: $REPO_DIR/scripts/"
 }
 
-install_kilo_code_light() {
+install_kilo_code() {
   local RULES_DIR="${PWD}/.kilo/rules"
   mkdir -p "$RULES_DIR"
   cp "$REPO_DIR/adapters/kilo-rules.md" "$RULES_DIR/save-token.md"
   echo "[OK] Installed: $RULES_DIR/save-token.md"
   echo "     Add to kilo.jsonc: {\"instructions\": [\".kilo/rules/save-token.md\"]}"
-}
-
-install_kilo_code_heavy() {
-  install_kilo_code_light
   echo "[OK] Scripts available at: $REPO_DIR/scripts/"
 }
 
-install_opencode_light() {
-  install_claude_code_light
+install_opencode() {
+  install_agents_md
   echo "     OpenCode auto-discovers AGENTS.md from project root."
-}
-
-install_opencode_heavy() {
-  install_opencode_light
   echo "[OK] Scripts available at: $REPO_DIR/scripts/"
 }
 
-install_pi_agent_light() {
-  install_claude_code_light
+install_pi_agent() {
+  install_agents_md
   echo "     Pi Agent auto-discovers AGENTS.md. Run /reload after install."
-}
-
-install_pi_agent_heavy() {
-  install_pi_agent_light
   echo "[OK] Scripts available at: $REPO_DIR/scripts/"
 }
 
-install_aider_light() {
-  local TARGET="${PWD}/AGENTS.md"
-  if [ -f "$TARGET" ]; then
-    echo "[WARN] AGENTS.md already exists. Backing up to AGENTS.md.bak"
-    cp "$TARGET" "${TARGET}.bak"
-  fi
-  cp "$REPO_DIR/adapters/AGENTS.md" "$TARGET"
-  echo "[OK] Installed: ./AGENTS.md"
+install_aider() {
+  install_agents_md
   echo "     Aider reads AGENTS.md natively."
   echo "     Or add to .aider.conf.yml: read: AGENTS.md"
-}
-
-install_aider_heavy() {
-  install_aider_light
   echo "[OK] Scripts available at: $REPO_DIR/scripts/"
 }
 
-install_gemini_cli_light() {
-  install_claude_code_light
+install_gemini_cli() {
+  install_agents_md
   echo "     Gemini CLI auto-discovers AGENTS.md."
   echo "     Or add to .gemini/settings.json: {\"context\":{\"fileName\":[\"AGENTS.md\"]}}"
-}
-
-install_gemini_cli_heavy() {
-  install_gemini_cli_light
   echo "[OK] Scripts available at: $REPO_DIR/scripts/"
 }
 
-install_cline_light() {
+install_cline() {
   local TARGET="${PWD}/.clinerules"
   if [ -f "$TARGET" ]; then
     echo "[WARN] .clinerules already exists. Backing up."
@@ -395,14 +343,10 @@ install_cline_light() {
   cp "$REPO_DIR/adapters/clinerules" "$TARGET"
   echo "[OK] Installed: ./.clinerules"
   echo "     Cline / Trae will auto-apply rules."
-}
-
-install_cline_heavy() {
-  install_cline_light
   echo "[OK] Scripts available at: $REPO_DIR/scripts/"
 }
 
-install_windsurf_light() {
+install_windsurf() {
   local TARGET="${PWD}/.windsurfrules"
   if [ -f "$TARGET" ]; then
     echo "[WARN] .windsurfrules already exists. Backing up."
@@ -410,14 +354,10 @@ install_windsurf_light() {
   fi
   cp "$REPO_DIR/adapters/windsurfrules" "$TARGET"
   echo "[OK] Installed: ./.windsurfrules"
-}
-
-install_windsurf_heavy() {
-  install_windsurf_light
   echo "[OK] Scripts available at: $REPO_DIR/scripts/"
 }
 
-install_copilot_light() {
+install_copilot() {
   local TARGET="${PWD}/.github/copilot-instructions.md"
   mkdir -p "${PWD}/.github"
   if [ -f "$TARGET" ]; then
@@ -426,74 +366,40 @@ install_copilot_light() {
   fi
   cp "$REPO_DIR/adapters/copilot-instructions.md" "$TARGET"
   echo "[OK] Installed: .github/copilot-instructions.md"
-}
-
-install_copilot_heavy() {
-  install_copilot_light
   echo "[OK] Scripts available at: $REPO_DIR/scripts/"
 }
 
-install_generic_light() {
+install_generic() {
   echo "[OK] Generic adapter: $REPO_DIR/adapters/system-prompt.txt"
   echo "     Paste into your system prompt, or use pre-prompt.sh:"
   echo ""
   echo '     echo "your prompt" | bash '"$REPO_DIR/adapters/pre-prompt.sh"' | your-cli-tool'
   echo ""
   echo "     Works with any LLM CLI: claude, codebuddy, openai, llm, etc."
-}
-
-install_generic_heavy() {
-  install_generic_light
   echo "[OK] Scripts available at: $REPO_DIR/scripts/"
   echo "     Run: bash $REPO_DIR/scripts/mode.sh [lite|full|ultra|off]"
 }
 
 # --- Execute installation ---
 
-echo "Installing save-token v${VERSION} (${INSTALL_MODE} mode, platform: ${PLATFORM})..."
+echo "Installing save-token v${VERSION} (platform: ${PLATFORM})..."
 echo
 
-case "$INSTALL_MODE" in
-  light)
-    case "$PLATFORM" in
-      cursor)      install_cursor_light ;;
-      claude-code) install_claude_code_light ;;
-      codebuddy)   install_codebuddy_light ;;
-      augment)     install_augment_light ;;
-      roo-code)    install_roo_code_light ;;
-      kilo-code)   install_kilo_code_light ;;
-      opencode)    install_opencode_light ;;
-      pi-agent)    install_pi_agent_light ;;
-      aider)       install_aider_light ;;
-      gemini-cli)  install_gemini_cli_light ;;
-      cline)       install_cline_light ;;
-      windsurf)    install_windsurf_light ;;
-      copilot)     install_copilot_light ;;
-      generic)     install_generic_light ;;
-    esac
-    ;;
-  heavy|"")
-    case "$PLATFORM" in
-      cursor)      install_cursor_heavy ;;
-      claude-code) install_claude_code_heavy ;;
-      codebuddy)   install_codebuddy_heavy ;;
-      augment)     install_augment_heavy ;;
-      roo-code)    install_roo_code_heavy ;;
-      kilo-code)   install_kilo_code_heavy ;;
-      opencode)    install_opencode_heavy ;;
-      pi-agent)    install_pi_agent_heavy ;;
-      aider)       install_aider_heavy ;;
-      gemini-cli)  install_gemini_cli_heavy ;;
-      cline)       install_cline_heavy ;;
-      windsurf)    install_windsurf_heavy ;;
-      copilot)     install_copilot_heavy ;;
-      generic)     install_generic_heavy ;;
-    esac
-    ;;
-  *)
-    echo "[FAIL] Unknown mode: $INSTALL_MODE. Use 'light' or 'heavy'."
-    exit 1
-    ;;
+case "$PLATFORM" in
+  cursor)      install_cursor ;;
+  claude-code) install_claude_code ;;
+  codebuddy)   install_codebuddy ;;
+  augment)     install_augment ;;
+  roo-code)    install_roo_code ;;
+  kilo-code)   install_kilo_code ;;
+  opencode)    install_opencode ;;
+  pi-agent)    install_pi_agent ;;
+  aider)       install_aider ;;
+  gemini-cli)  install_gemini_cli ;;
+  cline)       install_cline ;;
+  windsurf)    install_windsurf ;;
+  copilot)     install_copilot ;;
+  generic)     install_generic ;;
 esac
 
 echo "$INTENSITY" > "$CONFIG_DIR/mode"
@@ -503,24 +409,46 @@ echo "     Platform: $PLATFORM"
 echo "     Intensity: $INTENSITY"
 echo "     Density: $DENSITY ($(wc -w < "$(rules_file)") words)"
 echo "     Config: $CONFIG_DIR/"
-if [ "$INSTALL_MODE" = "heavy" ]; then
-  # Auto-install headroom for compression (default engine, pure software, no API keys)
-  if python3 -c "import headroom" 2>/dev/null; then
-    echo "     Compression: headroom (already installed)"
+
+# --- Auto-install compression engines ---
+echo
+echo "Installing compression engines..."
+
+# headroom: default engine for most content types (40-95% reduction, local ONNX)
+if python3 -c "import headroom" 2>/dev/null; then
+  echo "  [OK] headroom (already installed)"
+else
+  if pip install headroom-ai 2>/dev/null; then
+    echo "  [OK] headroom installed"
   else
-    echo
-    echo "Installing headroom (default compression engine, 40-95% token reduction)..."
-    if pip install headroom-ai 2>/dev/null; then
-      echo "[OK] headroom installed — compression active for code, text, JSON, logs, diffs, HTML, search"
-    else
-      echo "[SKIP] headroom install failed (optional). Zero-dep engines (truncate, pointer) will be used."
-      echo "       Retry later: pip install headroom-ai"
-    fi
+    echo "  [--] headroom failed (optional). Retry: pip install headroom-ai"
   fi
-  echo
-  echo "Key commands:"
-  echo "  /save-token              Activate rules"
-  echo "  /save-token cost [model] Estimate savings"
-  echo "  /save-token tokens       Track real token usage"
-  echo "  /save-token compress     Content-type-aware compression"
 fi
+
+# llmlingua: perplexity-based NL pruning for text (30-70% reduction)
+if python3 -c "from llmlingua import PromptCompressor" 2>/dev/null; then
+  echo "  [OK] llmlingua (already installed)"
+else
+  if pip install llmlingua 2>/dev/null; then
+    echo "  [OK] llmlingua installed (model downloads on first use)"
+  else
+    echo "  [--] llmlingua failed (optional). Retry: pip install llmlingua"
+  fi
+fi
+
+# treesitter: comment/whitespace stripping for code (regex fallback always works)
+if command -v tree-sitter &>/dev/null; then
+  echo "  [OK] tree-sitter-cli (already installed)"
+else
+  echo "  [OK] treesitter (regex fallback active; install tree-sitter-cli for full AST mode)"
+fi
+
+# Built-in engines always available
+echo "  [OK] truncate, pointer, none (built-in, zero deps)"
+
+echo
+echo "Key commands:"
+echo "  /save-token              Activate rules"
+echo "  /save-token cost [model] Estimate savings"
+echo "  /save-token tokens       Track real token usage"
+echo "  /save-token compress     Content-type-aware compression"

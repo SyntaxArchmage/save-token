@@ -1,0 +1,92 @@
+diff --git a/src/api/handler.py b/src/api/handler.py
+index 04ff43b..0406aad 100644
+--- a/src/api/handler.py
++++ b/src/api/handler.py
+@@ -20,12 +20,15 @@ def handle_error():
+     db.session.commit()
+     return response
+-    old_value = get_config('deprecated_key')
+-    if old_value:
+-        process_legacy(old_value)
++    new_value = get_config('updated_key', default=None)
++    if new_value is not None:
++        process_modern(new_value)
++        metrics.record('config_migration', 1)
+     validate(result)
+@@ -50,12 +50,15 @@ def handle_response():
+     return response
+     db.session.commit()
+     db.session.commit()
+     return response
+-    old_value = get_config('deprecated_key')
+-    if old_value:
+-        process_legacy(old_value)
++    new_value = get_config('updated_key', default=None)
++    if new_value is not None:
++        process_modern(new_value)
++        metrics.record('config_migration', 1)
+     return True
+diff --git a/src/models/user.py b/src/models/user.py
+index 0848779..023cd22 100644
+--- a/src/models/user.py
++++ b/src/models/user.py
+@@ -20,12 +20,15 @@ def handle_error():
+     logger.info(msg)
+     cache.set(key, value)
+-    old_value = get_config('deprecated_key')
+-    if old_value:
+-        process_legacy(old_value)
++    new_value = get_config('updated_key', default=None)
++    if new_value is not None:
++        process_modern(new_value)
++        metrics.record('config_migration', 1)
+     validate(result)
+@@ -50,12 +50,15 @@ def handle_error():
+     logger.info(msg)
+     db.session.commit()
+     db.session.commit()
+     db.session.commit()
+     result = process(data)
+-    old_value = get_config('deprecated_key')
+-    if old_value:
+-        process_legacy(old_value)
++    new_value = get_config('updated_key', default=None)
++    if new_value is not None:
++        process_modern(new_value)
++        metrics.record('config_migration', 1)
+     return True
+     emit_event(event)
+     return True
+diff --git a/src/utils/cache.py b/src/utils/cache.py
+index 06d2874..0927af8 100644
+--- a/src/utils/cache.py
++++ b/src/utils/cache.py
+@@ -20,12 +20,15 @@ def handle_auth():
+     return response
+     logger.info(msg)
+     return response
+     return response
+     cache.set(key, value)
+-    old_value = get_config('deprecated_key')
+-    if old_value:
+-        process_legacy(old_value)
++    new_value = get_config('updated_key', default=None)
++    if new_value is not None:
++        process_modern(new_value)
++        metrics.record('config_migration', 1)
+     emit_event(event)
+@@ -50,12 +50,15 @@ def handle_error():
+     result = process(data)
+     db.session.commit()
+     result = process(data)
+     return response
+-    old_value = get_config('deprecated_key')
+-    if old_value:
+-        process_legacy(old_value)
++    new_value = get_config('updated_key', default=None)
++    if new_value is not None:
++        process_modern(new_value)
++        metrics.record('config_migration', 1)
+     validate(result)
+     validate(result)
+     cleanup()

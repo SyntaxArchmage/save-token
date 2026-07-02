@@ -321,4 +321,5 @@ if ! engine_available "$ENGINE"; then
   ENGINE="$FALLBACK"
 fi
 
+export HEADROOM_CONTENT_TYPE="$TYPE"
 run_engine "$ENGINE" "$INPUT_FILE" "$SHOW_STATS"

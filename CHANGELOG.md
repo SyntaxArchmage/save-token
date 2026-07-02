@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.7.0] — 2026-07-02
+
+### Removed
+- **`light` install mode** — rules-only installation is meaningless for a multi-platform framework; `install.sh` now always does a full install (adapter + scripts + compression engine)
+- All `install_*_light()` / `install_*_heavy()` function pairs merged into single `install_*()` functions
+- "Zero-install" curl section from README
+
+### Added
+- **Treesitter (regex fallback) benchmark data** — 3 measurements on code fixtures (0.5-5.8% reduction), matching ROADMAP estimate of 3-9%
+- Engine availability notes in compress-bench report (claw blocked, llmlingua needs model download, treesitter partial)
+
+### Fixed
+- `engines/claw.sh` — PyPI `claw-compactor` (v7.x) is an unrelated project (EngramEngine); added import guard and documentation
+- `engines/llmlingua.sh` — added `use_llmlingua2=True`, error handling, network requirement note
+- README duplicate table fragment (stray `| Text | truncate |` lines)
+
+### Changed
+- `install.sh` version bump to 0.7.0
+- `install.sh` now auto-installs all available compression engines (headroom, llmlingua, treesitter) — not just headroom
+- Compression benchmark report updated to 103 measurements across 5 engines (was 100/4)
+- README compression matrix now includes treesitter column
+- Engine table in README now shows availability status per engine
+
 ## [0.6.0] — 2026-07-01
 
 ### Added

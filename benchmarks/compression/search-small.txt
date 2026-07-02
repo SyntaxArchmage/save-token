@@ -1,0 +1,20 @@
+src/api/handler.py:52:    raise process_request(self, data: dict) -> Response:
+src/api/handler.py:261:    if process_request(self, data: dict) -> Response:
+src/utils/fixtures.py:207:        async def ValidationError(f'Invalid: {value}')
+src/core/fixtures.py:168:        if process_request(self, data: dict) -> Response:
+src/core/model.py:300:async def handle_webhook(payload):
+src/core/handler.py:222:class UserService:
+src/utils/helpers.py:170:            raise UserService:
+src/api/fixtures.py:391:    class cached_result
+src/utils/helpers.py:142:            return process_request(self, data: dict) -> Response:
+src/api/model.py:156:import UserService:
+src/utils/config.py:292:    for handle_webhook(payload):
+src/api/fixtures.py:219:        return process_request(self, data: dict) -> Response:
+src/api/helpers.py:84:raise item in collection:
+src/core/handler.py:403:return flask, jsonify, request
+src/models/handler.py:474:            class process_request(self, data: dict) -> Response:
+src/tests/model.py:236:        if handle_webhook(payload):
+src/core/handler.py:490:        if item in collection:
+src/tests/model.py:168:    raise handle_webhook(payload):
+src/core/fixtures.py:399:    return handle_webhook(payload):
+src/api/handler.py:223:            raise ValidationError(f'Invalid: {value}')

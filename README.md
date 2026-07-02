@@ -12,21 +12,15 @@ AI coding agents waste tokens in predictable ways: over-engineered code, redunda
 
 The result: **up to 48% fewer code lines with better quality** (100% correctness, 125A/0B/0C vs baseline 90A/30B/5C, across 1000 component-level trials on 25 benchmarks).
 
-## 60-Second Start
+## Quick Start
 
-**Zero-install (standalone rule only):**
-```bash
-curl -o ~/.cursor/rules/save-token.mdc \
-  https://raw.githubusercontent.com/YOUR_USER/save-token/main/adapters/standalone.mdc
-```
-Done. Works immediately, no scripts needed.
-
-**Full install (scripts + benchmarks + adapters):**
 ```bash
 git clone https://github.com/YOUR_USER/save-token.git
-cd save-token && bash install.sh
+cd save-token && bash install.sh                      # Cursor (default)
+bash install.sh --platform=claude-code                # Claude Code
+bash install.sh --platform=copilot                    # GitHub Copilot
 
-# Use in any Cursor chat:
+# Use in any agent chat:
 /save-token          # activate (default: full mode)
 /save-token ultra    # maximum savings
 /save-token stats    # see mode + cost estimate
@@ -125,23 +119,21 @@ Benchmarks cover: algorithms, data structures, design patterns, refactoring, deb
 
 ```bash
 git clone https://github.com/YOUR_USER/save-token.git
-cd save-token && bash install.sh                           # Cursor (default)
-bash install.sh --platform=claude-code                     # Claude Code
-bash install.sh --platform=copilot                         # GitHub Copilot
-bash install.sh --platform=augment                         # Augment Code
-bash install.sh --platform=opencode                        # OpenCode
-bash install.sh --platform=kilo-code                       # Kilo Code
-bash install.sh --platform=roo-code                        # Roo Code / Zoo Code
-bash install.sh --platform=pi-agent                        # Pi Agent
-bash install.sh --platform=aider                           # Aider
-bash install.sh --platform=gemini-cli                      # Gemini CLI
-bash install.sh --platform=cline                           # Cline / Trae
-bash install.sh --platform=windsurf                        # Windsurf
-bash install.sh --platform=generic                         # Any LLM CLI
-bash install.sh --density=kernel                           # Minimal rules (177 words)
+cd save-token && bash install.sh                      # Cursor (default)
+bash install.sh --platform=claude-code                # Claude Code
+bash install.sh --platform=copilot                    # GitHub Copilot
+bash install.sh --platform=augment                    # Augment Code
+bash install.sh --platform=opencode                   # OpenCode
+bash install.sh --platform=kilo-code                  # Kilo Code
+bash install.sh --platform=roo-code                   # Roo Code / Zoo Code
+bash install.sh --platform=pi-agent                   # Pi Agent
+bash install.sh --platform=aider                      # Aider
+bash install.sh --platform=gemini-cli                 # Gemini CLI
+bash install.sh --platform=cline                      # Cline / Trae
+bash install.sh --platform=windsurf                   # Windsurf
+bash install.sh --platform=generic                    # Any LLM CLI
+bash install.sh --density=kernel                      # Minimal rules (177 words)
 ```
-
-Or manually symlink: `ln -s /path/to/save-token ~/.cursor/skills/save-token`
 
 Then use `/save-token` in any agent chat.
 
@@ -162,24 +154,14 @@ save-token includes a pluggable compression pipeline (`/save-token compress`) th
 | History (conversation) | truncate | — | First/last N lines |
 | Metadata (.yaml, .toml) | none | — | Passthrough (structure required) |
 
-> Headroom is auto-installed with `install.sh` (heavy mode). Pure software — no API keys, works offline.
+> Headroom is auto-installed with `install.sh`. Pure software — no API keys, works offline.
 > If headroom is not installed, compress.sh auto-falls back to zero-dep engines (truncate, pointer).
-| Text | truncate | First N + last N lines |
-| Metadata | none | Passthrough |
-
-Additional engines available: **llmlingua**, **claw**, **headroom** (system-level proxy, 60-95% input reduction). Install any engine on demand:
-
-```bash
-/save-token compress --install=headroom
-```
-
-All engines are optional — the behavior rules alone deliver the bulk of savings.
 
 ## Requirements
 
-- **bash** + **python3** (for learn/review/stats scripts)
-- **git** (optional, for install.sh)
-- Compression engines installed on demand (all optional)
+- **bash** + **python3** (for scripts and compression engines)
+- **git** (for cloning the repo)
+- **pip** (compression engines are auto-installed by `install.sh`)
 
 ## Compatibility
 
@@ -207,7 +189,7 @@ All engines are optional — the behavior rules alone deliver the bulk of saving
 
 | Platform | File | How |
 |----------|------|-----|
-| **Cursor** | `adapters/standalone.mdc` | Copy to `.cursor/rules/` — zero-install |
+| **Cursor** | `adapters/standalone.mdc` | Copy to `.cursor/rules/` |
 | **AGENTS.md** (universal) | `adapters/AGENTS.md` | Project root — works with Claude Code, OpenCode, Pi, Aider, Gemini CLI, etc. |
 | **Augment Code** | `adapters/augment-rules.md` | Copy to `.augment/rules/save-token.md` |
 | **Roo Code** / Zoo Code | `adapters/roo-rules.md` | Copy to `.roo/rules/save-token.md` |
@@ -268,7 +250,7 @@ save-token/
 │   ├── test.sh                 # 147-check test runner
 │   └── analyze_transcript.py   # Transcript analyzer (+ --html report)
 ├── adapters/
-│   ├── standalone.mdc          # Cursor standalone rule (zero-install)
+│   ├── standalone.mdc          # Cursor standalone rule
 │   ├── AGENTS.md               # Universal: Claude Code, OpenCode, Pi, Aider, Gemini CLI
 │   ├── augment-rules.md        # Augment Code (.augment/rules/)
 │   ├── roo-rules.md            # Roo Code / Zoo Code (.roo/rules/)
@@ -388,45 +370,47 @@ Pluggable engines reduce tokens before they reach the model. The pipeline auto-d
 }
 ```
 
-Headroom is the default for all compressible types — pure software, no API keys, 40-95% reduction. Auto-installed with `install.sh`. Each type is independently configurable — swap any to a different engine (e.g., `treesitter` for code, `llmlingua` for text). If headroom isn't installed, auto-falls back to zero-dep engines.
+Headroom is the default for compressible types — pure software, runs a local ONNX model (Kompress-v2-base from HuggingFace), no API keys needed. Auto-installed with `install.sh`. Each type is independently configurable. If headroom isn't installed, auto-falls back to zero-dep engines.
 
 **7 engines available** — 3 zero-dep (built-in), 4 installable on demand:
 
-| Engine | Dependencies | What it does |
-|--------|-------------|--------------|
-| **none** | — | Passthrough (no compression) |
-| **truncate** | — | Keep first N + last N lines, drop middle |
-| **pointer** | — | 3-line head + 3-line tail + line count + byte size |
-| **treesitter** | tree-sitter-cli | Strip comments + whitespace from code (AST-aware) |
-| **llmlingua** | `pip install llmlingua` | Perplexity-based pruning for natural language (Microsoft) |
-| **claw** | `pip install claw-compactor` | AST-aware code compression (reversible) |
-| **headroom** | `pip install headroom-ai[proxy]` | System-level proxy compression (60–95% on all input) |
+| Engine | Dependencies | Status | What it does |
+|--------|-------------|--------|--------------|
+| **none** | — | Ready | Passthrough (no compression) |
+| **truncate** | — | Ready | Keep first N + last N lines, drop middle |
+| **pointer** | — | Ready | 3-line head + 3-line tail + line count + byte size |
+| **headroom** | `pip install headroom-ai` | Ready | Local ML compression — SmartCrusher, CodeCompressor, LogCompressor, Kompress |
+| **treesitter** | tree-sitter-cli | Partial | Strip comments + whitespace from code (regex fallback without CLI) |
+| **llmlingua** | `pip install llmlingua` | Requires model | Perplexity-based NL pruning (needs HuggingFace model download, ~7GB) |
+| **claw** | — | Not available | AST-aware code compression (PyPI package is unrelated; real tool not on PyPI) |
 
-**Measured compression by content type and engine:**
+**Measured compression matrix** (103 measurements, 29 fixtures, 5 engines):
 
-| Content Type | Config key | Default | Alternatives | Measured reduction |
-|-------------|-----------|---------|--------------|-------------------|
-| **Code** (.py, .js, .ts, .go, .rs, .java, ...) | `compression.code` | **headroom** | treesitter, claw, pointer | headroom: 40–70%, treesitter: 3–9%, claw: 15–82% |
-| **Text** (.md, .txt, .rst, .tex) | `compression.text` | **headroom** | truncate, llmlingua, pointer | headroom: 60–80%, truncate: 56–95%, llmlingua: 60–80% |
-| **JSON** (.json, .jsonl, API responses) | `compression.json` | **headroom** | truncate | headroom/SmartCrusher: 70–90%, truncate: 32–80% |
-| **Logs** (.log, CI/build/test output) | `compression.logs` | **headroom** | truncate, pointer | headroom/LogCompressor: 85–95%, truncate: 32–80% |
-| **Diffs** (.diff, .patch, git diff) | `compression.diff` | **headroom** | truncate | headroom/DiffCompressor: 60–80%, truncate: 32–80% |
-| **HTML** (.html, .htm, web scrapes) | `compression.html` | **headroom** | truncate | headroom/HTMLExtractor: 50–70%, truncate: 32–80% |
-| **Search** (grep/rg output) | `compression.search` | **headroom** | pointer | headroom/SearchCompressor: 80–95%, pointer: 69–98% |
-| **Tool output** (stdin, misc) | `compression.tool_output` | pointer | headroom, truncate | pointer: 69–98% (constant ~460B), truncate: 32–80% |
-| **History** (conversation) | `compression.history` | truncate | none | truncate: 32–80% |
-| **Metadata** (.yaml, .toml, .xml, .csv, .ini) | `compression.metadata` | none | truncate | 0% (full fidelity recommended) |
+| Content Type | Config key | Default | headroom | truncate | pointer | treesitter |
+|-------------|-----------|---------|----------|----------|---------|-----------|
+| **Code** (.py, .js, .ts, ...) | `compression.code` | **headroom** | **54%** | 82% | 90% (lossy) | 4% |
+| **Text** (.md, .txt, .rst) | `compression.text` | **headroom** | **55%** | 82% | 93% (lossy) | — |
+| **JSON** (.json, .jsonl) | `compression.json` | **headroom** | **50%** | 97% (lossy) | 98% (lossy) | — |
+| **Logs** (.log, CI output) | `compression.logs` | **headroom** | **53%** | 86% | 94% (lossy) | — |
+| **Diffs** (.diff, .patch) | `compression.diff` | **headroom** | **38%** | 58% | — | — |
+| **HTML** (.html, .htm) | `compression.html` | **headroom** | **47%** | 88% | — | — |
+| **Search** (grep/rg output) | `compression.search` | pointer | 36% | 58% | **81%** | — |
+| **Tool output** (stdin, misc) | `compression.tool_output` | pointer | 9% | 78% | **90%** | — |
+| **History** (conversation) | `compression.history` | truncate | — | **58%** | — | — |
+| **Metadata** (.yaml, .toml, .xml) | `compression.metadata` | none | — | 85% | — | — |
 
-**Size-dependent performance** (tool output, measured):
+**Key trade-off: semantic vs lossy compression.** Headroom preserves meaning (ML-based token pruning + structural compression), while pointer/truncate achieve higher % by discarding content. Headroom is recommended as default because the compressed output remains readable and useful to the model.
 
-| Output size | pointer | truncate |
-|------------|---------|----------|
-| 30 lines | 31% retained | 68% retained |
-| 50 lines | 18% | 41% |
-| 100 lines | 9% | 20% |
-| 500 lines | 2% | 4% |
+**Size scaling** (headroom reduction improves with input size):
 
-**Takeaway:** Compression is additive to behavior rules. Headroom is the default engine for 7 of 10 content types — auto-installed with `install.sh`, pure software, no API keys. Each type is independently configurable: swap any to `treesitter`, `claw`, `llmlingua`, `truncate`, or `pointer`. If headroom isn't available, compress.sh gracefully falls back to zero-dep engines.
+| Content Type | Small (~2KB) | Medium (~10KB) | Large (~50KB) |
+|-------------|-------------|---------------|--------------|
+| Code | 52% | 56% | 54% |
+| JSON (SmartCrusher) | 32% | 58% | 59% |
+| Logs (LogCompressor) | 9% | 59% | 92% |
+| Text (Kompress) | 53% | 55% | 57% |
+
+**Takeaway:** Compression is additive to behavior rules. Headroom runs 100% locally (ONNX on CPU, ~7s/file), no API keys. Truncate and pointer are instant zero-dep alternatives. Treesitter provides lightweight comment/whitespace stripping (4% on code, regex fallback). Each of the 10 content types is independently configurable. Run `scripts/compress-bench.sh` to benchmark on your own data.
 
 ### Layer 4: Effort Routing (delegate cheap tasks to cheap models)
 

@@ -76,6 +76,7 @@
     // Git diffs (.diff, .patch, unified diff format)
     // Options: "headroom" | "truncate" | "none"
     //   headroom — DiffCompressor: preserves change hunks, drops unchanged context (60-80%)
+    //              Benchmark: 17-51% on small/medium, strong on large (95%+ via truncate)
     //   truncate — first/last lines (zero-dep fallback)
     "diff": "headroom",
 

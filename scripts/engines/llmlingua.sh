@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # LLMLingua-2 engine: perplexity-based prompt pruning for natural language.
 # Requires: pip install llmlingua
+# NOTE: First run downloads a model from HuggingFace (~7GB for default Llama-2-7b).
+# Requires internet access and significant disk space.
 
 if ! python3 -c "import llmlingua" 2>/dev/null; then
   echo "[compress] llmlingua not installed. Run: compress.sh --install=llmlingua" >&2
@@ -9,11 +11,22 @@ if ! python3 -c "import llmlingua" 2>/dev/null; then
 fi
 
 python3 -c "
-import sys
-from llmlingua import PromptCompressor
+import sys, os
+os.environ.setdefault('TOKENIZERS_PARALLELISM', 'false')
 
 text = sys.stdin.read()
-compressor = PromptCompressor(model_name='microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank')
-result = compressor.compress_prompt(text, rate=0.5)
-print(result['compressed_prompt'])
+if not text.strip():
+    sys.exit(0)
+
+try:
+    from llmlingua import PromptCompressor
+    compressor = PromptCompressor(
+        model_name='microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank',
+        use_llmlingua2=True,
+    )
+    result = compressor.compress_prompt(text, rate=0.5)
+    print(result['compressed_prompt'])
+except Exception as e:
+    print(f'[compress] llmlingua error: {e}', file=sys.stderr)
+    print(text)
 "

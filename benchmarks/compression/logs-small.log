@@ -1,0 +1,65 @@
+[2026-07-02 10:00:00.812] ERROR  app.server - Timeout after 30s waiting for response from upstream
+[2026-07-02 10:37:13.794] INFO  auth.middleware - Session created for user 6875
+[2026-07-02 10:14:26.599] INFO  scheduler.cron - Rate limit check: 25/100 requests in window
+[2026-07-02 10:51:39.989] WARN  api.handler - Slow query detected: 2971ms for SELECT on users
+[2026-07-02 10:28:52.543] WARN  api.handler - Slow query detected: 4147ms for SELECT on events
+[2026-07-02 10:05:05.779] WARN  scheduler.cron - Slow query detected: 1417ms for SELECT on users
+[2026-07-02 10:42:18.111] WARN  auth.middleware - Slow query detected: 4341ms for SELECT on logs
+[2026-07-02 11:19:31.972] DEBUG  auth.middleware - Database query completed in 49ms
+[2026-07-02 11:56:44.619] INFO  scheduler.cron - Connection pool: 41/50 active
+[2026-07-02 11:33:57.977] DEBUG  storage.s3 - Health check passed
+[2026-07-02 11:10:10.670] DEBUG  app.server - Database query completed in 39ms
+[2026-07-02 11:47:23.787] INFO  worker.queue - Health check passed
+[2026-07-02 11:24:36.714] DEBUG  worker.queue - Rate limit check: 26/100 requests in window
+[2026-07-02 12:01:49.919] INFO  worker.queue - Database query completed in 3ms
+[2026-07-02 12:38:02.360] DEBUG  api.handler - User 7437 authenticated via OAuth
+[2026-07-02 12:15:15.446] INFO  scheduler.cron - Request processed successfully
+[2026-07-02 12:52:28.237] DEBUG  app.server - File uploaded: 4174KB to bucket uploads
+[2026-07-02 12:29:41.808] DEBUG  auth.middleware - Cache hit for key=user:397
+[2026-07-02 12:06:54.809] ERROR  api.handler - IntegrityError: duplicate key value violates unique constraint
+  Traceback (most recent call last):
+    File "/app/api/handler.py", line 84, in handle_request
+      result = process(data)
+    File "/app/core/processor.py", line 27, in process
+      raise RuntimeError('IntegrityError: duplicate key value viol')
+[2026-07-02 13:43:07.716] WARN  cache.redis - Slow query detected: 4687ms for SELECT on events
+[2026-07-02 13:20:20.828] ERROR  api.handler - Timeout after 30s waiting for response from upstream
+[2026-07-02 13:57:33.788] INFO  auth.middleware - File uploaded: 2895KB to bucket backups
+[2026-07-02 13:34:46.591] DEBUG  scheduler.cron - File uploaded: 882KB to bucket uploads
+[2026-07-02 13:11:59.490] INFO  app.server - Request processed successfully
+[2026-07-02 13:48:12.807] INFO  api.handler - File uploaded: 4612KB to bucket uploads
+[2026-07-02 14:25:25.860] WARN  scheduler.cron - Slow query detected: 2146ms for SELECT on events
+[2026-07-02 14:02:38.809] WARN  app.server - Slow query detected: 3325ms for SELECT on logs
+[2026-07-02 14:39:51.526] WARN  worker.queue - Slow query detected: 4723ms for SELECT on users
+[2026-07-02 14:16:04.113] ERROR  cache.redis - Timeout after 30s waiting for response from upstream
+[2026-07-02 14:53:17.659] ERROR  api.handler - Timeout after 30s waiting for response from upstream
+[2026-07-02 14:30:30.176] INFO  auth.middleware - File uploaded: 4569KB to bucket assets
+[2026-07-02 14:07:43.233] INFO  cache.redis - Request processed successfully
+[2026-07-02 15:44:56.152] ERROR  cache.redis - PermissionDenied: user 6866 cannot access resource 10
+[2026-07-02 15:21:09.288] DEBUG  db.connection - File uploaded: 763KB to bucket assets
+[2026-07-02 15:58:22.326] INFO  worker.queue - Health check passed
+[2026-07-02 15:35:35.674] ERROR  app.server - Connection refused: db-primary:5432
+[2026-07-02 15:12:48.728] DEBUG  api.handler - Request processed successfully
+[2026-07-02 15:49:01.653] ERROR  cache.redis - Connection refused: db-primary:5432
+[2026-07-02 16:26:14.620] INFO  storage.s3 - Request processed successfully
+[2026-07-02 16:03:27.271] ERROR  app.server - Connection refused: db-primary:5432
+[2026-07-02 16:40:40.534] INFO  api.handler - File uploaded: 1269KB to bucket uploads
+[2026-07-02 16:17:53.570] WARN  worker.queue - Slow query detected: 510ms for SELECT on users
+[2026-07-02 16:54:06.175] INFO  auth.middleware - Background job job-33902 enqueued
+[2026-07-02 16:31:19.745] INFO  scheduler.cron - Health check passed
+[2026-07-02 17:08:32.699] INFO  db.connection - Health check passed
+[2026-07-02 17:45:45.388] ERROR  storage.s3 - PermissionDenied: user 7473 cannot access resource 85
+  Traceback (most recent call last):
+    File "/app/storage/s3.py", line 186, in handle_request
+      result = process(data)
+    File "/app/core/processor.py", line 38, in process
+      raise ValueError('PermissionDenied: user 7473 cannot acces')
+[2026-07-02 17:22:58.864] INFO  cache.redis - Cache hit for key=user:694
+[2026-07-02 17:59:11.226] INFO  app.server - Session created for user 9800
+[2026-07-02 17:36:24.866] ERROR  worker.queue - Timeout after 30s waiting for response from upstream
+  Traceback (most recent call last):
+    File "/app/worker/queue.py", line 97, in handle_request
+      result = process(data)
+    File "/app/core/processor.py", line 38, in process
+      raise ConnectionError('Timeout after 30s waiting for response f')
+[2026-07-02 17:13:37.954] INFO  api.handler - Database query completed in 12ms

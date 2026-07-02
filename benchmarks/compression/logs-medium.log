@@ -1,0 +1,240 @@
+[2026-07-02 10:00:00.662] INFO  cache.redis - Database query completed in 17ms
+[2026-07-02 10:37:13.465] INFO  api.handler - Database query completed in 19ms
+[2026-07-02 10:14:26.436] DEBUG  cache.redis - Session created for user 6971
+[2026-07-02 10:51:39.420] INFO  api.handler - Connection pool: 26/50 active
+[2026-07-02 10:28:52.556] INFO  cache.redis - Rate limit check: 43/100 requests in window
+[2026-07-02 10:05:05.979] INFO  api.handler - Background job job-95346 enqueued
+[2026-07-02 10:42:18.746] INFO  scheduler.cron - Session created for user 1600
+[2026-07-02 10:19:31.583] WARN  auth.middleware - Slow query detected: 3196ms for SELECT on logs
+[2026-07-02 10:56:44.328] ERROR  cache.redis - Timeout after 30s waiting for response from upstream
+  Traceback (most recent call last):
+    File "/app/cache/redis.py", line 143, in handle_request
+      result = process(data)
+    File "/app/core/processor.py", line 74, in process
+      raise ValueError('Timeout after 30s waiting for response f')
+[2026-07-02 10:33:57.778] INFO  auth.middleware - File uploaded: 4645KB to bucket backups
+[2026-07-02 10:10:10.993] INFO  storage.s3 - Health check passed
+[2026-07-02 10:47:23.339] INFO  api.handler - File uploaded: 336KB to bucket backups
+[2026-07-02 10:24:36.431] INFO  cache.redis - Background job job-49370 enqueued
+[2026-07-02 10:01:49.769] INFO  cache.redis - Connection pool: 27/50 active
+[2026-07-02 10:38:02.718] INFO  auth.middleware - Rate limit check: 22/100 requests in window
+[2026-07-02 10:15:15.291] INFO  worker.queue - Session created for user 2938
+[2026-07-02 10:52:28.837] INFO  storage.s3 - Rate limit check: 31/100 requests in window
+[2026-07-02 10:29:41.144] INFO  auth.middleware - Cache hit for key=user:525
+[2026-07-02 10:06:54.364] INFO  scheduler.cron - Session created for user 1305
+[2026-07-02 10:43:07.559] DEBUG  storage.s3 - Rate limit check: 14/100 requests in window
+[2026-07-02 10:20:20.738] WARN  cache.redis - Slow query detected: 1573ms for SELECT on events
+[2026-07-02 10:57:33.564] DEBUG  db.connection - User 3166 authenticated via OAuth
+[2026-07-02 10:34:46.980] DEBUG  scheduler.cron - Cache hit for key=user:99
+[2026-07-02 10:11:59.998] DEBUG  db.connection - Database query completed in 31ms
+[2026-07-02 10:48:12.764] INFO  scheduler.cron - Health check passed
+[2026-07-02 11:25:25.458] DEBUG  db.connection - Connection pool: 10/50 active
+[2026-07-02 11:02:38.997] DEBUG  scheduler.cron - Background job job-75758 enqueued
+[2026-07-02 11:39:51.107] INFO  api.handler - Health check passed
+[2026-07-02 11:16:04.367] DEBUG  scheduler.cron - Session created for user 5514
+[2026-07-02 11:53:17.665] DEBUG  storage.s3 - Cache hit for key=user:573
+[2026-07-02 11:30:30.892] WARN  scheduler.cron - Slow query detected: 1331ms for SELECT on users
+[2026-07-02 11:07:43.865] INFO  storage.s3 - Cache hit for key=user:220
+[2026-07-02 11:44:56.813] WARN  app.server - Slow query detected: 1516ms for SELECT on logs
+[2026-07-02 11:21:09.751] INFO  db.connection - Cache hit for key=user:949
+[2026-07-02 11:58:22.479] INFO  app.server - Connection pool: 43/50 active
+[2026-07-02 11:35:35.755] DEBUG  storage.s3 - Request processed successfully
+[2026-07-02 11:12:48.622] DEBUG  api.handler - Session created for user 1590
+[2026-07-02 11:49:01.188] INFO  scheduler.cron - Health check passed
+[2026-07-02 11:26:14.854] WARN  db.connection - Slow query detected: 938ms for SELECT on events
+[2026-07-02 11:03:27.843] DEBUG  worker.queue - Health check passed
+[2026-07-02 11:40:40.367] INFO  scheduler.cron - File uploaded: 2795KB to bucket uploads
+[2026-07-02 11:17:53.922] DEBUG  cache.redis - File uploaded: 3971KB to bucket uploads
+[2026-07-02 11:54:06.875] INFO  storage.s3 - Rate limit check: 12/100 requests in window
+[2026-07-02 11:31:19.491] WARN  api.handler - Slow query detected: 2083ms for SELECT on events
+[2026-07-02 11:08:32.522] INFO  app.server - Background job job-52289 enqueued
+[2026-07-02 11:45:45.282] DEBUG  worker.queue - Health check passed
+[2026-07-02 11:22:58.304] INFO  api.handler - Background job job-32729 enqueued
+[2026-07-02 11:59:11.897] INFO  db.connection - Database query completed in 44ms
+[2026-07-02 11:36:24.968] DEBUG  worker.queue - Session created for user 5501
+[2026-07-02 11:13:37.507] INFO  auth.middleware - Request processed successfully
+[2026-07-02 12:50:50.455] INFO  auth.middleware - Rate limit check: 25/100 requests in window
+[2026-07-02 12:27:03.790] INFO  scheduler.cron - Session created for user 6924
+[2026-07-02 12:04:16.369] INFO  cache.redis - Rate limit check: 36/100 requests in window
+[2026-07-02 12:41:29.529] WARN  worker.queue - Slow query detected: 3190ms for SELECT on logs
+[2026-07-02 12:18:42.386] INFO  auth.middleware - Session created for user 4744
+[2026-07-02 12:55:55.542] INFO  api.handler - Cache hit for key=user:154
+[2026-07-02 12:32:08.237] WARN  worker.queue - Slow query detected: 4186ms for SELECT on events
+[2026-07-02 12:09:21.356] DEBUG  app.server - Connection pool: 18/50 active
+[2026-07-02 12:46:34.959] WARN  db.connection - Slow query detected: 3885ms for SELECT on events
+[2026-07-02 12:23:47.366] INFO  worker.queue - File uploaded: 3383KB to bucket uploads
+[2026-07-02 12:00:00.459] WARN  api.handler - Slow query detected: 4925ms for SELECT on tasks
+[2026-07-02 12:37:13.899] INFO  worker.queue - Health check passed
+[2026-07-02 12:14:26.728] INFO  storage.s3 - Cache hit for key=user:656
+[2026-07-02 12:51:39.969] INFO  db.connection - Cache hit for key=user:234
+[2026-07-02 12:28:52.760] INFO  cache.redis - Rate limit check: 42/100 requests in window
+[2026-07-02 12:05:05.523] INFO  auth.middleware - Request processed successfully
+[2026-07-02 12:42:18.270] INFO  db.connection - Database query completed in 5ms
+[2026-07-02 12:19:31.636] ERROR  db.connection - Connection refused: db-primary:5432
+  Traceback (most recent call last):
+    File "/app/db/connection.py", line 288, in handle_request
+      result = process(data)
+    File "/app/core/processor.py", line 59, in process
+      raise RuntimeError('Connection refused: db-primary:5432')
+[2026-07-02 12:56:44.334] INFO  cache.redis - Rate limit check: 15/100 requests in window
+[2026-07-02 12:33:57.779] INFO  worker.queue - Rate limit check: 40/100 requests in window
+[2026-07-02 12:10:10.814] DEBUG  auth.middleware - Session created for user 8126
+[2026-07-02 12:47:23.455] DEBUG  api.handler - Database query completed in 29ms
+[2026-07-02 12:24:36.110] INFO  auth.middleware - Health check passed
+[2026-07-02 12:01:49.109] ERROR  scheduler.cron - IntegrityError: duplicate key value violates unique constraint
+  Traceback (most recent call last):
+    File "/app/scheduler/cron.py", line 155, in handle_request
+      result = process(data)
+    File "/app/core/processor.py", line 81, in process
+      raise RuntimeError('IntegrityError: duplicate key value viol')
+[2026-07-02 12:38:02.504] INFO  auth.middleware - Connection pool: 32/50 active
+[2026-07-02 13:15:15.882] DEBUG  cache.redis - Background job job-35236 enqueued
+[2026-07-02 13:52:28.286] INFO  cache.redis - Database query completed in 41ms
+[2026-07-02 13:29:41.428] INFO  auth.middleware - Request processed successfully
+[2026-07-02 13:06:54.832] INFO  app.server - User 1241 authenticated via OAuth
+[2026-07-02 13:43:07.419] DEBUG  worker.queue - Rate limit check: 10/100 requests in window
+[2026-07-02 13:20:20.372] ERROR  scheduler.cron - Connection refused: db-primary:5432
+  Traceback (most recent call last):
+    File "/app/scheduler/cron.py", line 265, in handle_request
+      result = process(data)
+    File "/app/core/processor.py", line 42, in process
+      raise RuntimeError('Connection refused: db-primary:5432')
+[2026-07-02 13:57:33.948] INFO  db.connection - User 8257 authenticated via OAuth
+[2026-07-02 13:34:46.852] ERROR  db.connection - OutOfMemoryError: heap space exhausted (used: 399MB / 512MB)
+[2026-07-02 13:11:59.419] INFO  auth.middleware - Request processed successfully
+[2026-07-02 13:48:12.405] INFO  worker.queue - Request processed successfully
+[2026-07-02 13:25:25.115] INFO  cache.redis - Session created for user 4982
+[2026-07-02 13:02:38.586] WARN  auth.middleware - Slow query detected: 3242ms for SELECT on users
+[2026-07-02 13:39:51.354] INFO  storage.s3 - Database query completed in 44ms
+[2026-07-02 13:16:04.464] WARN  auth.middleware - Slow query detected: 4593ms for SELECT on users
+[2026-07-02 13:53:17.228] DEBUG  api.handler - Health check passed
+[2026-07-02 13:30:30.486] INFO  auth.middleware - Background job job-73273 enqueued
+[2026-07-02 13:07:43.601] INFO  auth.middleware - File uploaded: 4552KB to bucket uploads
+[2026-07-02 13:44:56.170] DEBUG  auth.middleware - Rate limit check: 28/100 requests in window
+[2026-07-02 13:21:09.894] WARN  scheduler.cron - Slow query detected: 1719ms for SELECT on users
+[2026-07-02 13:58:22.734] INFO  api.handler - Health check passed
+[2026-07-02 13:35:35.609] ERROR  auth.middleware - OutOfMemoryError: heap space exhausted (used: 409MB / 512MB)
+[2026-07-02 13:12:48.213] INFO  db.connection - Request processed successfully
+[2026-07-02 13:49:01.201] INFO  scheduler.cron - Rate limit check: 28/100 requests in window
+[2026-07-02 13:26:14.835] INFO  app.server - User 2310 authenticated via OAuth
+[2026-07-02 13:03:27.671] ERROR  scheduler.cron - IntegrityError: duplicate key value violates unique constraint
+[2026-07-02 14:40:40.851] INFO  cache.redis - Database query completed in 14ms
+[2026-07-02 14:17:53.494] INFO  api.handler - File uploaded: 3411KB to bucket backups
+[2026-07-02 14:54:06.208] ERROR  worker.queue - PermissionDenied: user 7997 cannot access resource 14
+[2026-07-02 14:31:19.663] INFO  worker.queue - Cache hit for key=user:615
+[2026-07-02 14:08:32.965] INFO  scheduler.cron - Connection pool: 39/50 active
+[2026-07-02 14:45:45.884] DEBUG  cache.redis - Health check passed
+[2026-07-02 14:22:58.116] DEBUG  auth.middleware - Background job job-28158 enqueued
+[2026-07-02 14:59:11.942] INFO  auth.middleware - Database query completed in 3ms
+[2026-07-02 14:36:24.696] INFO  api.handler - Background job job-74589 enqueued
+[2026-07-02 14:13:37.432] DEBUG  auth.middleware - Rate limit check: 24/100 requests in window
+[2026-07-02 14:50:50.927] DEBUG  scheduler.cron - Database query completed in 50ms
+[2026-07-02 14:27:03.990] ERROR  api.handler - OutOfMemoryError: heap space exhausted (used: 395MB / 512MB)
+  Traceback (most recent call last):
+    File "/app/api/handler.py", line 184, in handle_request
+      result = process(data)
+    File "/app/core/processor.py", line 15, in process
+      raise RuntimeError('OutOfMemoryError: heap space exhausted (')
+[2026-07-02 14:04:16.652] DEBUG  auth.middleware - Health check passed
+[2026-07-02 14:41:29.870] DEBUG  db.connection - User 7460 authenticated via OAuth
+[2026-07-02 14:18:42.587] DEBUG  app.server - File uploaded: 3569KB to bucket backups
+[2026-07-02 14:55:55.233] ERROR  auth.middleware - PermissionDenied: user 4245 cannot access resource 63
+[2026-07-02 14:32:08.300] DEBUG  api.handler - User 8046 authenticated via OAuth
+[2026-07-02 14:09:21.787] INFO  scheduler.cron - Health check passed
+[2026-07-02 14:46:34.273] INFO  storage.s3 - Session created for user 1735
+[2026-07-02 14:23:47.875] ERROR  db.connection - Connection refused: db-primary:5432
+[2026-07-02 14:00:00.939] INFO  app.server - Health check passed
+[2026-07-02 14:37:13.439] INFO  api.handler - User 5237 authenticated via OAuth
+[2026-07-02 14:14:26.815] WARN  app.server - Slow query detected: 3285ms for SELECT on users
+[2026-07-02 14:51:39.361] INFO  app.server - Background job job-06958 enqueued
+[2026-07-02 14:28:52.497] WARN  cache.redis - Slow query detected: 3150ms for SELECT on users
+[2026-07-02 15:05:05.119] INFO  scheduler.cron - User 2631 authenticated via OAuth
+[2026-07-02 15:42:18.190] INFO  api.handler - File uploaded: 4346KB to bucket assets
+[2026-07-02 15:19:31.441] DEBUG  scheduler.cron - Cache hit for key=user:356
+[2026-07-02 15:56:44.613] INFO  app.server - Background job job-72738 enqueued
+[2026-07-02 15:33:57.449] INFO  auth.middleware - Database query completed in 47ms
+[2026-07-02 15:10:10.346] DEBUG  auth.middleware - Connection pool: 39/50 active
+[2026-07-02 15:47:23.768] INFO  api.handler - Cache hit for key=user:706
+[2026-07-02 15:24:36.678] INFO  worker.queue - Database query completed in 36ms
+[2026-07-02 15:01:49.130] ERROR  worker.queue - PermissionDenied: user 7737 cannot access resource 39
+[2026-07-02 15:38:02.941] WARN  cache.redis - Slow query detected: 1444ms for SELECT on tasks
+[2026-07-02 15:15:15.209] INFO  auth.middleware - Request processed successfully
+[2026-07-02 15:52:28.337] INFO  app.server - Health check passed
+[2026-07-02 15:29:41.829] WARN  worker.queue - Slow query detected: 1707ms for SELECT on logs
+[2026-07-02 15:06:54.603] DEBUG  auth.middleware - Cache hit for key=user:232
+[2026-07-02 15:43:07.327] ERROR  api.handler - Timeout after 30s waiting for response from upstream
+[2026-07-02 15:20:20.601] WARN  worker.queue - Slow query detected: 3948ms for SELECT on tasks
+[2026-07-02 15:57:33.537] INFO  app.server - Session created for user 7232
+[2026-07-02 15:34:46.860] DEBUG  app.server - File uploaded: 4259KB to bucket backups
+[2026-07-02 15:11:59.505] ERROR  app.server - OutOfMemoryError: heap space exhausted (used: 225MB / 512MB)
+  Traceback (most recent call last):
+    File "/app/app/server.py", line 162, in handle_request
+      result = process(data)
+    File "/app/core/processor.py", line 60, in process
+      raise RuntimeError('OutOfMemoryError: heap space exhausted (')
+[2026-07-02 15:48:12.892] INFO  storage.s3 - Cache hit for key=user:302
+[2026-07-02 15:25:25.949] WARN  storage.s3 - Slow query detected: 940ms for SELECT on users
+[2026-07-02 15:02:38.284] ERROR  auth.middleware - PermissionDenied: user 7775 cannot access resource 42
+  Traceback (most recent call last):
+    File "/app/auth/middleware.py", line 166, in handle_request
+      result = process(data)
+    File "/app/core/processor.py", line 85, in process
+      raise ConnectionError('PermissionDenied: user 7775 cannot acces')
+[2026-07-02 15:39:51.306] INFO  db.connection - Background job job-94159 enqueued
+[2026-07-02 15:16:04.823] INFO  worker.queue - Database query completed in 34ms
+[2026-07-02 15:53:17.663] INFO  app.server - Cache hit for key=user:580
+[2026-07-02 16:30:30.152] INFO  cache.redis - Background job job-37852 enqueued
+[2026-07-02 16:07:43.234] INFO  app.server - Session created for user 1200
+[2026-07-02 16:44:56.926] INFO  storage.s3 - User 8794 authenticated via OAuth
+[2026-07-02 16:21:09.715] DEBUG  app.server - User 4401 authenticated via OAuth
+[2026-07-02 16:58:22.768] INFO  app.server - Cache hit for key=user:684
+[2026-07-02 16:35:35.526] INFO  auth.middleware - Background job job-59683 enqueued
+[2026-07-02 16:12:48.195] ERROR  cache.redis - IntegrityError: duplicate key value violates unique constraint
+[2026-07-02 16:49:01.963] DEBUG  db.connection - Background job job-91046 enqueued
+[2026-07-02 16:26:14.523] DEBUG  api.handler - User 2790 authenticated via OAuth
+[2026-07-02 16:03:27.595] ERROR  cache.redis - PermissionDenied: user 6185 cannot access resource 34
+[2026-07-02 16:40:40.738] INFO  auth.middleware - Session created for user 9514
+[2026-07-02 16:17:53.927] INFO  api.handler - Background job job-03144 enqueued
+[2026-07-02 16:54:06.968] INFO  scheduler.cron - Connection pool: 45/50 active
+[2026-07-02 16:31:19.755] INFO  cache.redis - Background job job-66413 enqueued
+[2026-07-02 16:08:32.216] WARN  worker.queue - Slow query detected: 2996ms for SELECT on logs
+[2026-07-02 16:45:45.841] DEBUG  app.server - Cache hit for key=user:339
+[2026-07-02 16:22:58.761] INFO  storage.s3 - Cache hit for key=user:472
+[2026-07-02 16:59:11.157] DEBUG  cache.redis - Session created for user 6169
+[2026-07-02 16:36:24.691] WARN  worker.queue - Slow query detected: 3096ms for SELECT on users
+[2026-07-02 16:13:37.252] INFO  app.server - Health check passed
+[2026-07-02 16:50:50.291] DEBUG  db.connection - Background job job-93041 enqueued
+[2026-07-02 16:27:03.188] DEBUG  api.handler - Health check passed
+[2026-07-02 16:04:16.214] INFO  app.server - User 9290 authenticated via OAuth
+[2026-07-02 16:41:29.294] INFO  storage.s3 - File uploaded: 4238KB to bucket backups
+[2026-07-02 16:18:42.235] INFO  app.server - Rate limit check: 5/100 requests in window
+[2026-07-02 17:55:55.803] DEBUG  db.connection - Health check passed
+[2026-07-02 17:32:08.691] ERROR  cache.redis - Timeout after 30s waiting for response from upstream
+  Traceback (most recent call last):
+    File "/app/cache/redis.py", line 186, in handle_request
+      result = process(data)
+    File "/app/core/processor.py", line 50, in process
+      raise RuntimeError('Timeout after 30s waiting for response f')
+[2026-07-02 17:09:21.787] INFO  cache.redis - Cache hit for key=user:281
+[2026-07-02 17:46:34.204] INFO  worker.queue - File uploaded: 4712KB to bucket uploads
+[2026-07-02 17:23:47.275] INFO  cache.redis - Session created for user 8268
+[2026-07-02 17:00:00.791] INFO  db.connection - Connection pool: 16/50 active
+[2026-07-02 17:37:13.744] WARN  storage.s3 - Slow query detected: 3113ms for SELECT on events
+[2026-07-02 17:14:26.440] INFO  db.connection - Rate limit check: 34/100 requests in window
+[2026-07-02 17:51:39.417] WARN  storage.s3 - Slow query detected: 4054ms for SELECT on tasks
+[2026-07-02 17:28:52.329] INFO  cache.redis - Health check passed
+[2026-07-02 17:05:05.166] DEBUG  db.connection - Health check passed
+[2026-07-02 17:42:18.230] DEBUG  db.connection - Connection pool: 40/50 active
+[2026-07-02 17:19:31.645] INFO  scheduler.cron - Session created for user 4992
+[2026-07-02 17:56:44.167] INFO  api.handler - Session created for user 8132
+[2026-07-02 17:33:57.341] INFO  db.connection - Session created for user 8584
+[2026-07-02 17:10:10.280] INFO  scheduler.cron - Database query completed in 39ms
+[2026-07-02 17:47:23.322] INFO  app.server - Cache hit for key=user:153
+[2026-07-02 17:24:36.691] INFO  api.handler - User 6187 authenticated via OAuth
+[2026-07-02 17:01:49.835] INFO  db.connection - Session created for user 9362
+[2026-07-02 17:38:02.478] DEBUG  app.server - Request processed successfully
+[2026-07-02 17:15:15.542] WARN  scheduler.cron - Slow query detected: 2806ms for SELECT on logs
+[2026-07-02 17:52:28.515] INFO  scheduler.cron - File uploaded: 1551KB to bucket backups
+[2026-07-02 17:29:41.493] INFO  scheduler.cron - Cache hit for key=user:894
+[2026-07-02 17:06:54.116] INFO  storage.s3 - Connection pool: 31/50 active
+[2026-07-02 17:43:07.718] INFO  auth.middleware - Rate limit check: 27/100 requests in window

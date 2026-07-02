@@ -68,7 +68,7 @@ Modular token-saving framework — 6 layers, each targeting a waste category, al
 |-------|-----------|
 | Not working | `bash scripts/mode.sh get` — is it `off`? |
 | No transcripts | Run during active session (60 min window) |
-| Install fail | `mkdir -p ~/.cursor/skills && bash install.sh` |
+| Install fail | `git clone ... && cd save-token && bash install.sh` |
 
 ## Auto-Activation
 ```bash
@@ -97,7 +97,7 @@ cp hooks/hooks.json.example ~/.cursor/hooks.json
 | mid | 368 | Project-level rules |
 | full | 1123 | Complete feature set |
 
-Install: `bash install.sh --density=kernel|mid|full`
+Install: `bash install.sh --density=kernel` (or `mid`, `full`)
 
 ## Optimization Layers
 | Layer | Targets |

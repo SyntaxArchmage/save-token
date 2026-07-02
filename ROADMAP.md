@@ -102,7 +102,16 @@ Core rules (`rules/agent-rules.md`) are platform-agnostic. All scripts work on a
 
 ### P1: Content-Type-Aware Compression Pipeline ✅ DONE
 
-**Status:** Implemented. `compress.sh` + 7 engines (none, truncate, pointer, treesitter, llmlingua, claw, headroom). Configurable via env vars + `~/.save-token/compress.conf`. A/B tested: pointer 84-99% on large tool output, truncate 74-95% on docs.
+**Status:** Implemented. `compress.sh` + 7 engines (none, truncate, pointer, treesitter, llmlingua, claw, headroom). Configurable via env vars + `~/.save-token/compress.conf`. A/B tested: 103 measurements across 10 content types and 5 engines. pointer 84-99% on large tool output, truncate 74-95% on docs.
+
+**Engine availability (as of v0.7.0):**
+| Engine | Status | Notes |
+|--------|--------|-------|
+| none, truncate, pointer | Ready | Zero-dep, always available |
+| headroom | Ready | Auto-installed, local ONNX model, 40-95% reduction |
+| treesitter | Partial | `tree-sitter` CLI not installed; regex fallback strips comments/blanks (0.5-5.8% on code) |
+| claw | Blocked | PyPI `claw-compactor` v7.x is EngramEngine (unrelated). Real Claw Compactor AST tool not on PyPI. |
+| llmlingua | Blocked | Requires HuggingFace Llama-2-7b model download (~7GB). Works with network access. |
 
 **Problem:** Context is not homogeneous. Code, natural language, tool outputs, and binary references have fundamentally different structures. A single compressor cannot optimize all types. Headroom understands this (separate CCR for code, output shaper for responses), but we need to go further.
 

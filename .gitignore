@@ -26,3 +26,10 @@ benchmarks/results/bench-*.json
 # Test artifacts
 /a.log
 /b.log
+
+# Benchmark fixture outputs (generated at project root by quality-bench)
+/binary-search.py
+/csv-parser.py
+/email-validator.py
+/flatten-nested.py
+/merge-sort.py
