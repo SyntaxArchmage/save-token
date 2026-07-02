@@ -6,7 +6,7 @@
 git clone <repo-url>
 cd save-token
 bash install.sh
-bash scripts/test.sh  # should pass 55+ checks
+bash scripts/test.sh  # should pass 151 checks
 ```
 
 ## Development Workflow
@@ -28,7 +28,7 @@ To add new benchmark results:
 ## Adding Adapters
 
 1. Create the adapter file in `adapters/`
-2. Include the "Validated: 200 A/B trials" line in the header
+2. Include the "Validated: 1216 A/B trials" line in the header
 3. Add a row to the adapters table in README.md
 4. Add existence + content validation checks in `test.sh`
 
