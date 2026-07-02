@@ -136,15 +136,15 @@ auto_engine() {
       if [ "$has_headroom" = true ]; then echo "headroom"
       else echo "truncate"
       fi ;;
-    diff)         echo "truncate" ;;
+    diff)
+      if [ "$has_headroom" = true ]; then echo "headroom"
+      else echo "truncate"
+      fi ;;
     html)
       if [ "$has_headroom" = true ]; then echo "headroom"
       else echo "truncate"
       fi ;;
-    search)
-      if [ "$has_headroom" = true ]; then echo "headroom"
-      else echo "pointer"
-      fi ;;
+    search)       echo "pointer" ;;
     tool_output)  echo "pointer" ;;
     history)      echo "truncate" ;;
     metadata)     echo "none" ;;
