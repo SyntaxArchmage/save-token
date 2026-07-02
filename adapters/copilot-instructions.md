@@ -3,7 +3,7 @@
 Place this file at `.github/copilot-instructions.md` in your project root
 to apply save-token rules to GitHub Copilot Chat.
 
-Validated: 216 A/B trials → -51% code, -93% explanation, -39% tool calls (ultra).
+Validated: 1216 A/B trials — -48% code, 100% quality, 125A/0B/0C grades.
 
 ---
 

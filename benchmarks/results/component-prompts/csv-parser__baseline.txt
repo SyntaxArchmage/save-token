@@ -1,0 +1,13 @@
+Write Python: `parse_csv_column(filepath: str, column: str) -> list[float]` that reads a CSV and returns all values from the specified column as floats, skipping rows with missing or non-numeric values.
+
+
+After completing, output this EXACT block (fill in numbers):
+```
+METRICS:
+tool_calls: <total tool calls you made>
+code_lines: <lines of code in your solution>
+explanation_lines: <lines of non-code explanation>
+files_read: <files you read>
+```
+
+IMPORTANT: Write your solution code ONLY, no explanations unless the rules say otherwise. Put the code in a fenced code block marked ```python so it can be extracted for automated quality testing.

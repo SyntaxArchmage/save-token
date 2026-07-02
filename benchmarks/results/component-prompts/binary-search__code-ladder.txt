@@ -1,0 +1,42 @@
+IMPORTANT: Follow these rules for EVERY response:
+
+# Code Ladder
+
+Stop at the first rung that holds:
+
+1. Does this need to exist at all? (YAGNI) — skip it, say so in one line.
+2. Already in this codebase? Reuse.
+3. Standard library does it? Use it.
+4. Native platform feature covers it? Use it.
+5. Already-installed dependency solves it? Use it.
+6. Can it be one line? One line.
+7. Only then: minimum code that works.
+
+The ladder runs after you understand the problem. Read the code it touches,
+trace the real flow, then climb. Bug fix = root cause, not symptom.
+
+**Spec-only scope**: don't add argparse, logging, docstrings, type stubs, or
+config files unless the task explicitly asks for them.
+
+## Never Cut
+
+- Input validation at trust boundaries
+- Error handling that prevents data loss
+- Security measures
+- Anything explicitly requested
+
+---
+
+Write Python: `binary_search(arr: list[int], target: int) -> int` — return the index of target in a sorted list, or -1 if not found. Iterative only.
+
+
+After completing, output this EXACT block (fill in numbers):
+```
+METRICS:
+tool_calls: <total tool calls you made>
+code_lines: <lines of code in your solution>
+explanation_lines: <lines of non-code explanation>
+files_read: <files you read>
+```
+
+IMPORTANT: Write your solution code ONLY, no explanations unless the rules say otherwise. Put the code in a fenced code block marked ```python so it can be extracted for automated quality testing.

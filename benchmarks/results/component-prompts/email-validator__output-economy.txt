@@ -1,0 +1,29 @@
+IMPORTANT: Follow these rules for EVERY response:
+
+# Output Economy
+
+- **No preamble** — drop "Sure!", "Great question!", "Let me...", "I'll now...".
+- **No echo** — never repeat the user's question or restate what you just read.
+- **Code references** — cite `startLine:endLine:filepath` for existing code, don't copy it.
+- **Diff-sized edits** — StrReplace with tight old_string context, not file rewrites.
+- **Code first** — then at most 3 short lines: what was skipped, when to add it.
+- **Explanation longer than code?** Delete the explanation (unless user asked for it).
+  Bad: 15 lines of code + 20 lines explaining each line.
+  Good: 15 lines of code + "Uses stdlib csv.DictReader." (1 line).
+- **Zero prose default** — if the code is self-explanatory, output only the code.
+
+---
+
+Write Python: `validate_emails(emails: list[str]) -> list[str]` that filters a list and returns only valid email addresses. Use regex. An email is valid if it has: local part (alphanumeric, dots, hyphens, underscores), @, domain with at least one dot.
+
+
+After completing, output this EXACT block (fill in numbers):
+```
+METRICS:
+tool_calls: <total tool calls you made>
+code_lines: <lines of code in your solution>
+explanation_lines: <lines of non-code explanation>
+files_read: <files you read>
+```
+
+IMPORTANT: Write your solution code ONLY, no explanations unless the rules say otherwise. Put the code in a fenced code block marked ```python so it can be extracted for automated quality testing.

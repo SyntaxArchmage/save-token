@@ -26,7 +26,10 @@ case "${1:-}" in
     echo "  help       Show this help"
     echo
     echo "Options:"
-    echo "  --platform=cursor|claude-code|codebuddy|generic  Target platform (default: cursor)"
+    echo "  --platform=PLATFORM  Target platform (default: cursor)"
+    echo "    Platforms: cursor, claude-code, codebuddy, augment, roo-code,"
+    echo "    kilo-code, opencode, pi-agent, aider, gemini-cli, cline, windsurf,"
+    echo "    copilot, generic"
     echo "  --mode=lite|full|ultra  Set initial intensity (default: full)"
     echo "  --density=kernel|mid|full  Rules density variant (default: full)"
     echo "  --hook                  Also install session auto-activation hook (cursor only)"
@@ -57,11 +60,6 @@ case "${1:-}" in
       echo "[OK] Cursor (light): $RULES_DIR/save-token.mdc"
       found=true
     fi
-    # Claude Code
-    if [ -f "AGENTS.md" ] && grep -q "save-token" "AGENTS.md" 2>/dev/null; then
-      echo "[OK] Claude Code: ./AGENTS.md"
-      found=true
-    fi
     # CodeBuddy
     CB_RULE_DIR="${HOME}/.codebuddy/rules"
     if [ -f "$CB_RULE_DIR/save-token.md" ]; then
@@ -74,6 +72,41 @@ case "${1:-}" in
     fi
     if [ -d ".codebuddy/rules" ] && ls .codebuddy/rules/*save-token* >/dev/null 2>&1; then
       echo "[OK] CodeBuddy (project rules): .codebuddy/rules/"
+      found=true
+    fi
+    # Augment Code
+    if [ -f ".augment/rules/save-token.md" ]; then
+      echo "[OK] Augment Code: .augment/rules/save-token.md"
+      found=true
+    fi
+    # Roo Code
+    if [ -f ".roo/rules/save-token.md" ]; then
+      echo "[OK] Roo Code: .roo/rules/save-token.md"
+      found=true
+    fi
+    # Kilo Code
+    if [ -f ".kilo/rules/save-token.md" ]; then
+      echo "[OK] Kilo Code: .kilo/rules/save-token.md"
+      found=true
+    fi
+    # Cline / Trae
+    if [ -f ".clinerules" ] && grep -q "save-token" ".clinerules" 2>/dev/null; then
+      echo "[OK] Cline/Trae: ./.clinerules"
+      found=true
+    fi
+    # Windsurf
+    if [ -f ".windsurfrules" ] && grep -q "save-token" ".windsurfrules" 2>/dev/null; then
+      echo "[OK] Windsurf: ./.windsurfrules"
+      found=true
+    fi
+    # GitHub Copilot
+    if [ -f ".github/copilot-instructions.md" ] && grep -q "save-token" ".github/copilot-instructions.md" 2>/dev/null; then
+      echo "[OK] GitHub Copilot: .github/copilot-instructions.md"
+      found=true
+    fi
+    # AGENTS.md (OpenCode, Pi Agent, Aider, Gemini CLI)
+    if [ -f "AGENTS.md" ] && grep -q "save-token" "AGENTS.md" 2>/dev/null; then
+      echo "[OK] AGENTS.md (Claude Code, OpenCode, Pi Agent, Aider, Gemini CLI, etc.)"
       found=true
     fi
     if [ "$found" = false ]; then
@@ -121,9 +154,17 @@ case "${1:-}" in
       echo "[OK] Removed CodeBuddy global rule"
       removed=true
     fi
+    # Project-level files
+    for pf in ".augment/rules/save-token.md" ".roo/rules/save-token.md" ".kilo/rules/save-token.md" ".clinerules" ".windsurfrules"; do
+      if [ -f "$pf" ] && grep -q "save-token" "$pf" 2>/dev/null; then
+        rm "$pf"
+        echo "[OK] Removed $pf"
+        removed=true
+      fi
+    done
     if [ "$removed" = false ]; then
       echo "[--] Not installed (nothing to remove)."
-      echo "[TIP] Project-level files (AGENTS.md, CODEBUDDY.md) must be removed manually."
+      echo "[TIP] Project-level files (AGENTS.md, CODEBUDDY.md, .github/copilot-instructions.md) must be removed manually."
     fi
     exit 0
     ;;
@@ -169,8 +210,8 @@ rules_file() {
 
 # Validate platform
 case "$PLATFORM" in
-  cursor|claude-code|codebuddy|generic) ;;
-  *) echo "[FAIL] Invalid platform: $PLATFORM. Use cursor|claude-code|codebuddy|generic"; exit 1 ;;
+  cursor|claude-code|codebuddy|augment|roo-code|kilo-code|opencode|pi-agent|aider|gemini-cli|cline|windsurf|copilot|generic) ;;
+  *) echo "[FAIL] Invalid platform: $PLATFORM"; echo "  Use: cursor|claude-code|codebuddy|augment|roo-code|kilo-code|opencode|pi-agent|aider|gemini-cli|cline|windsurf|copilot|generic"; exit 1 ;;
 esac
 
 mkdir -p "$CONFIG_DIR"
@@ -258,6 +299,140 @@ install_codebuddy_heavy() {
   echo "[OK] Scripts available at: $REPO_DIR/scripts/"
 }
 
+install_augment_light() {
+  local RULES_DIR="${PWD}/.augment/rules"
+  mkdir -p "$RULES_DIR"
+  cp "$REPO_DIR/adapters/augment-rules.md" "$RULES_DIR/save-token.md"
+  echo "[OK] Installed: $RULES_DIR/save-token.md"
+  echo "     Augment Code will auto-apply on every prompt."
+}
+
+install_augment_heavy() {
+  install_augment_light
+  echo "[OK] Scripts available at: $REPO_DIR/scripts/"
+}
+
+install_roo_code_light() {
+  local RULES_DIR="${PWD}/.roo/rules"
+  mkdir -p "$RULES_DIR"
+  cp "$REPO_DIR/adapters/roo-rules.md" "$RULES_DIR/save-token.md"
+  echo "[OK] Installed: $RULES_DIR/save-token.md"
+  echo "     Roo Code / Zoo Code will auto-apply on every prompt."
+}
+
+install_roo_code_heavy() {
+  install_roo_code_light
+  echo "[OK] Scripts available at: $REPO_DIR/scripts/"
+}
+
+install_kilo_code_light() {
+  local RULES_DIR="${PWD}/.kilo/rules"
+  mkdir -p "$RULES_DIR"
+  cp "$REPO_DIR/adapters/kilo-rules.md" "$RULES_DIR/save-token.md"
+  echo "[OK] Installed: $RULES_DIR/save-token.md"
+  echo "     Add to kilo.jsonc: {\"instructions\": [\".kilo/rules/save-token.md\"]}"
+}
+
+install_kilo_code_heavy() {
+  install_kilo_code_light
+  echo "[OK] Scripts available at: $REPO_DIR/scripts/"
+}
+
+install_opencode_light() {
+  install_claude_code_light
+  echo "     OpenCode auto-discovers AGENTS.md from project root."
+}
+
+install_opencode_heavy() {
+  install_opencode_light
+  echo "[OK] Scripts available at: $REPO_DIR/scripts/"
+}
+
+install_pi_agent_light() {
+  install_claude_code_light
+  echo "     Pi Agent auto-discovers AGENTS.md. Run /reload after install."
+}
+
+install_pi_agent_heavy() {
+  install_pi_agent_light
+  echo "[OK] Scripts available at: $REPO_DIR/scripts/"
+}
+
+install_aider_light() {
+  local TARGET="${PWD}/AGENTS.md"
+  if [ -f "$TARGET" ]; then
+    echo "[WARN] AGENTS.md already exists. Backing up to AGENTS.md.bak"
+    cp "$TARGET" "${TARGET}.bak"
+  fi
+  cp "$REPO_DIR/adapters/AGENTS.md" "$TARGET"
+  echo "[OK] Installed: ./AGENTS.md"
+  echo "     Aider reads AGENTS.md natively."
+  echo "     Or add to .aider.conf.yml: read: AGENTS.md"
+}
+
+install_aider_heavy() {
+  install_aider_light
+  echo "[OK] Scripts available at: $REPO_DIR/scripts/"
+}
+
+install_gemini_cli_light() {
+  install_claude_code_light
+  echo "     Gemini CLI auto-discovers AGENTS.md."
+  echo "     Or add to .gemini/settings.json: {\"context\":{\"fileName\":[\"AGENTS.md\"]}}"
+}
+
+install_gemini_cli_heavy() {
+  install_gemini_cli_light
+  echo "[OK] Scripts available at: $REPO_DIR/scripts/"
+}
+
+install_cline_light() {
+  local TARGET="${PWD}/.clinerules"
+  if [ -f "$TARGET" ]; then
+    echo "[WARN] .clinerules already exists. Backing up."
+    cp "$TARGET" "${TARGET}.bak"
+  fi
+  cp "$REPO_DIR/adapters/clinerules" "$TARGET"
+  echo "[OK] Installed: ./.clinerules"
+  echo "     Cline / Trae will auto-apply rules."
+}
+
+install_cline_heavy() {
+  install_cline_light
+  echo "[OK] Scripts available at: $REPO_DIR/scripts/"
+}
+
+install_windsurf_light() {
+  local TARGET="${PWD}/.windsurfrules"
+  if [ -f "$TARGET" ]; then
+    echo "[WARN] .windsurfrules already exists. Backing up."
+    cp "$TARGET" "${TARGET}.bak"
+  fi
+  cp "$REPO_DIR/adapters/windsurfrules" "$TARGET"
+  echo "[OK] Installed: ./.windsurfrules"
+}
+
+install_windsurf_heavy() {
+  install_windsurf_light
+  echo "[OK] Scripts available at: $REPO_DIR/scripts/"
+}
+
+install_copilot_light() {
+  local TARGET="${PWD}/.github/copilot-instructions.md"
+  mkdir -p "${PWD}/.github"
+  if [ -f "$TARGET" ]; then
+    echo "[WARN] copilot-instructions.md already exists. Backing up."
+    cp "$TARGET" "${TARGET}.bak"
+  fi
+  cp "$REPO_DIR/adapters/copilot-instructions.md" "$TARGET"
+  echo "[OK] Installed: .github/copilot-instructions.md"
+}
+
+install_copilot_heavy() {
+  install_copilot_light
+  echo "[OK] Scripts available at: $REPO_DIR/scripts/"
+}
+
 install_generic_light() {
   echo "[OK] Generic adapter: $REPO_DIR/adapters/system-prompt.txt"
   echo "     Paste into your system prompt, or use pre-prompt.sh:"
@@ -284,6 +459,16 @@ case "$INSTALL_MODE" in
       cursor)      install_cursor_light ;;
       claude-code) install_claude_code_light ;;
       codebuddy)   install_codebuddy_light ;;
+      augment)     install_augment_light ;;
+      roo-code)    install_roo_code_light ;;
+      kilo-code)   install_kilo_code_light ;;
+      opencode)    install_opencode_light ;;
+      pi-agent)    install_pi_agent_light ;;
+      aider)       install_aider_light ;;
+      gemini-cli)  install_gemini_cli_light ;;
+      cline)       install_cline_light ;;
+      windsurf)    install_windsurf_light ;;
+      copilot)     install_copilot_light ;;
       generic)     install_generic_light ;;
     esac
     ;;
@@ -292,6 +477,16 @@ case "$INSTALL_MODE" in
       cursor)      install_cursor_heavy ;;
       claude-code) install_claude_code_heavy ;;
       codebuddy)   install_codebuddy_heavy ;;
+      augment)     install_augment_heavy ;;
+      roo-code)    install_roo_code_heavy ;;
+      kilo-code)   install_kilo_code_heavy ;;
+      opencode)    install_opencode_heavy ;;
+      pi-agent)    install_pi_agent_heavy ;;
+      aider)       install_aider_heavy ;;
+      gemini-cli)  install_gemini_cli_heavy ;;
+      cline)       install_cline_heavy ;;
+      windsurf)    install_windsurf_heavy ;;
+      copilot)     install_copilot_heavy ;;
       generic)     install_generic_heavy ;;
     esac
     ;;

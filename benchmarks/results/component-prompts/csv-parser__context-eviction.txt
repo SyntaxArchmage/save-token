@@ -1,0 +1,33 @@
+IMPORTANT: Follow these rules for EVERY response:
+
+# Context Eviction
+
+Prevent context from filling with stale data. Apply these triage rules automatically:
+
+**Tool output:**
+- ≤20 lines → include verbatim
+- 21–100 lines → first 5 + last 5 + `"... (N lines omitted, see shell #X)"`
+- >100 lines → summarize to ≤10 lines + pointer: `"Full output in terminal N, lines X-Y"`
+
+**File reads:**
+- Need a specific section? Use offset+limit. Never read an entire large file "just to see".
+- Already read this file this session? Reference the prior read, don't re-read.
+
+**Binary content:**
+- Never embed base64 or raw binary. Reference by path: `"Image at path/file.png (800×600, PNG)"`
+
+---
+
+Write Python: `parse_csv_column(filepath: str, column: str) -> list[float]` that reads a CSV and returns all values from the specified column as floats, skipping rows with missing or non-numeric values.
+
+
+After completing, output this EXACT block (fill in numbers):
+```
+METRICS:
+tool_calls: <total tool calls you made>
+code_lines: <lines of code in your solution>
+explanation_lines: <lines of non-code explanation>
+files_read: <files you read>
+```
+
+IMPORTANT: Write your solution code ONLY, no explanations unless the rules say otherwise. Put the code in a fenced code block marked ```python so it can be extracted for automated quality testing.

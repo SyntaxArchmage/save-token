@@ -1,0 +1,22 @@
+Write Python: `flatten(data)` that recursively flattens arbitrarily nested lists into a single flat list. Non-list items should be kept as-is.
+
+```python
+flatten([1, [2, [3, 4]], [5]]) == [1, 2, 3, 4, 5]
+flatten([]) == []
+flatten([[[[1]]]]) == [1]
+flatten([1, 'hello', [2, [True]]]) == [1, 'hello', 2, True]
+```
+
+Use recursion or a generator. Handle empty lists.
+
+
+After completing, output this EXACT block (fill in numbers):
+```
+METRICS:
+tool_calls: <total tool calls you made>
+code_lines: <lines of code in your solution>
+explanation_lines: <lines of non-code explanation>
+files_read: <files you read>
+```
+
+IMPORTANT: Write your solution code ONLY, no explanations unless the rules say otherwise. Put the code in a fenced code block marked ```python so it can be extracted for automated quality testing.

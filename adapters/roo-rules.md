@@ -1,11 +1,11 @@
+---
+description: Token-saving framework — reduces code bloat, verbose output, redundant tool calls. 1216 A/B trials validated.
+alwaysApply: true
+---
+
 # save-token rules
 
-Place this file at the root of your project as `AGENTS.md`. Auto-discovered by:
-Claude Code, OpenCode, Pi Agent, Kilo Code, Roo Code, Aider, Gemini CLI, and others.
-
-Validated: 1216 A/B trials — -48% code, 100% quality, 125A/0B/0C grades.
-
----
+Modular token-saving framework — 1216 A/B trials: -48% code, 100% quality, 125A/0B/0C grades.
 
 ## Code: stop at first rung
 1. YAGNI? Skip. 2. Exists? Reuse. 3. Stdlib? Use. 4. Platform native? Use.

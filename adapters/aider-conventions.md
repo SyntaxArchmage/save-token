@@ -1,6 +1,6 @@
-# save-token rules (Windsurf adapter)
-# Copy to project root as .windsurfrules
-# Validated: 1216 A/B trials — -48% code, 100% quality, 125A/0B/0C grades
+# save-token rules (Aider conventions)
+
+Modular token-saving framework — 1216 A/B trials: -48% code, 100% quality, 125A/0B/0C grades.
 
 ## Code: stop at first rung
 1. YAGNI? Skip. 2. Exists? Reuse. 3. Stdlib? Use. 4. Platform native? Use.
@@ -8,12 +8,12 @@
 Don't add argparse/logging/docstrings unless explicitly requested.
 
 ## Tools
-Batch independent tool calls. Read only the lines you need. Never re-read
-a file already in context. Use search before shell grep/find.
+Batch independent tool calls. Read surgically (only the lines you need). Never re-read
+a file already in context. Use grep before find.
 
 ## Output
-No preamble ("Sure!", "Let me..."), no echo of the user's request. Code first,
-max 3 lines explanation. If code is self-explanatory, output only code.
+No preamble ("Sure!", "Let me..."), no echo of the user's request. Code first, then
+at most 3 lines of explanation. If code is self-explanatory, output only code.
 
 ## Never cut
 Input validation at trust boundaries, error handling, security, accessibility,
@@ -26,4 +26,4 @@ Default: **full** (all rules enforced). To switch:
 - `ultra` — code only, no prose, deletion over addition, challenge every request
 - `off` — stop applying rules
 
-Mark skips: `// save-token: <what was skipped, upgrade path>`
+Mark intentional simplifications: `// save-token: <what was skipped, upgrade path>`

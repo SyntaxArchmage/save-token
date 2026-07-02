@@ -75,14 +75,20 @@ Modular token-saving framework — 6 layers, each targeting a waste category, al
 cp hooks/hooks.json.example ~/.cursor/hooks.json
 ```
 
-## Adapters
-| IDE | File |
-|-----|------|
-| Claude Code | `adapters/AGENTS.md` → project root |
+## Adapters (14 platforms)
+| Platform | File / Method |
+|----------|---------------|
+| Cursor | `adapters/standalone.mdc` → `.cursor/rules/` |
+| AGENTS.md tools | `adapters/AGENTS.md` → project root (Claude Code, OpenCode, Pi, Aider, Gemini CLI) |
+| Augment Code | `adapters/augment-rules.md` → `.augment/rules/` |
+| Roo / Zoo Code | `adapters/roo-rules.md` → `.roo/rules/` |
+| Kilo Code | `adapters/kilo-rules.md` → `.kilo/rules/` |
+| Cline / Trae | `adapters/clinerules` → `.clinerules` |
+| GitHub Copilot | `adapters/copilot-instructions.md` → `.github/` |
 | CodeBuddy | `adapters/codebuddy-rule.md` → `~/.codebuddy/rules/` |
 | Windsurf | `adapters/windsurfrules` → `.windsurfrules` |
-| GitHub Copilot | `adapters/copilot-instructions.md` → `.github/` |
-| Generic CLI | `adapters/system-prompt.txt` → system prompt |
+| Aider | `adapters/aider-conventions.md` → `.aider/conventions.md` |
+| Generic | `adapters/system-prompt.txt` → system prompt |
 
 ## Density Variants
 | Variant | Words | Use for |
@@ -105,12 +111,12 @@ Install: `bash install.sh --density=kernel|mid|full`
 
 Configure per-team via `.save-token.json` (3-level precedence: user > team > defaults).
 
-## Quick Stats (266-trial A/B data)
-| Mode | Code | Explanation | Tool Calls |
-|------|------|-------------|------------|
-| Lite | -16% | -33% | -20% |
-| Full | -24% | -75% | -34% |
-| Ultra | -51% | -93% | -39% |
+## Quick Stats (1216-trial A/B data)
+| Mode | Δ Code Lines | Quality | Grades |
+|------|-------------|---------|--------|
+| Full | **-27.4%** | 100% | 125A/0B/0C |
+| Ultra | **-48.1%** | 100% | 125A/0B/0C |
+| Baseline | — | 94.4% | 90A/30B/5C |
 
-Quality: 25A/0B/0C vs baseline 19A/5B/1C (50 trials, 25 SE benchmarks).
-100% correctness vs baseline 99.1%. Opus full: ~$250/mo savings at 100 req/day.
+Component isolation (1000 trials): Code Ladder and Output Economy each independently deliver -27.4%.
+100% correctness across all modes. Opus full: ~$250/mo savings at 100 req/day.

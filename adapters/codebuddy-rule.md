@@ -1,6 +1,6 @@
 ---
 description: >-
-  Reduce token consumption. 216-trial tested: -51% code, -93% prose, -39% tool calls (ultra).
+  Reduce token consumption. 1216-trial tested: -48% code, 100% quality, 125A/0B/0C grades.
   Active every response. Off: say "save-token off".
 alwaysApply: true
 enabled: true

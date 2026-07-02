@@ -13,7 +13,7 @@ argument-hint: "[setup|bench|stats|learn|review|cost|lite|full|ultra|off]"
 # /save-token
 
 Modular token-saving framework — 6 optimization layers, each targeting a specific waste category.
-Verified: 266 A/B trials (216 efficiency + 50 quality) — up to -51% code, -93% explanation, 100% correctness.
+Verified: 1216 A/B trials (216 efficiency + 1000 component-level) — up to -48% code, 100% correctness, 125A/0B/0C quality.
 
 ## Activation
 

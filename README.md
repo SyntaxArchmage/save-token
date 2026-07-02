@@ -1,7 +1,7 @@
 # save-token
 
-![Tests](https://img.shields.io/badge/tests-145%20passing-brightgreen)
-![Trials](https://img.shields.io/badge/A%2FB%20trials-216%20%2B%2050%20quality-blue)
+![Tests](https://img.shields.io/badge/tests-147%20passing-brightgreen)
+![Trials](https://img.shields.io/badge/A%2FB%20trials-1216%20(216%20%2B%201000%20component)-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 A modular token-saving framework for AI coding agents. Covers every waste spot — code bloat, tool misuse, verbose output, wrong-model routing, stale context, raw input size — with a dedicated optimization layer for each. Configurable per-team, validated through A/B benchmarks on real SE tasks.
@@ -10,7 +10,7 @@ A modular token-saving framework for AI coding agents. Covers every waste spot �
 
 AI coding agents waste tokens in predictable ways: over-engineered code, redundant tool calls, verbose explanations, bloated context windows. save-token addresses each waste category with a dedicated optimization layer, then proves it works through automated A/B testing — not guesswork.
 
-The result: **up to 51% fewer tokens with better code quality** (100% correctness vs baseline 99.1%, across 50 quality trials).
+The result: **up to 48% fewer code lines with better quality** (100% correctness, 125A/0B/0C vs baseline 90A/30B/5C, across 1000 component-level trials on 25 benchmarks).
 
 ## 60-Second Start
 
@@ -64,6 +64,26 @@ The default config ([`save-token.json`](save-token.json)) ships with the repo �
 
 Every optimization is validated through automated A/B testing on real SE benchmarks — not estimated, measured.
 
+### Component Effect Matrix (1000 trials, 25 benchmarks, 8 conditions, 5 trials each)
+
+| Component | Code Lines (avg) | Δ Code | Correctness | Quality | Grade Dist |
+|-----------|-----------------|--------|-------------|---------|------------|
+| **Baseline** (no rules) | 17.8 | — | 100% | 94.4% | 90A/30B/5C |
+| **Code Ladder only** | 12.9 | **-27.4%** | 100% | 100% | 125A/0B/0C |
+| **Output Economy only** | 12.9 | **-27.4%** | 100% | 100% | 125A/0B/0C |
+| **Tool Discipline only** | 17.8 | 0% | 100% | 94.4% | 90A/30B/5C |
+| **Context Eviction only** | 17.8 | 0% | 100% | 94.4% | 90A/30B/5C |
+| **Full (all layers)** | 12.9 | **-27.4%** | 100% | 100% | 125A/0B/0C |
+| **Lite** | 12.9 | **-27.4%** | 100% | 100% | 125A/0B/0C |
+| **Ultra** | 9.2 | **-48.1%** | 100% | 100% | 125A/0B/0C |
+
+**Key findings:**
+- **Code Ladder** and **Output Economy** are the two components that independently drive code conciseness (-27.4% each)
+- **Tool Discipline** and **Context Eviction** don't affect code style but reduce tool calls and context waste (session-level savings)
+- **Full mode** matches the best single component — the layers compose cleanly
+- **Ultra mode** nearly halves code output (-48.1%) with zero quality loss
+- Baseline code fails quality checks in 7/25 benchmarks (too verbose); all save-token modes pass 100%
+
 ### Token Efficiency (216 subagent trials, 16 tasks, 3 intensity levels)
 
 | Mode | Code | Explanation | Tool Calls | Correctness |
@@ -71,15 +91,6 @@ Every optimization is validated through automated A/B testing on real SE benchma
 | **lite** | -16% | **-33%** | -20% | 100% |
 | **full** | -24% | **-75%** | **-34%** | 100% |
 | **ultra** | **-51%** | **-93%** | **-39%** | 100% |
-
-### Code Quality (50 quality trials, 25 SE benchmarks)
-
-| Metric | Baseline | save-token | Delta |
-|--------|----------|------------|-------|
-| Correctness | 99.1% | **100%** | +0.9% |
-| Quality grade | 19A / 5B / 1C | **25A / 0B / 0C** | save-token wins |
-| Code lines | 16.7 avg | 14.1 avg | **-15.8%** |
-| Unwanted explanation | 0.52 lines | 0 lines | **-100%** |
 
 Benchmarks cover: algorithms, data structures, design patterns, refactoring, debugging, security, test generation, concurrency, and more. See [benchmarks/results/quality-ab-results.md](benchmarks/results/quality-ab-results.md) for per-task breakdowns.
 
@@ -114,11 +125,20 @@ Benchmarks cover: algorithms, data structures, design patterns, refactoring, deb
 
 ```bash
 git clone https://github.com/YOUR_USER/save-token.git
-cd save-token && bash install.sh                           # Cursor, full density
+cd save-token && bash install.sh                           # Cursor (default)
 bash install.sh --platform=claude-code                     # Claude Code
-bash install.sh --platform=codebuddy                       # CodeBuddy
+bash install.sh --platform=copilot                         # GitHub Copilot
+bash install.sh --platform=augment                         # Augment Code
+bash install.sh --platform=opencode                        # OpenCode
+bash install.sh --platform=kilo-code                       # Kilo Code
+bash install.sh --platform=roo-code                        # Roo Code / Zoo Code
+bash install.sh --platform=pi-agent                        # Pi Agent
+bash install.sh --platform=aider                           # Aider
+bash install.sh --platform=gemini-cli                      # Gemini CLI
+bash install.sh --platform=cline                           # Cline / Trae
+bash install.sh --platform=windsurf                        # Windsurf
+bash install.sh --platform=generic                         # Any LLM CLI
 bash install.sh --density=kernel                           # Minimal rules (177 words)
-bash install.sh light --platform=generic                   # Generic CLI, rules only
 ```
 
 Or manually symlink: `ln -s /path/to/save-token ~/.cursor/skills/save-token`
@@ -152,27 +172,42 @@ All engines are optional — the behavior rules alone deliver the bulk of saving
 
 ## Compatibility
 
-| Platform | Status | Install |
+| Platform | Method | Install |
 |----------|--------|---------|
-| Cursor CLI (Linux/macOS) | Tested | `install.sh --platform=cursor` |
-| Cursor Desktop | Tested | `install.sh --platform=cursor` |
-| Claude Code | Tested | `install.sh --platform=claude-code` |
-| CodeBuddy IDE/CLI | Tested | `install.sh --platform=codebuddy` |
-| Generic CLI (any LLM) | Tested | `install.sh --platform=generic` |
-| Windsurf | Rules only | Copy `adapters/windsurfrules` |
-| GitHub Copilot | Rules only | Copy `adapters/copilot-instructions.md` |
+| **Cursor** (CLI + Desktop) | `.cursor/rules/*.mdc` | `install.sh --platform=cursor` |
+| **Claude Code** | `AGENTS.md` | `install.sh --platform=claude-code` |
+| **GitHub Copilot** | `.github/copilot-instructions.md` | `install.sh --platform=copilot` |
+| **Augment Code** | `.augment/rules/*.md` | `install.sh --platform=augment` |
+| **OpenCode** | `AGENTS.md` | `install.sh --platform=opencode` |
+| **Kilo Code** | `.kilo/rules/*.md` | `install.sh --platform=kilo-code` |
+| **Roo Code** / Zoo Code | `.roo/rules/*.md` | `install.sh --platform=roo-code` |
+| **Pi Agent** | `AGENTS.md` | `install.sh --platform=pi-agent` |
+| **Aider** | `AGENTS.md` | `install.sh --platform=aider` |
+| **Gemini CLI** | `AGENTS.md` | `install.sh --platform=gemini-cli` |
+| **Cline** / Trae | `.clinerules` | `install.sh --platform=cline` |
+| **CodeBuddy** | `~/.codebuddy/rules/*.md` | `install.sh --platform=codebuddy` |
+| **Windsurf** | `.windsurfrules` | `install.sh --platform=windsurf` |
+| **Generic** (any LLM) | System prompt | `install.sh --platform=generic` |
+
+> Most AGENTS.md-compatible tools (OpenCode, Pi, Aider, Gemini CLI, Kilo Code, Roo Code)
+> auto-discover `AGENTS.md` from the project root. One file, many agents.
 
 ## Adapters
 
 | Platform | File | How |
 |----------|------|-----|
-| **Cursor (standalone)** | `adapters/standalone.mdc` | Copy to `.cursor/rules/` — zero-install |
-| **Claude Code** | `adapters/AGENTS.md` | Copy to project root as `AGENTS.md` |
-| **CodeBuddy (global)** | `adapters/codebuddy-rule.md` | Copy to `~/.codebuddy/rules/save-token.md` |
-| **CodeBuddy (project)** | `adapters/CODEBUDDY.md` | Copy to project root |
-| **Windsurf** | `adapters/windsurfrules` | Copy to project root as `.windsurfrules` |
+| **Cursor** | `adapters/standalone.mdc` | Copy to `.cursor/rules/` — zero-install |
+| **AGENTS.md** (universal) | `adapters/AGENTS.md` | Project root — works with Claude Code, OpenCode, Pi, Aider, Gemini CLI, etc. |
+| **Augment Code** | `adapters/augment-rules.md` | Copy to `.augment/rules/save-token.md` |
+| **Roo Code** / Zoo Code | `adapters/roo-rules.md` | Copy to `.roo/rules/save-token.md` |
+| **Kilo Code** | `adapters/kilo-rules.md` | Copy to `.kilo/rules/save-token.md` |
+| **Cline** / Trae | `adapters/clinerules` | Copy to project root as `.clinerules` |
 | **GitHub Copilot** | `adapters/copilot-instructions.md` | Copy to `.github/copilot-instructions.md` |
-| **Generic (any LLM)** | `adapters/system-prompt.txt` | Paste into system prompt, or use `pre-prompt.sh` |
+| **CodeBuddy** (global) | `adapters/codebuddy-rule.md` | Copy to `~/.codebuddy/rules/save-token.md` |
+| **CodeBuddy** (project) | `adapters/CODEBUDDY.md` | Copy to project root |
+| **Windsurf** | `adapters/windsurfrules` | Copy to project root as `.windsurfrules` |
+| **Aider** | `adapters/aider-conventions.md` | Copy to `.aider/conventions.md` |
+| **Generic** (any LLM) | `adapters/system-prompt.txt` | Paste into system prompt, or use `pre-prompt.sh` |
 
 ## Auto-Activation (Cursor Hook)
 
@@ -195,7 +230,12 @@ save-token/
 ├── rules/
 │   ├── agent-rules.md          # Full behavior ruleset (1123 words)
 │   ├── agent-rules-mid.md      # Mid-density variant (368 words)
-│   └── agent-rules-kernel.md   # Kernel variant (177 words, for alwaysApply)
+│   ├── agent-rules-kernel.md   # Kernel variant (177 words, for alwaysApply)
+│   └── components/             # Isolated rule sections for A/B testing
+│       ├── code-ladder.md      # Code Ladder section only
+│       ├── tool-discipline.md  # Tool Discipline section only
+│       ├── output-economy.md   # Output Economy section only
+│       └── context-eviction.md # Context Eviction section only
 ├── scripts/
 │   ├── compress.sh             # Content-type-aware compression pipeline
 │   ├── engines/                # Compression engines (7: none, truncate, pointer, treesitter, llmlingua, claw, headroom)
@@ -212,15 +252,22 @@ save-token/
 │   ├── progress.sh             # Progressive activation tracker
 │   ├── export-promptfoo.sh     # promptfoo config generator
 │   ├── quality-bench.sh        # Dev quality benchmark runner (correctness + quality)
-│   ├── test.sh                 # 145-check test runner
+│   ├── component-bench.sh      # Component-level A/B benchmark runner
+│   ├── component-report.sh     # Component effect matrix generator
+│   ├── test.sh                 # 147-check test runner
 │   └── analyze_transcript.py   # Transcript analyzer (+ --html report)
 ├── adapters/
 │   ├── standalone.mdc          # Cursor standalone rule (zero-install)
-│   ├── AGENTS.md               # Claude Code adapter
+│   ├── AGENTS.md               # Universal: Claude Code, OpenCode, Pi, Aider, Gemini CLI
+│   ├── augment-rules.md        # Augment Code (.augment/rules/)
+│   ├── roo-rules.md            # Roo Code / Zoo Code (.roo/rules/)
+│   ├── kilo-rules.md           # Kilo Code (.kilo/rules/)
+│   ├── clinerules              # Cline / Trae (.clinerules)
+│   ├── copilot-instructions.md # GitHub Copilot (.github/)
+│   ├── aider-conventions.md    # Aider (.aider/conventions.md)
 │   ├── CODEBUDDY.md            # CodeBuddy project adapter
 │   ├── codebuddy-rule.md       # CodeBuddy global rule
 │   ├── windsurfrules           # Windsurf adapter
-│   ├── copilot-instructions.md # GitHub Copilot adapter
 │   ├── system-prompt.txt       # Generic LLM system prompt
 │   └── pre-prompt.sh           # CLI pre-prompt injector
 ├── hooks/
@@ -241,7 +288,7 @@ save-token/
 ## FAQ
 
 **Does this affect code quality?**
-No — it *improves* it. 50 quality trials show save-token scores 25A/0B/0C vs baseline 19A/5B/1C. The code ladder prevents bloat and enforces best practices that baselines miss.
+No — it *improves* it. 1000 component-level trials show save-token scores 125A/0B/0C vs baseline 90A/30B/5C. Baseline code fails quality checks in 7/25 benchmarks (too verbose). The code ladder prevents bloat and enforces best practices.
 
 **Which mode should I use?**
 Start with `full` (default). Switch to `ultra` for boilerplate/simple tasks. Use `lite` if you want gentle hints without strict enforcement. Progressive activation (`/save-token progress`) can auto-promote based on session scores.
@@ -250,7 +297,7 @@ Start with `full` (default). Switch to `ultra` for boilerplate/simple tasks. Use
 Each optimization layer targets a specific waste category (code bloat, tool waste, verbose output, wrong-model routing, stale context, raw input tokens). They compose independently — enable what you need, configure per-team via `.save-token.json`.
 
 **Can I use this without Cursor?**
-Yes — 8 adapters cover Cursor, Claude Code, CodeBuddy, Windsurf, GitHub Copilot, and generic LLM setups. The core rules are IDE-agnostic.
+Yes — 14 platform adapters cover Cursor, Claude Code, GitHub Copilot, Augment Code, OpenCode, Kilo Code, Roo Code, Pi Agent, Aider, Gemini CLI, Cline/Trae, CodeBuddy, Windsurf, and generic LLM setups. The core rules are IDE-agnostic.
 
 **How do I verify it's working?**
 Run `/save-token review` mid-session to get a waste score (A+ to F). Run `/save-token bench` to A/B test on your own prompts. Run `/save-token quality` for code quality benchmarks.
@@ -261,36 +308,41 @@ Run `/save-token review` mid-session to get a waste score (A+ to F). Run `/save-
 |---|---|---|---|
 | Scope | Full pipeline (behavior + compression + routing + testing) | Agent behavior rules | System proxy |
 | Approach | 6 modular layers, each targeting a waste category | Decision ladder + code diet | Input/output compression |
-| Validation | A/B subagent testing (266 trials) + quality benchmarks | Manual benchmarks | Automatic perf stats |
+| Validation | A/B subagent testing (1216 trials) + component benchmarks | Manual benchmarks | Automatic perf stats |
 | Configuration | `.save-token.json` team config + 3-level precedence | Cursor rule | API proxy config |
-| Integration | 8 platform adapters (Cursor, Claude Code, Copilot, etc.) | Cursor rule | API proxy |
-| Unique | Pluggable engines + A/B validated + quality-proven (100% vs 99.1%) | Anti-bloat focus | Reversible compression |
+| Integration | 14 platform adapters (Cursor, Copilot, Augment, OpenCode, Pi, etc.) | Cursor rule | API proxy |
+| Unique | Pluggable engines + 1216 A/B trials + component-isolated proof (100% vs 94.4%) | Anti-bloat focus | Reversible compression |
 
 save-token can integrate Headroom as one of its compression engines — they're complementary, not competing.
 
 ## A/B Data: Pick Your Recipe
 
-All numbers below are measured, not estimated. Use this data to configure the combination that fits your needs.
+All numbers below are measured from 1000 component-level trials (25 benchmarks × 8 conditions × 5 trials). Use this data to configure the combination that fits your needs.
 
 ### Layer 1: Intensity Level (Code Ladder + Output Economy)
 
 The single biggest knob. Controls how aggressively the code ladder and output economy are enforced.
 
-| Benchmark Category | Metric | Baseline | Lite | Full | Ultra |
-|--------------------|--------|----------|------|------|-------|
-| **Simple** (csv-parser, email-validator, binary-search) | Code lines | 10.3 | 8.7 (-16%) | 9.3 (-10%) | 6.3 (-39%) |
-| | Explanation | 2.0 | 1.3 (-33%) | 0 (-100%) | 0 (-100%) |
-| | Quality grade | A | A | A | A |
-| **Medium** (lru-cache, merge-sort, rate-limiter, retry-decorator) | Code lines | 17.3 | — | 16.0 (-7%) | — |
-| | Explanation | 1.5 | — | 0 (-100%) | — |
-| | Quality grade | A/B mix | — | A | — |
-| **Complex** (event-emitter, stack-calculator, file-watcher, refactor) | Code lines | 28.0 | 23.0 (-18%) | 21.3 (-24%) | 13.5 (-52%) |
-| | Explanation | 3.0 | 2.0 (-33%) | 0.5 (-83%) | 0.3 (-90%) |
-| | Quality grade | A/B/C mix | A/B | A | A |
-| **All 25 quality benchmarks** | Correctness | 99.1% | — | 100% | — |
-| | Grade distribution | 19A/5B/1C | — | 25A/0B/0C | — |
+| Benchmark Category | Baseline | Full (-27%) | Ultra (-48%) | Baseline Grades | Full/Ultra Grades |
+|--------------------|----------|-------------|-------------|-----------------|-------------------|
+| **Simple** (binary-search, csv-parser, email-validator, merge-sort, flatten-nested) | 13.0 lines | 10.0 lines | 6.8 lines | 20A/0B/5C | 25A/0B/0C |
+| **Medium** (lru-cache, stack-calculator, retry-decorator, debounce, rate-limiter) | 19.2 lines | 13.4 lines | 11.2 lines | 15A/10B/0C | 25A/0B/0C |
+| **Complex** (api-crud, trie-prefix, refactor-extract-class, event-emitter, generate-tests) | 25.2 lines | 18.0 lines | 12.0 lines | 20A/5B/0C | 25A/0B/0C |
+| **Debugging** (debug-off-by-one, debug-race-condition, optimize-n-plus-one, security-sql-injection) | 12.8 lines | 10.5 lines | 7.8 lines | 20A/0B/0C | 20A/0B/0C |
+| **All 25 benchmarks** | 17.8 lines | 12.9 lines | 9.2 lines | 90A/30B/5C | 125A/0B/0C |
 
-**Takeaway:** `full` is the sweet spot — eliminates all unwanted explanation, maintains 100% quality. `ultra` for maximum code compression. `lite` for advisory-only.
+### Component Isolation: Which Layer Does What
+
+Each component was tested independently (single rule section injected vs no rules):
+
+| Component | Δ Code Lines | Quality Impact | What It Delivers |
+|-----------|-------------|----------------|------------------|
+| **Code Ladder** | **-27.4%** | 94.4% → 100% | Drives conciseness. Prevents over-engineering, docstring bloat, unnecessary abstractions. |
+| **Output Economy** | **-27.4%** | 94.4% → 100% | Eliminates verbose explanations. Zero prose default. |
+| **Tool Discipline** | 0% | No change | Reduces tool calls and re-reads. Savings are in turns, not code size. |
+| **Context Eviction** | 0% | No change | Prevents context bloat over long sessions. Saves context tokens, not code. |
+
+**Takeaway:** Code Ladder and Output Economy are the two components that independently produce the full conciseness benefit. Tool Discipline and Context Eviction deliver session-level savings (fewer turns, smaller context) that are equally important but not measurable in single-shot benchmarks.
 
 ### Layer 2: Rules Density (how many tokens the rules themselves consume)
 
@@ -380,4 +432,4 @@ Pluggable engines reduce tokens before they reach the model. The pipeline auto-d
 | **Maximum** | ultra | kernel (global) | headroom + defaults | auto | ~$400/mo |
 | **API/system prompt** | full | kernel | headroom | auto | ~$350/mo (lowest per-request overhead) |
 
-All recipes maintain 100% correctness. `ultra` produces measurably better code quality than baseline (25A vs 19A).
+All recipes maintain 100% correctness. `ultra` produces measurably better code quality than baseline (125A/0B/0C vs 90A/30B/5C across 1000 trials).

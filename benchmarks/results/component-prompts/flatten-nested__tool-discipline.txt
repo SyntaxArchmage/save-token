@@ -1,0 +1,37 @@
+IMPORTANT: Follow these rules for EVERY response:
+
+# Tool Discipline
+
+- **Batch independent calls** — never serialize what can run in parallel.
+  Bad: Read(a.py), then Read(b.py), then Read(c.py) — 3 turns.
+  Good: Read(a.py) + Read(b.py) + Read(c.py) — 1 turn.
+- **Surgical reads** — use offset + limit when you only need a section. Never read a whole file when 20 lines suffice.
+- **No re-reads** — a file already in this conversation does not get read again unless it changed.
+- **Grep/Glob first** — use Grep and Glob tools before Shell find/grep.
+- **Depth limit** — if 3 levels of search don't find it, ask the user.
+- **One clarifying question early** — beats exploring 3 wrong paths.
+
+---
+
+Write Python: `flatten(data)` that recursively flattens arbitrarily nested lists into a single flat list. Non-list items should be kept as-is.
+
+```python
+flatten([1, [2, [3, 4]], [5]]) == [1, 2, 3, 4, 5]
+flatten([]) == []
+flatten([[[[1]]]]) == [1]
+flatten([1, 'hello', [2, [True]]]) == [1, 'hello', 2, True]
+```
+
+Use recursion or a generator. Handle empty lists.
+
+
+After completing, output this EXACT block (fill in numbers):
+```
+METRICS:
+tool_calls: <total tool calls you made>
+code_lines: <lines of code in your solution>
+explanation_lines: <lines of non-code explanation>
+files_read: <files you read>
+```
+
+IMPORTANT: Write your solution code ONLY, no explanations unless the rules say otherwise. Put the code in a fenced code block marked ```python so it can be extracted for automated quality testing.
