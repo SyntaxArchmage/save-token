@@ -514,7 +514,7 @@ Output:
     
   With save-token (estimated):
     Input tokens:  45,230 (unchanged — rules don't compress input directly)
-    Output tokens: ~9,220 (-50%, based on 200-trial A/B data)
+    Output tokens: ~9,220 (-50%, based on 1216-trial A/B data)
     Estimated cost: $0.78 (-37%)
 ```
 
