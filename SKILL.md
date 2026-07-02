@@ -1,18 +1,19 @@
 ---
 name: save-token
 description: >
-  Minimize token consumption when using expensive AI models. Combines behavior
-  rules (code ladder, tool discipline, output economy), optional Headroom proxy
-  compression, and A/B subagent testing. Use when the user says "save-token",
-  "save tokens", "reduce token", "cut cost", "be efficient", "token budget",
-  or invokes /save-token.
+  Modular token-saving framework for AI coding agents. Systematically covers
+  every waste category — code generation, tool usage, output verbosity, effort
+  routing, context hygiene, input compression — with pluggable optimization
+  layers. All configurable via .save-token.json, all validated through A/B
+  benchmarks on real SE tasks. Use when the user says "save-token", "save tokens",
+  "reduce token", "cut cost", "be efficient", "token budget", or invokes /save-token.
 argument-hint: "[setup|bench|stats|learn|review|cost|lite|full|ultra|off]"
 ---
 
 # /save-token
 
-Reduce token waste across code generation, tool usage, and output verbosity.
-Verified: 216 A/B subagent trials show -51% code, -93% explanation, -39% tool calls (ultra mode).
+Modular token-saving framework — 6 optimization layers, each targeting a specific waste category.
+Verified: 266 A/B trials (216 efficiency + 50 quality) — up to -51% code, -93% explanation, 100% correctness.
 
 ## Activation
 

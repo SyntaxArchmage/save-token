@@ -1,5 +1,7 @@
 # save-token Cheat Sheet
 
+Modular token-saving framework — 6 layers, each targeting a waste category, all A/B validated.
+
 ## Commands
 | | |
 |-|-|
@@ -11,13 +13,13 @@
 | `/save-token stats` | Show metrics |
 | `/save-token learn` | Mine past sessions |
 | `/save-token review` | Audit current session |
-| `/save-token bench` | A/B test |
+| `/save-token bench` | A/B test on your prompts |
 | `/save-token compress` | Compress content (auto engine) |
 | `/save-token verbosity` | Verbosity profile + recommendation |
-| `/save-token setup` | Install Headroom |
+| `/save-token setup` | Install engines + hooks |
 | `/save-token cost` | Estimate $/month savings |
 | `/save-token tokens` | Track real token usage |
-| `/save-token config` | Team config (show/apply) |
+| `/save-token config` | Team config (show/apply/init) |
 | `/save-token progress` | Progressive activation |
 | `/save-token quality` | Dev quality benchmarks |
 
@@ -91,12 +93,24 @@ cp hooks/hooks.json.example ~/.cursor/hooks.json
 
 Install: `bash install.sh --density=kernel|mid|full`
 
-## Quick Stats (216-trial A/B data)
+## Optimization Layers
+| Layer | Targets |
+|-------|---------|
+| Code Ladder | Over-engineered output |
+| Tool Discipline | Redundant tool calls |
+| Output Economy | Verbose prose |
+| Effort Routing | Wrong model for task |
+| Context Hygiene | Stale/bloated context |
+| Compression | Raw input tokens (pluggable engines) |
+
+Configure per-team via `.save-token.json` (3-level precedence: user > team > defaults).
+
+## Quick Stats (266-trial A/B data)
 | Mode | Code | Explanation | Tool Calls |
 |------|------|-------------|------------|
 | Lite | -16% | -33% | -20% |
 | Full | -24% | -75% | -34% |
 | Ultra | -51% | -93% | -39% |
 
-Zero correctness regressions across all 216 trials.
-Opus full mode: ~$250/month savings at 100 req/day.
+Quality: 25A/0B/0C vs baseline 19A/5B/1C (50 trials, 25 SE benchmarks).
+100% correctness vs baseline 99.1%. Opus full: ~$250/mo savings at 100 req/day.
