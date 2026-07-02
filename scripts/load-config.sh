@@ -28,9 +28,16 @@ DEFAULTS='{
   "mode": "full",
   "density": "full",
   "compression": {
-    "code": "treesitter",
-    "text": "truncate",
-    "tool_output": "pointer"
+    "code": "headroom",
+    "text": "headroom",
+    "json": "headroom",
+    "logs": "headroom",
+    "diff": "headroom",
+    "html": "headroom",
+    "search": "pointer",
+    "tool_output": "pointer",
+    "history": "truncate",
+    "metadata": "none"
   },
   "effort_routing": true,
   "context_hygiene": {
@@ -130,9 +137,16 @@ print(json.dumps(data) if isinstance(data, (dict, list)) else data)
   "mode": "full",
   "density": "full",
   "compression": {
-    "code": "treesitter",
-    "text": "truncate",
-    "tool_output": "pointer"
+    "code": "headroom",
+    "text": "headroom",
+    "json": "headroom",
+    "logs": "headroom",
+    "diff": "headroom",
+    "html": "headroom",
+    "search": "pointer",
+    "tool_output": "pointer",
+    "history": "truncate",
+    "metadata": "none"
   },
   "effort_routing": true,
   "context_hygiene": {
