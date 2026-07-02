@@ -239,7 +239,7 @@ save-token/
 │   ├── learn.sh                # Session waste + verbosity profiling
 │   ├── review.sh               # Real-time session audit
 │   ├── mode.sh                 # Mode persistence + history
-│   ├── cost.sh                 # Cost savings estimator (real data + 216-trial fallback)
+│   ├── cost.sh                 # Cost savings estimator (real data + 1216-trial fallback)
 │   ├── tokens.sh               # Real token tracking (multi-platform)
 │   ├── load-config.sh          # Team config loader (3-level precedence)
 │   ├── progress.sh             # Progressive activation tracker
@@ -247,7 +247,9 @@ save-token/
 │   ├── quality-bench.sh        # Dev quality benchmark runner (correctness + quality)
 │   ├── component-bench.sh      # Component-level A/B benchmark runner
 │   ├── component-report.sh     # Component effect matrix generator
-│   ├── test.sh                 # 147-check test runner
+│   ├── compress-bench.sh       # Compression engine benchmark runner
+│   ├── compress-report.sh      # Compression benchmark report generator
+│   ├── test.sh                 # 151-check test runner
 │   └── analyze_transcript.py   # Transcript analyzer (+ --html report)
 ├── adapters/
 │   ├── standalone.mdc          # Cursor standalone rule
