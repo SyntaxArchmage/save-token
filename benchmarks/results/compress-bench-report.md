@@ -191,5 +191,5 @@ Generated from 103 measurements across 10 content types and 5 engines.
 | **headroom** | Ready | Local ML model, 6-12s per file |
 | **treesitter** | Partial | `tree-sitter` CLI not installed; regex fallback active (3-9% vs expected 10-20% with full AST) |
 | **claw** | Blocked | PyPI `claw-compactor` is an unrelated package (EngramEngine v7.x). Real Claw Compactor not on PyPI. |
-| **llmlingua** | Blocked | Requires HuggingFace model download (~7GB Llama-2-7b). Needs internet + disk space. |
+| **llmlingua** | Blocked | Requires HuggingFace BERT model download (~500MB). Needs internet access. |
 

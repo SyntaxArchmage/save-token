@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # LLMLingua-2 engine: perplexity-based prompt pruning for natural language.
 # Requires: pip install llmlingua
-# NOTE: First run downloads a model from HuggingFace (~7GB for default Llama-2-7b).
-# Requires internet access and significant disk space.
+# NOTE: First run downloads a model from HuggingFace (BERT-base, ~500MB).
+# Requires internet access. Uses llmlingua-2 (BERT-based, faster than original Llama-2).
 
 if ! python3 -c "import llmlingua" 2>/dev/null; then
   echo "[compress] llmlingua not installed. Run: compress.sh --install=llmlingua" >&2

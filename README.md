@@ -383,7 +383,7 @@ Headroom is the default for compressible types — pure software, runs a local O
 | **pointer** | — | Ready | 3-line head + 3-line tail + line count + byte size |
 | **headroom** | `pip install headroom-ai` | Ready | Local ML compression — SmartCrusher, CodeCompressor, LogCompressor, Kompress |
 | **treesitter** | tree-sitter-cli | Partial | Strip comments + whitespace from code (regex fallback without CLI) |
-| **llmlingua** | `pip install llmlingua` | Requires model | Perplexity-based NL pruning (needs HuggingFace model download, ~7GB) |
+| **llmlingua** | `pip install llmlingua` | Requires model | Perplexity-based NL pruning (downloads BERT model ~500MB on first use) |
 | **claw** | — | Not available | AST-aware code compression (PyPI package is unrelated; real tool not on PyPI) |
 
 **Measured compression matrix** (103 measurements, 29 fixtures, 5 engines):

@@ -111,7 +111,7 @@ Core rules (`rules/agent-rules.md`) are platform-agnostic. All scripts work on a
 | headroom | Ready | Auto-installed, local ONNX model, 40-95% reduction |
 | treesitter | Partial | `tree-sitter` CLI not installed; regex fallback strips comments/blanks (0.5-5.8% on code) |
 | claw | Blocked | PyPI `claw-compactor` v7.x is EngramEngine (unrelated). Real Claw Compactor AST tool not on PyPI. |
-| llmlingua | Blocked | Requires HuggingFace Llama-2-7b model download (~7GB). Works with network access. |
+| llmlingua | Blocked | Requires HuggingFace BERT model download (~500MB). Works with network access. |
 
 **Problem:** Context is not homogeneous. Code, natural language, tool outputs, and binary references have fundamentally different structures. A single compressor cannot optimize all types. Headroom understands this (separate CCR for code, output shaper for responses), but we need to go further.
 
