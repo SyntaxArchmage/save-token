@@ -158,12 +158,23 @@ ${METRICS_SUFFIX}
 OEOF
 
 if [ "$OUTPUT_FMT" = "json" ]; then
+  # Provenance metadata (v2.0 A2): make each result re-runnable identically
+  ST_VERSION=$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+' "${REPO_DIR}/install.sh" 2>/dev/null | head -1 || echo "unknown")
+  RULES_HASH=$(sha256sum "$RULES_FILE" 2>/dev/null | cut -c1-16 || echo "unknown")
+  PROMPT_HASH=$(printf '%s' "$PROMPT" | sha256sum 2>/dev/null | cut -c1-16 || echo "unknown")
+  GIT_COMMIT=$(git -C "$REPO_DIR" rev-parse --short HEAD 2>/dev/null || echo "unknown")
+  DATE_ISO=$(date -u +%Y-%m-%dT%H:%M:%SZ)
   python3 -c "
 import json
 data = {
     'timestamp': '$TIMESTAMP',
+    'date_iso': '$DATE_ISO',
+    'save_token_version': '$ST_VERSION',
+    'git_commit': '$GIT_COMMIT',
     'trials': $TRIALS,
     'model': '${MODEL:-default}',
+    'rules_hash': '$RULES_HASH',
+    'prompt_hash': '$PROMPT_HASH',
     'prompt_preview': '''${PROMPT:0:100}''',
     'baseline_prompt': '${RESULTS_DIR}/.baseline-prompt.txt',
     'optimized_prompt': '${RESULTS_DIR}/.optimized-prompt.txt'

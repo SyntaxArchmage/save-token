@@ -1,7 +1,14 @@
 name: Benchmark Regression
 on:
   pull_request:
-    paths: ['rules/**', 'adapters/**', 'SKILL.md']
+    paths:
+      - 'rules/**'
+      - 'adapters/**'
+      - 'SKILL.md'
+      - 'README.md'
+      - 'CHEATSHEET.md'
+      - 'CHANGELOG.md'
+      - 'benchmarks/results/HEADLINE.json'
 
 jobs:
   test:
@@ -11,6 +18,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Doc-drift guard (stats match HEADLINE.json source-of-truth)
+        run: |
+          python3 -c "import json; json.load(open('benchmarks/results/HEADLINE.json'))"
+          echo "HEADLINE.json valid. Running stat-consistency checks..."
+          bash scripts/test.sh 2>&1 | grep -E "^\[(PASS|FAIL)\] stat:" || true
       - name: Run test suite
         run: bash scripts/test.sh
       - name: Check benchmark baseline exists

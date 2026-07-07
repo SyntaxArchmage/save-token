@@ -1,7 +1,7 @@
 # save-token
 
-![Version](https://img.shields.io/badge/version-0.7.0-blue)
-![Tests](https://img.shields.io/badge/tests-158%20passing-brightgreen)
+![Version](https://img.shields.io/badge/version-0.8.0-blue)
+![Tests](https://img.shields.io/badge/tests-172%20passing-brightgreen)
 ![Trials](https://img.shields.io/badge/A%2FB%20trials-1216%20(216%20%2B%201000%20component)-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -16,7 +16,7 @@ The result: **up to 48% fewer code lines with better quality** (100% correctness
 ## Quick Start
 
 ```bash
-git clone https://github.com/YOUR_USER/save-token.git
+git clone https://github.com/SyntaxArchmage/save-token.git
 cd save-token && bash install.sh                      # Cursor (default)
 bash install.sh --platform=claude-code                # Claude Code
 bash install.sh --platform=copilot                    # GitHub Copilot
@@ -119,7 +119,7 @@ Benchmarks cover: algorithms, data structures, design patterns, refactoring, deb
 ## Installation
 
 ```bash
-git clone https://github.com/YOUR_USER/save-token.git
+git clone https://github.com/SyntaxArchmage/save-token.git
 cd save-token && bash install.sh                      # Cursor (default)
 bash install.sh --platform=claude-code                # Claude Code
 bash install.sh --platform=copilot                    # GitHub Copilot
@@ -140,7 +140,7 @@ Then use `/save-token` in any agent chat.
 
 ## Compression Engines
 
-save-token includes a pluggable compression pipeline (`/save-token compress`) that auto-detects content type and routes each to the best engine. 10 content types, 7 engines (5 ready, 2 require external deps) — configure each independently in `.save-token.json`:
+save-token includes a pluggable compression pipeline (`/save-token compress`) that auto-detects content type and routes each to the best engine. 10 content types, 6 engines (3 zero-dep + headroom auto-install + llmlingua opt-in + treesitter regex fallback) — configure each independently in `.save-token.json`:
 
 | Content Type | Default Engine | Headroom Equivalent | What It Does |
 |-------------|---------------|---------------------|--------------|
@@ -162,7 +162,7 @@ save-token includes a pluggable compression pipeline (`/save-token compress`) th
 
 - **bash** + **python3** (for scripts and compression engines)
 - **git** (for cloning the repo)
-- **pip** (compression engines are auto-installed by `install.sh`)
+- **pip** (optional — only for `headroom` auto-install; built-in engines need nothing)
 
 ## Compatibility
 
@@ -232,7 +232,7 @@ save-token/
 │       └── context-eviction.md # Context Eviction section only
 ├── scripts/
 │   ├── compress.sh             # Content-type-aware compression pipeline
-│   ├── engines/                # Compression engines (7: none, truncate, pointer, treesitter, llmlingua, claw, headroom)
+│   ├── engines/                # Compression engines (6: none, truncate, pointer, treesitter, llmlingua, headroom)
 │   ├── setup.sh                # Engine installer (Headroom, etc.)
 │   ├── benchmark.sh            # A/B test prompt generator
 │   ├── compare.sh              # Results table (+ --json, --markdown, --fail-if-regression)
@@ -250,7 +250,7 @@ save-token/
 │   ├── component-report.sh     # Component effect matrix generator
 │   ├── compress-bench.sh       # Compression engine benchmark runner
 │   ├── compress-report.sh      # Compression benchmark report generator
-│   ├── test.sh                 # 158-check test runner
+│   ├── test.sh                 # 172-check test runner
 │   └── analyze_transcript.py   # Transcript analyzer (+ --html report)
 ├── adapters/
 │   ├── standalone.mdc          # Cursor standalone rule
@@ -375,7 +375,7 @@ Pluggable engines reduce tokens before they reach the model. The pipeline auto-d
 
 Headroom is the default for compressible types — pure software, runs a local ONNX model (Kompress-v2-base from HuggingFace), no API keys needed. Auto-installed with `install.sh`. Each type is independently configurable. If headroom isn't installed, auto-falls back to zero-dep engines.
 
-**7 engines** — 3 built-in, 2 auto-installed, 2 require external deps:
+**6 engines** — 3 built-in (zero-dep), 1 auto-installed (headroom), 2 optional (treesitter CLI, llmlingua):
 
 | Engine | Dependencies | Status | What it does |
 |--------|-------------|--------|--------------|
@@ -385,7 +385,6 @@ Headroom is the default for compressible types — pure software, runs a local O
 | **headroom** | `pip install headroom-ai` | Ready | Local ML compression — SmartCrusher, CodeCompressor, LogCompressor, Kompress |
 | **treesitter** | tree-sitter-cli | Partial | Strip comments + whitespace from code (regex fallback without CLI) |
 | **llmlingua** | `pip install llmlingua` | Requires model | Perplexity-based NL pruning (downloads BERT model ~500MB on first use) |
-| **claw** | — | Not available | AST-aware code compression (PyPI package is unrelated; real tool not on PyPI) |
 
 **Measured compression matrix** (103 measurements, 29 fixtures, 5 engines):
 

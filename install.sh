@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="0.7.0"
+VERSION="0.8.0"
 CONFIG_DIR="${SAVE_TOKEN_DIR:-${HOME}/.save-token}"
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 
@@ -31,6 +31,7 @@ case "${1:-}" in
     echo
     echo "Commands:"
     echo "  status     Show what's installed"
+    echo "  verify     Health check (doctor): install, mode, engines, hook"
     echo "  uninstall  Remove everything"
     echo "  version    Show version"
     echo
@@ -134,6 +135,51 @@ case "${1:-}" in
     echo "     Engines: ${engines# }"
     exit 0
     ;;
+  verify|doctor|--verify)
+    echo "╔══════════════════════════════════════╗"
+    echo "║      save-token doctor               ║"
+    echo "╚══════════════════════════════════════╝"
+    echo
+    ok=0; warn=0
+    pass() { echo "[OK]   $1"; ok=$((ok+1)); }
+    flag() { echo "[WARN] $1"; warn=$((warn+1)); }
+
+    # 1. Install presence (any platform)
+    SKILL_DIR="${HOME}/.cursor/skills/save-token"
+    if [ -L "$SKILL_DIR" ] || [ -f "${HOME}/.cursor/rules/save-token.mdc" ] \
+       || [ -f "AGENTS.md" ] || [ -f ".windsurfrules" ] \
+       || [ -f ".github/copilot-instructions.md" ] || [ -f "${HOME}/.codebuddy/rules/save-token.md" ]; then
+      pass "Adapter installed (run 'install.sh status' for details)"
+    else
+      flag "No adapter detected — run: bash install.sh"
+    fi
+
+    # 2. Mode + density
+    MODE_VAL="full"; [ -f "${CONFIG_DIR}/mode" ] && MODE_VAL=$(cat "${CONFIG_DIR}/mode")
+    DENS_VAL="full"; [ -f "${CONFIG_DIR}/density" ] && DENS_VAL=$(cat "${CONFIG_DIR}/density")
+    if [ "$MODE_VAL" = "off" ]; then
+      flag "Mode is OFF — rules not applied. Enable: /save-token full"
+    else
+      pass "Mode: $MODE_VAL, Density: $DENS_VAL"
+    fi
+
+    # 3. Engines available
+    eng_ready="truncate pointer none"
+    python3 -c "import headroom" 2>/dev/null && eng_ready="headroom $eng_ready" || flag "headroom missing — pip install headroom-ai (falls back to truncate/pointer)"
+    pass "Engines ready: $eng_ready (treesitter regex fallback always available)"
+
+    # 4. Hook wired?
+    if [ -f "${HOME}/.cursor/hooks.json" ] && grep -q "save-token" "${HOME}/.cursor/hooks.json" 2>/dev/null; then
+      pass "Auto-activation hook wired"
+    else
+      flag "No auto-activation hook — optional: bash install.sh --hook"
+    fi
+
+    echo
+    echo "Doctor: ${ok} OK, ${warn} warning(s)."
+    [ "$warn" -eq 0 ] && echo "[OK] Healthy." || echo "[TIP] Warnings are non-fatal; address as needed."
+    exit 0
+    ;;
   uninstall|remove)
     removed=false
     SKILL_DIR="${HOME}/.cursor/skills/save-token"
@@ -219,6 +265,18 @@ esac
 
 mkdir -p "$CONFIG_DIR"
 
+# safe_backup TARGET — back up only if the file exists AND is not already a
+# save-token file (avoids pointless self-backup on reinstall).
+safe_backup() {
+  local target="$1"
+  [ -f "$target" ] || return 0
+  if grep -q "save-token" "$target" 2>/dev/null; then
+    return 0  # already ours; overwrite in place, no backup
+  fi
+  cp "$target" "${target}.bak"
+  echo "[WARN] $(basename "$target") existed (foreign). Backed up to $(basename "$target").bak"
+}
+
 # --- Platform-specific installation functions ---
 
 install_cursor() {
@@ -273,10 +331,7 @@ install_cursor() {
 
 install_agents_md() {
   local TARGET="${PWD}/AGENTS.md"
-  if [ -f "$TARGET" ]; then
-    echo "[WARN] AGENTS.md already exists. Backing up to AGENTS.md.bak"
-    cp "$TARGET" "${TARGET}.bak"
-  fi
+  safe_backup "$TARGET"
   cp "$REPO_DIR/adapters/AGENTS.md" "$TARGET"
   echo "[OK] Installed: ./AGENTS.md"
 }
@@ -359,10 +414,7 @@ install_gemini_cli() {
 
 install_cline() {
   local TARGET="${PWD}/.clinerules"
-  if [ -f "$TARGET" ]; then
-    echo "[WARN] .clinerules already exists. Backing up."
-    cp "$TARGET" "${TARGET}.bak"
-  fi
+  safe_backup "$TARGET"
   cp "$REPO_DIR/adapters/clinerules" "$TARGET"
   echo "[OK] Installed: ./.clinerules"
   echo "     Cline / Trae will auto-apply rules."
@@ -371,10 +423,7 @@ install_cline() {
 
 install_windsurf() {
   local TARGET="${PWD}/.windsurfrules"
-  if [ -f "$TARGET" ]; then
-    echo "[WARN] .windsurfrules already exists. Backing up."
-    cp "$TARGET" "${TARGET}.bak"
-  fi
+  safe_backup "$TARGET"
   cp "$REPO_DIR/adapters/windsurfrules" "$TARGET"
   echo "[OK] Installed: ./.windsurfrules"
   echo "[OK] Scripts available at: $REPO_DIR/scripts/"
@@ -383,10 +432,7 @@ install_windsurf() {
 install_copilot() {
   local TARGET="${PWD}/.github/copilot-instructions.md"
   mkdir -p "${PWD}/.github"
-  if [ -f "$TARGET" ]; then
-    echo "[WARN] copilot-instructions.md already exists. Backing up."
-    cp "$TARGET" "${TARGET}.bak"
-  fi
+  safe_backup "$TARGET"
   cp "$REPO_DIR/adapters/copilot-instructions.md" "$TARGET"
   echo "[OK] Installed: .github/copilot-instructions.md"
   echo "[OK] Scripts available at: $REPO_DIR/scripts/"
@@ -433,45 +479,59 @@ echo "     Intensity: $INTENSITY"
 echo "     Density: $DENSITY ($(wc -w < "$(rules_file)") words)"
 echo "     Config: $CONFIG_DIR/"
 
-# --- Auto-install compression engines ---
+# --- Compression engines ---
+# Built-in engines (truncate, pointer, none) need zero deps and always work.
+# headroom is the one recommended auto-install (local, no model download).
+# llmlingua/treesitter are opt-in (heavy / external CLI) — see messages below.
 echo
-echo "Installing compression engines..."
+echo "Compression engines..."
+
+# pip_install ENGINE PKG — robust installer: prefers `python3 -m pip`, handles
+# PEP 668 (externally-managed) by retrying with --user, stays non-fatal.
+pip_install() {
+  local pkg="$1"
+  local pip_cmd=""
+  if python3 -m pip --version >/dev/null 2>&1; then pip_cmd="python3 -m pip"
+  elif command -v pip3 >/dev/null 2>&1; then pip_cmd="pip3"
+  elif command -v pip  >/dev/null 2>&1; then pip_cmd="pip"
+  else return 2; fi
+  $pip_cmd install "$pkg" >/dev/null 2>&1 && return 0
+  # PEP 668 / permissions fallback
+  $pip_cmd install --user "$pkg" >/dev/null 2>&1 && return 0
+  return 1
+}
 
 # headroom: default engine for most content types (40-95% reduction, local ONNX)
 if python3 -c "import headroom" 2>/dev/null; then
   echo "  [OK] headroom (already installed)"
+elif pip_install headroom-ai; then
+  echo "  [OK] headroom installed"
 else
-  if pip install headroom-ai 2>/dev/null; then
-    echo "  [OK] headroom installed"
-  else
-    echo "  [--] headroom failed (optional). Retry: pip install headroom-ai"
-  fi
-fi
-
-# llmlingua: perplexity-based NL pruning for text (30-70% reduction)
-if python3 -c "from llmlingua import PromptCompressor" 2>/dev/null; then
-  echo "  [OK] llmlingua (already installed)"
-else
-  if pip install llmlingua 2>/dev/null; then
-    echo "  [OK] llmlingua installed (model downloads on first use)"
-  else
-    echo "  [--] llmlingua failed (optional). Retry: pip install llmlingua"
-  fi
-fi
-
-# treesitter: comment/whitespace stripping for code (regex fallback always works)
-if command -v tree-sitter &>/dev/null; then
-  echo "  [OK] tree-sitter-cli (already installed)"
-else
-  echo "  [OK] treesitter (regex fallback active; install tree-sitter-cli for full AST mode)"
+  echo "  [--] headroom not installed (optional; falls back to truncate/pointer)."
+  echo "       Retry: python3 -m pip install headroom-ai  (add --user if PEP 668)"
 fi
 
 # Built-in engines always available
 echo "  [OK] truncate, pointer, none (built-in, zero deps)"
 
+# treesitter: regex fallback always works; CLI is opt-in for full AST mode
+if command -v tree-sitter &>/dev/null; then
+  echo "  [OK] treesitter (tree-sitter-cli present, full AST mode)"
+else
+  echo "  [OK] treesitter (regex fallback; opt-in full AST: npm i -g tree-sitter-cli)"
+fi
+
+# llmlingua: opt-in (downloads ~500MB model on first use) — not auto-installed
+if python3 -c "from llmlingua import PromptCompressor" 2>/dev/null; then
+  echo "  [OK] llmlingua (already installed)"
+else
+  echo "  [--] llmlingua opt-in (heavy ~500MB model). Enable: python3 -m pip install llmlingua"
+fi
+
 echo
-echo "Key commands:"
-echo "  /save-token              Activate rules"
-echo "  /save-token cost [model] Estimate savings"
-echo "  /save-token tokens       Track real token usage"
-echo "  /save-token compress     Content-type-aware compression"
+echo "Done. The 3 commands you need:"
+echo "  /save-token         Activate (default: full)"
+echo "  /save-token ultra   Maximum savings"
+echo "  /save-token off     Deactivate"
+echo
+echo "Verify anytime: bash install.sh verify"

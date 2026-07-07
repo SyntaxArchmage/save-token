@@ -65,7 +65,7 @@ bash ~/.cursor/skills/save-token/install.sh --density=kernel
 
 If save-token repo is not yet cloned:
 ```bash
-git clone https://github.com/YOUR_USER/save-token.git /tmp/save-token && bash /tmp/save-token/install.sh --hook
+git clone https://github.com/SyntaxArchmage/save-token.git /tmp/save-token && bash /tmp/save-token/install.sh --hook
 ```
 
 The installer auto-installs all available compression engines (headroom, llmlingua, treesitter fallback).

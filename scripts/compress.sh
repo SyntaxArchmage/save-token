@@ -39,7 +39,7 @@ Engines:
   headroom     Local ML compression via Headroom (auto-installed)
   treesitter   Strip comments + whitespace from code (regex fallback built-in)
   llmlingua    Perplexity-based pruning for NL (auto-installed, needs model download)
-  claw         AST-aware code compression (not available: PyPI package is unrelated)
+  (claw removed — PyPI package is unrelated project; no viable AST compressor on PyPI)
 
 Auto engine selection by type:
   code         → headroom (or treesitter fallback)
@@ -172,8 +172,8 @@ install_engine() {
       pip install llmlingua
       ;;
     claw)
-      echo "[FAIL] claw-compactor on PyPI is an unrelated package (EngramEngine)." >&2
-      echo "       The real Claw Compactor AST tool is not available on PyPI." >&2
+      echo "[FAIL] Engine 'claw' has been removed (PyPI package is unrelated)." >&2
+      echo "       See CHANGELOG for details." >&2
       exit 1
       ;;
     headroom)
@@ -223,7 +223,7 @@ list_engines() {
     show_engine "llmlingua" "[missing]"    "Perplexity-based NL pruning — pip install llmlingua"
   fi
 
-  show_engine "claw"       "[blocked]"     "PyPI package is unrelated project; real tool not on PyPI"
+  show_engine "claw"       "[removed]"     "Removed: PyPI package is unrelated; no viable replacement"
 }
 
 # --- Engine execution ---
@@ -315,7 +315,7 @@ engine_available() {
     headroom)   python3 -c "import headroom" 2>/dev/null ;;
     treesitter) return 0 ;;  # regex fallback always works
     llmlingua)  python3 -c "from llmlingua import PromptCompressor" 2>/dev/null ;;
-    claw)       python3 -c "from claw_compactor import compress" 2>/dev/null ;;
+    claw)       return 1 ;;
     truncate|pointer|none) return 0 ;;
     *)          return 1 ;;
   esac

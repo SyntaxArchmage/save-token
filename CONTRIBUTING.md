@@ -6,7 +6,7 @@
 git clone <repo-url>
 cd save-token
 bash install.sh
-bash scripts/test.sh  # should pass 158 checks
+bash scripts/test.sh  # should pass 172 checks
 ```
 
 ## Development Workflow
@@ -39,8 +39,25 @@ To add new benchmark results:
 - Keep agent-rules.md under 200 words per section
 - Keep save-token.mdc under 200 total words
 
+## Release Checklist (cutting a version)
+
+Run this sequence when cutting a new release:
+
+1. Bump `VERSION=` in `install.sh`
+2. Update version badge in `README.md` and version in `benchmarks/results/HEADLINE.json`
+3. Add a dated section to `CHANGELOG.md` (what changed, why)
+4. Refresh headline numbers in `benchmarks/results/HEADLINE.json` if any A/B data changed
+5. Run `bash scripts/test.sh` — all checks (including stat-consistency) must pass
+6. Run `bash scripts/stats.sh health` — confirm version/tests/engines look right
+7. Run `bash install.sh verify` — confirm a clean install health report
+8. Commit with `release: vX.Y.Z` and tag
+
+The stat-consistency checks in `test.sh` will fail if any doc cites a number absent from
+`HEADLINE.json` — fix drift before tagging.
+
 ## What Not to Do
 
 - Don't add dependencies (all scripts are stdlib-only)
 - Don't add features not explicitly tested by `test.sh`
 - Don't modify the code ladder order (it's A/B validated)
+- Don't cite a stat in docs without adding it to `benchmarks/results/HEADLINE.json`

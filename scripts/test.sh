@@ -243,6 +243,48 @@ check "examples dir exists" test -d "$REPO_DIR/examples"
 check "before-after examples" test -f "$REPO_DIR/examples/before-after.md"
 check "cursorignore template" test -f "$REPO_DIR/templates/cursorignore"
 
+# --- Stat consistency (v2.0 A1) ---
+
+HEADLINE="$REPO_DIR/benchmarks/results/HEADLINE.json"
+check "HEADLINE.json exists" test -f "$HEADLINE"
+check "HEADLINE.json valid JSON" python3 -c "import json; json.load(open('$HEADLINE'))"
+
+# v2.0 new features
+check "install.sh verify runs" bash "$REPO_DIR/install.sh" verify
+check "stats.sh health runs" bash -c 'SAVE_TOKEN_SKIP_TESTRUN=1 bash "'"$SCRIPT_DIR"'/stats.sh" health | grep -q "A/B trials"'
+check "benchmark.sh provenance fields" bash -c '
+  bash "'"$SCRIPT_DIR"'/benchmark.sh" --output=json "prov test" >/dev/null 2>&1
+  latest=$(ls -t "'"$REPO_DIR"'/benchmarks/results/"bench-*.json | head -1)
+  grep -q "rules_hash" "$latest" && grep -q "save_token_version" "$latest" && grep -q "git_commit" "$latest"
+  rm -f "$latest"
+'
+check "marketplace-readiness doc exists" test -f "$REPO_DIR/docs/marketplace-readiness.md"
+check "claw removed from engine list" bash -c 'bash "'"$SCRIPT_DIR"'/compress.sh" --list | grep -q "removed"'
+
+# Verify headline numbers match source-of-truth across all docs
+stat_check() {
+  local pattern="$1"
+  grep -rq --include="*.md" -- "$pattern" "$REPO_DIR"
+}
+
+check "stat: -27.4% in docs" stat_check "-27.4%"
+check "stat: -48.1% in docs" stat_check "-48.1%"
+check "stat: 125A/0B/0C in docs" stat_check "125A/0B/0C"
+check "stat: 90A/30B/5C in docs" stat_check "90A/30B/5C"
+check "stat: 1216 trials in docs" stat_check "1216"
+check "stat: 94.4% baseline in docs" stat_check "94.4%"
+
+# Verify adapter headers reference correct trial count from HEADLINE.json
+TRIAL_COUNT=$(python3 -c "import json; print(json.load(open('$HEADLINE'))['trials']['total'])")
+check "stat: adapters match trial count" bash -c '
+  for f in "'"$REPO_DIR"'/adapters"/*.md "'"$REPO_DIR"'/adapters"/*.mdc; do
+    [ -f "$f" ] || continue
+    if grep -q "trials\|Validated" "$f" 2>/dev/null; then
+      grep -q "'"$TRIAL_COUNT"'" "$f" || exit 1
+    fi
+  done
+'
+
 echo
 echo "Results: $pass passed, $fail failed, $((pass + fail)) total"
 [ "$fail" -eq 0 ] && echo "[OK] All tests passed." || { echo "[FAIL] $fail test(s) failed."; exit 1; }

@@ -1,0 +1,67 @@
+{
+  "_description": "Single source of truth for all headline statistics cited in documentation. Every number referenced in README, SKILL, CHEATSHEET, adapters, etc. must match an entry here. Verified by test.sh stat-consistency check.",
+  "_version": "0.8.0",
+  "trials": {
+    "total": 1216,
+    "efficiency_subagent": 216,
+    "component_level": 1000,
+    "component_benchmarks": 25,
+    "component_conditions": 8,
+    "component_trials_per_condition": 5,
+    "compression_measurements": 103,
+    "source_files": [
+      "benchmarks/results/full-report.md",
+      "benchmarks/results/component-effect-matrix.md",
+      "benchmarks/results/quality-ab-results.md",
+      "benchmarks/results/compress-bench-report.md"
+    ]
+  },
+  "code_reduction": {
+    "full_mode": "-27.4%",
+    "ultra_mode": "-48.1%",
+    "lite_mode": "-16%",
+    "source": "benchmarks/results/component-effect-matrix.md"
+  },
+  "quality": {
+    "save_token_grades": "125A/0B/0C",
+    "baseline_grades": "90A/30B/5C",
+    "save_token_correctness": "100%",
+    "baseline_correctness": "100%",
+    "baseline_quality_score": "94.4%",
+    "save_token_quality_score": "100%",
+    "source": "benchmarks/results/quality-ab-results.md"
+  },
+  "efficiency": {
+    "full_explanation_reduction": "-75%",
+    "full_tool_call_reduction": "-34%",
+    "ultra_explanation_reduction": "-93%",
+    "ultra_tool_call_reduction": "-39%",
+    "source": "benchmarks/results/full-report.md"
+  },
+  "baseline_code_lines": {
+    "average": 17.8,
+    "full_average": 12.9,
+    "ultra_average": 9.2,
+    "source": "benchmarks/results/component-effect-matrix.md"
+  },
+  "density": {
+    "kernel_words": 177,
+    "kernel_tokens": 299,
+    "mid_words": 368,
+    "mid_tokens": 578,
+    "full_words": 1123,
+    "full_tokens": 1796,
+    "source": "benchmarks/results/p4-density-analysis.md"
+  },
+  "platforms": {
+    "adapter_count": 14,
+    "engines_total": 6,
+    "engines_ready": 3,
+    "engines_auto_install": 1,
+    "engines_removed": 1,
+    "engines_external_dep": 1
+  },
+  "test_suite": {
+    "total_checks": 172
+  }
+}

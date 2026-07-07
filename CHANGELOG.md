@@ -1,5 +1,50 @@
 # Changelog
 
+## [0.8.0] — 2026-07-02
+
+v2.0 polish: claim integrity, frictionless adoption, drift prevention. No new
+optimization layers — hardening only.
+
+### Added
+- **Claim integrity (A1):** `benchmarks/results/HEADLINE.json` — single source of truth
+  for every headline statistic. `test.sh` now fails if any doc cites a number missing
+  from it (stat-consistency checks).
+- **Benchmark provenance (A2):** `benchmark.sh --output=json` now records
+  `save_token_version`, `date_iso`, `git_commit`, `rules_hash`, `prompt_hash` so any
+  result is re-runnable identically.
+- **Install doctor (B1):** `install.sh verify` — one-screen health report (adapter, mode,
+  engines, hook) with OK/WARN verdicts.
+- **Project health dashboard (C1):** `stats.sh health` — version, test pass rate, adapter
+  count, engine availability, A/B trial count (from HEADLINE.json).
+- **Doc-drift guard (C2):** CI workflow triggers on docs + HEADLINE.json changes and runs
+  stat-consistency checks before the full suite.
+- **Marketplace-readiness gap list (B3):** `docs/marketplace-readiness.md` maps the repo
+  to Cursor plugin requirements (9/11 met; `plugin.json` is the one hard gap).
+- **Release checklist (C3):** added to `CONTRIBUTING.md`.
+- Test suite expanded from 158 to 172 checks.
+
+### Removed
+- **`claw` compression engine (A3):** the PyPI `claw-compactor` package is an unrelated
+  project and no viable AST compressor exists on PyPI. Engine list now shows `[removed]`;
+  `--install=claw` fails with an explanation. Engine count: 7 → 6.
+
+### Changed
+- First-run guidance after install (B2): reduced to the 3 essential commands
+  (`/save-token`, `/save-token ultra`, `/save-token off`) + a `verify` pointer.
+- Replaced `YOUR_USER` GitHub placeholder with real owner in README.md and SKILL.md.
+- README/CHEATSHEET engine tables updated for 6 engines.
+
+### Install robustness & UX
+- **llmlingua is now opt-in, not auto-installed** — aligns install with the A3 decision.
+  It pulls a ~500MB model and adds ~4s import cost; auto-installing it hurt first-run UX.
+  `install.sh` now prints an opt-in hint instead.
+- **PEP 668 handling** — engine install now uses `python3 -m pip` (more reliable than bare
+  `pip`) and retries with `--user` on externally-managed environments (modern Ubuntu/
+  Debian/Homebrew). Failure messages now show the actual retry command.
+- **No more pointless self-backup** — reinstalling a file-based platform (AGENTS.md,
+  .clinerules, .windsurfrules, copilot) no longer backs up save-token's own adapter to
+  `.bak`. Backups now only happen for genuinely foreign files (via `safe_backup`).
+
 ## [0.7.0] — 2026-07-02
 
 ### Removed
